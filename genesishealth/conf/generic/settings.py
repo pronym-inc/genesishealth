@@ -69,10 +69,10 @@ WSGI_APPLICATION = 'genesishealth.conf.wsgi.app.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'HOST': secrets['default_db_host'],
-        'NAME': secrets['default_db_name'],
-        'USER': secrets['default_db_username'],
-        'PASSWORD': secrets['default_db_password']
+        'HOST': secrets['db_host'],
+        'NAME': secrets['db_name'],
+        'USER': secrets['db_username'],
+        'PASSWORD': secrets['db_password']
     }
 }
 
