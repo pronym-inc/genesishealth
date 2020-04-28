@@ -1,0 +1,12 @@
+<html>
+    <head>
+        <title>Genesis Health API Test</title>
+    </head>
+    <body>
+        <form method="post" action="{{ url }}" name="testForm">
+            {% for field in fields %}
+            <label>{{ field }}</label><input type="text" name="{{ field }}" /><br />
+            {% endfor %}
+            <input type="submit" value="Submit" name="submit" />
+    </body>
+</html>

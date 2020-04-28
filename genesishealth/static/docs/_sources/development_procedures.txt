@@ -1,0 +1,44 @@
+======================
+Development Procedures
+======================
+
+Overview
+--------
+
+Genesis development is geared towards long-term stability and maintanability.  This means:
+
+#. Please adhere to the `DRY principle`_ as much as possible.  There are a lot of generic tools and views generated for the system, and those should be used as much as possible.  Along these same lines, please try to employ `encapsulation`_ as much as possible.
+
+#. Please conform to the prevailing standards in the code.  This means please use the same format for variable names (all_lowercase_with_underscores), for function names (same as variable names), class names (UpperCaseNoUnderscores).
+
+#. Document as needed.  Not every function needs a novel, but a simple doc string at least should be provided.  Confusing or complex parts of the code should be explained.  Documentation is especially important when creating or updating core functionality (like generic views), since those are the most likely to be reused.
+
+#. Use unit tests.  Before any code is checked in, it should pass all of the tests run by manage.py tests.  More information on Genesis's unit testing can be found below.
+
+#. Please, generally, follow the `Python Style Guide`_.  However, readability and clarity trump all other considerations, so feel free to deviate when necessary.
+
+.. _DRY principle: http://en.wikipedia.org/wiki/Don't_repeat_yourself
+.. _encapsulation: http://en.wikipedia.org/wiki/Encapsulation_(object-oriented_programming)
+.. _Python Style Guide: http://www.python.org/dev/peps/pep-0008/
+
+Git
+--------------------
+
+All code should be checked in regularly via git.  Developers should feel free to make branches as necessary.
+
+Code Deployment
+-------------------
+
+Code should never be deployed manually (e.g. via SSH or FTP) to a server.  Code should only ever be deployed via the fabric scripts included in the repository.  For more on this, see :ref:`remote-server-updates`.
+
+Server Environments
+-------------------
+
+In general, Genesis has three different types of environments: development, staging, and production.
+
+The development server is not used for active development; each developer should have his or her own local development site.  The dev site is used to show the most recent, relatively stable version of the development code to management for their review.  Pushes to the dev site need not be coordinated in any particular way, but please be aware what branch you are checking your code into!  If you check into the development branch, that code should be ready to appear on the development site.
+
+The staging server is used as the final testing and review platform before code is promoted to production.  Pushes of new versions of code to the staging server should be coordinated among the development team.
+
+The production server is obviously the server actually being used by customers.  In general, the developers should have relatively little interaction with the production server.  Pushes of new versions of the code to the production server should be handled by the system administration team.
+

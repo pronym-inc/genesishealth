@@ -1,0 +1,671 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+<head>
+<meta charset="UTF-8">
+
+<title>14-Day Summary Report</title>
+
+<style type="text/css">
+
+h1 {font-family:sans-serif;font-size:18px;text-align:center;}
+h2 {font-family:sans-serif;font-size:16px;text-align:center;}
+li {font-family:sans-serif;font-size:10px;text-align:left;}
+table {font-family:sans-serif;font-size: 12px;}
+div.footnotesprint {width: 900px;margin:0px auto;}
+.footnotes {font-size: 14px;text-align: left !important; border-bottom: 1px solid #ccc;}
+.otherreportsh2 {
+	font-size: 14px;
+	text-align: center;
+	border-bottom: 1px solid #CCC;
+	background-color: #ccc;
+	display: block;
+	margin: 0px;
+	padding: 5px;
+}
+.printcaption {text-align: left;font-weight: bold;}
+div.printlogo {width: 900px;margin:0px auto;}
+table.summaryheader {
+	margin:0px auto;
+	clear:both;
+	width: 753px;
+	padding:0px;
+	margin-top:15px;
+	margin-bottom:5px;
+	border: 1px solid #ccc;
+}
+table.printalertstable {
+	margin:0px auto;
+	clear:both;
+	width: 900px;
+	padding: 0px;
+	margin-top:0px;
+	margin-bottom:20px;
+	border:1px dashed #999;
+}
+table.printalertstable img {
+	vertical-align:bottom;
+	padding-right: 2px;
+}
+table.summaryfooter {
+	margin:0px auto;
+	clear:both;
+	width: 900px;
+	padding:0px;
+	margin-top: 10px;
+	margin-bottom:10px;
+	border: 1px solid #ccc;
+	border-collapse: collapse;
+	/*page-break-inside: auto;*/
+}
+table.summaryfooter tr {
+	border-bottom: 1px dotted #ccc;
+	/*page-break-inside: avoid;
+	page-break-after: auto;*/
+}
+table.summaryfooter tr td {
+	padding: 1px;
+	text-align: left;
+	width: 20px;
+}
+.tdcenter {text-align: center;}
+table.printdisplay {
+	margin: 0px auto;
+	clear:both;
+	border: 1px solid #CCC;
+	border-collapse: collapse;
+	width: 900px;
+}
+table.legendprintdisplay {
+	margin: 0px auto;
+	clear:both;
+	border: 1px solid #ccc;
+	border-collapse: collapse;
+	width: 900px;
+}
+table.headerwrappertable {
+	margin: 0px auto;
+	clear:both;
+	width: 900px;
+}
+table.targetrangeprinttable {
+	border-collapse: collapse;
+	border-spacing: 0px;
+	width: 100%;
+}
+table.targetrangeprinttable tr {border-bottom: 1px solid #999;}
+table.targetrangeprinttable tr td {padding: 2px;}
+table.printdisplay th {
+	border-right: 1px solid #ccc;
+	border-bottom: 1px solid #ccc;
+	padding: 3px 18px 3px 10px;
+}
+table.printdisplay tr td {
+	border-right:1px solid #ccc;
+	padding: 2px;
+	position: relative;
+	width: 100px;
+}
+table.printdisplay tr td.summaryrowstext {font-weight: bold;}
+table.printdisplay tr.odd {background-color: #f1f1f1;border-bottom: 1px solid #ccc;}
+table.printdisplay tr.even {background-color: #fff;border-bottom: 1px solid #ccc;}
+.first {border-top:3px solid #ccc;}
+table.printdisplay tr.weekendrows {border-top: 2px dotted #999 !important;border-bottom: 2px dotted #999 !important;}
+table.printdisplay tr td.datecolumn {width: 50px;}
+div.tablelegend {
+	text-align: left;
+	width: 900px;
+	margin: auto;
+	margin-top: 10px;
+}
+div.otherreportsprint {
+	width: 900px;
+	margin: 0px auto;
+	margin-bottom: 30px;
+	clear: both;
+	/*page-break-before: always;*/
+}
+div.testhistoryprint {min-height: 240px;border: 1px solid #999;width: 49%;float: left;}
+div.targetrangeprint {min-height: 240px;border: 1px solid #999;width: 49%;float: right;}
+.floatright {position: absolute;right: 8px;margin-top: 2px;}
+div.entry-wrapper {border-radius: 4px;float: left;}
+div.entry-wrapper img {padding-right:2px;vertical-align:bottom;}
+td.norightborder {border-right:0px !important;}
+</style>
+
+</head>
+
+<body>
+
+<table class="headerwrappertable">
+	<tbody>
+    	<tr>
+        	<td>
+            	<table class="summaryheader" id="summaryheaderprint">
+                    <tbody>
+                        <tr>
+                            <td>Patient: Jason Cross</td>
+                            <td>Report Date: 11/17/2012</td>
+                            <td>Before Meal Target: 90 - 110</td>
+                        </tr>
+                        <tr>
+                            <td>Age/Gender: 35/male</td>
+                            <td>Printed By: John L. Smith, MD</td>
+                            <td>After Meal Target: 90 - 140</td>
+                        </tr>
+                        <tr>
+                            <td>Date Range: 11/1/2012 - 11/17/2012</td>
+                            <td>Compliance Target (# of Tests/Day): 3</td>
+                            <td>Hyper/Hypo Range: 67 - 200</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </td>
+            <td>
+            	<img src="http://www.genesishealthtechnologies.com/Portals/0/GHT_Logo1.png" style="height: 60px; margin-top: 8px" />
+            </td>
+        </tr>
+    </tbody>
+</table>
+
+<table class="printalertstable">
+    <tbody>
+        <tr>
+            <td><img src="/static/images/printablereports/911-ico.png" />Out of compliance target (1.8 tests/day)</td>
+            <td><img src="/static/images/printablereports/911-ico.png" />High Standard Deviation</td>
+            <td><img src="/static/images/printablereports/911-ico.png" />Out of compliance target (1.8 tests/day)</td>
+        </tr>
+        <tr>
+            <td><img src="/static/images/printablereports/911-ico.png" />20% of readings were hyperglycemic</td>
+            <td><img src="/static/images/printablereports/911-ico.png" />15% of readings were hypoglycemic</td>
+            <td><img src="/static/images/printablereports/911-ico.png" />20% of readings were hyperglycemic</td>
+        </tr>
+    </tbody>
+</table>
+
+<!-- 4 Column Logbook -->
+<table class="printdisplay" id="logbook4">
+	<thead> 
+        <tr> 
+            <th rowspan="2" style="width: 110px">Date</th> 
+            <th colspan="2">Breakfast</th> 
+            <th colspan="2">Lunch</th> 
+            <th colspan="2">Dinner</th> 
+            <th colspan="2">Night</th>
+        </tr>
+        <tr>
+            <th colspan="2" class="small">5 AM - 11 AM</th>
+            <th colspan="2" class="small">11 AM - 2 PM</th>
+            <th colspan="2" class="small">2 PM - 10 PM</th>
+            <th colspan="2" class="small">10 PM - 5 AM</th>
+        </tr>
+	</thead> 
+	<tbody>
+    	<tr class="odd"> 
+            <td class="datecolumn">11/01/2012</td> 
+            <!-- Breakfast -->
+            <td class="norightborder">
+            	<div class="entry-wrapper">
+                    <img src="/static/images/printablereports/after-ico.png" />126
+                    <!-- <img src="/static/images/printablereports/mgdl.png" /> -->
+                    <img src="/static/images/printablereports/o-up-ico.png" />
+                </div>
+            </td>
+            <td>    
+                <div class="entry-wrapper">
+                    <img src="/static/images/printablereports/before-ico.png" />102
+                    <!-- <img src="/static/images/printablereports/mgdl.png" /> -->
+                    <img src="/static/images/printablereports/ontarget-ico.png" />
+                </div>
+            </td>
+            <!-- /Breakfast -->
+            <!-- Lunch -->
+            <td class="norightborder">
+                <div class="entry-wrapper">
+                    <img src="/static/images/printablereports/after-ico.png" />250
+                    <!-- <img src="/static/images/printablereports/mgdl.png" /> -->
+                    <img src="/static/images/printablereports/911-ico.png" />
+                </div>
+            </td>
+            <td></td>
+            <!-- /Lunch -->
+            <!-- Dinner -->
+            <td class="norightborder"></td>
+            <td></td>
+            <!-- /Dinner -->
+            <!-- Night -->
+            <td class="norightborder"></td>
+            <td></td>
+            <!-- /Night -->
+        </tr>
+        <tr class="even"> 
+    		<td class="datecolumn">11/02/2012</td> 
+    	    <!-- Breakfast -->
+            <td class="norightborder">
+                <div class="entry-wrapper">
+                    <img src="/static/images/printablereports/before-ico.png" />112
+                    <img src="/static/images/printablereports/ontarget-ico.png" />
+                </div>
+            </td>
+            <td>
+            	<div class="entry-wrapper">
+                    <img src="/static/images/printablereports/weight-ico.png" />213
+                </div>
+            </td>
+            <!-- /Breakfast -->
+            <!-- Lunch -->
+            <td class="norightborder"</td>
+            <td></td>
+            <!-- /Lunch -->
+            <!-- Dinner -->
+            <td class="norightborder"></td>
+            <td></td>
+            <!-- /Dinner -->
+            <!-- Night -->
+            <td class="norightborder"></td>
+            <td></td>
+            <!-- /Night -->
+    	</tr>
+        <tr class="odd weekendrows"> 
+            <td class="datecolumn">11/03/2012 <img src="/static/images/printablereports/w-ico.png" style="vertical-align:bottom" /></td> 
+            <!-- Breakfast -->
+            <td class="norightborder">
+            	<div class="entry-wrapper">
+                	<img src="/static/images/printablereports/exercise-ico.png" />30
+                </div>
+            </td>
+            <td>    
+                <div class="entry-wrapper">
+                    <img src="/static/images/printablereports/weight-ico.png" />213
+                </div>
+            </td>
+            <!-- /Breakfast -->
+            <!-- Lunch -->
+            <td class="norightborder">
+            	<div class="entry-wrapper">
+                	<img src="/static/images/printablereports/bp-ico.png" />120/90
+                </div>
+            </td>
+            <td>
+                <div class="entry-wrapper">
+                	<img src="/static/images/printablereports/before-ico.png" />102
+                    <img src="/static/images/printablereports/ontarget-ico.png" />
+                </div>
+            </td>
+            <!-- /Lunch -->
+            <!-- Dinner -->
+            <td class="norightborder"></td>
+            <td></td>
+            <!-- /Dinner -->
+            <!-- Night -->
+            <td class="norightborder"></td>
+            <td></td>
+            <!-- /Night -->
+        </tr>
+        <tr class="even weekendrows"> 
+    		<td class="datecolumn">11/04/2012 <img src="/static/images/printablereports/w-ico.png" style="vertical-align:bottom" /></td> 
+    	    <!-- Breakfast -->
+            <td class="norightborder"></td>
+            <td></td>
+            <!-- /Breakfast -->
+            <!-- Lunch -->
+            <td class="norightborder">
+            	<div class="entry-wrapper">
+                	<img src="/static/images/printablereports/after-ico.png" />70
+                    <img src="/static/images/printablereports/911-ico.png" />
+                </div>
+            </td>
+            <td>
+                <div class="entry-wrapper">
+                	<img src="/static/images/printablereports/meds-ico.png" />50 mL
+                </div>
+            </td>
+            <!-- /Lunch -->
+            <!-- Dinner -->
+            <td class="norightborder"></td>
+            <td></td>
+            <!-- /Dinner -->
+            <!-- Night -->
+            <td class="norightborder"></td>
+            <td></td>
+            <!-- /Night -->
+    	</tr>
+        <tr class="odd"> 
+            <td class="datecolumn">11/05/2012</td> 
+            <!-- Breakfast -->
+            <td class="norightborder"></td>
+            <td></td>
+            <!-- /Breakfast -->
+            <!-- Lunch -->
+            <td class="norightborder">
+            	<div class="entry-wrapper">
+                	<img src="/static/images/printablereports/g-ico.png" />98
+                </div>
+            </td>
+            <td></td>
+            <!-- /Lunch -->
+            <!-- Dinner -->
+            <td class="norightborder"></td>
+            <td></td>
+            <!-- /Dinner -->
+            <!-- Night -->
+            <td class="norightborder"></td>
+            <td></td>
+            <!-- /Night -->
+        </tr>
+        <tr class="even"> 
+    		<td class="datecolumn">11/06/2012</td> 
+    	    <!-- Breakfast -->
+            <td class="norightborder">
+            	<div class="entry-wrapper">
+                    <img src="/static/images/printablereports/after-ico.png" />50
+                    <img src="/static/images/printablereports/o-down-ico.png" />
+                </div>
+            </td>
+            <td></td>
+            <!-- /Breakfast -->
+            <!-- Lunch -->
+            <td class="norightborder">
+            	<div class="entry-wrapper">
+                	<img src="/static/images/printablereports/bp-ico.png" />120/90
+                </div>
+                <div class="entry-wrapper">
+                	<img src="/static/images/printablereports/bp-ico.png" />120/90
+                </div>
+            </td>
+            <td>
+                <div class="entry-wrapper">
+                	<img src="/static/images/printablereports/before-ico.png" />102
+                    <img src="/static/images/printablereports/ontarget-ico.png" />
+                </div>
+                <div class="entry-wrapper">
+                	<img src="/static/images/printablereports/before-ico.png" />102
+                    <img src="/static/images/printablereports/ontarget-ico.png" />
+                </div>
+            </td>
+            <!-- /Lunch -->
+            <!-- Dinner -->
+            <td class="norightborder"></td>
+            <td></td>
+            <!-- /Dinner -->
+            <!-- Night -->
+            <td class="norightborder"></td>
+            <td></td>
+            <!-- /Night -->
+    	</tr>
+        <tr class="odd"> 
+            <td class="datecolumn">11/07/2012</td> 
+            <!-- Breakfast -->
+            <td class="norightborder"></td>
+            <td></td>
+            <!-- /Breakfast -->
+            <!-- Lunch -->
+            <td class="norightborder">
+            	<div class="entry-wrapper">
+                	<img src="/static/images/printablereports/meal-ico.png" />900 cal
+                </div>
+            </td>
+            <td></td>
+            <!-- /Lunch -->
+            <!-- Dinner -->
+            <td class="norightborder"></td>
+            <td></td>
+            <!-- /Dinner -->
+            <!-- Night -->
+            <td class="norightborder"></td>
+            <td></td>
+            <!-- /Night -->
+        </tr>
+        <tr class="even"> 
+    		<td class="datecolumn">11/08/2012</td> 
+    	    <!-- Breakfast -->
+            <td class="norightborder"></td>
+            <td></td>
+            <!-- /Breakfast -->
+            <!-- Lunch -->
+            <td class="norightborder">
+            	<div class="entry-wrapper">
+                	<img src="/static/images/printablereports/meal-ico.png" />12 carb
+                </div>
+            </td>
+            <td></td>
+            <!-- /Lunch -->
+            <!-- Dinner -->
+            <td class="norightborder"></td>
+            <td></td>
+            <!-- /Dinner -->
+            <!-- Night -->
+            <td class="norightborder">
+            	<div class="entry-wrapper">
+                	<img src="/static/images/printablereports/bp-ico.png" />120/90
+                </div>
+                <div class="entry-wrapper">
+                	<img src="/static/images/printablereports/bp-ico.png" />120/90
+                </div>
+            </td>
+            <td>
+                <div class="entry-wrapper">
+                	<img src="/static/images/printablereports/before-ico.png" />102
+                    <img src="/static/images/printablereports/ontarget-ico.png" />
+                </div>
+                <div class="entry-wrapper">
+                	<img src="/static/images/printablereports/before-ico.png" />102
+                    <img src="/static/images/printablereports/ontarget-ico.png" />
+                </div>
+            </td>
+            <!-- /Night -->
+    	</tr>
+        <tr class="odd"> 
+            <td class="datecolumn">11/09/2012</td> 
+            <td class="norightborder"></td>
+            <td></td>
+            <td class="norightborder"></td>
+            <td></td>
+            <td class="norightborder"></td>
+            <td></td>
+            <td class="norightborder"></td>
+            <td></td>
+        </tr>
+        <tr class="weekendrows"> 
+    		<td class="datecolumn">11/10/2012 <img src="/static/images/printablereports/w-ico.png" style="vertical-align:bottom" /></td> 
+    	    <td class="norightborder"></td>
+            <td></td>
+            <td class="norightborder"></td>
+            <td></td>
+            <td class="norightborder"></td>
+            <td></td>
+            <td class="norightborder"></td>
+            <td></td>
+    	</tr>
+        <tr class="weekendrows"> 
+            <td class="datecolumn">11/11/2012 <img src="/static/images/printablereports/w-ico.png" style="vertical-align:bottom" /></td> 
+            <td class="norightborder"></td>
+            <td></td>
+            <td class="norightborder"></td>
+            <td></td>
+            <td class="norightborder"></td>
+            <td></td>
+            <td class="norightborder"></td>
+            <td></td>
+        </tr>
+        <tr class="even"> 
+    		<td class="datecolumn">11/12/2012</td> 
+    	    <td class="norightborder"></td>
+            <td></td>
+            <td class="norightborder"></td>
+            <td></td>
+            <td class="norightborder"></td>
+            <td></td>
+            <td class="norightborder"></td>
+            <td></td>
+    	</tr>
+        <tr class="odd"> 
+            <td class="datecolumn">11/13/2012</td> 
+            <td class="norightborder"></td>
+            <td></td>
+            <td class="norightborder"></td>
+            <td></td>
+            <td class="norightborder"></td>
+            <td></td>
+            <td class="norightborder"></td>
+            <td></td>
+        </tr>
+        <tr class="even"> 
+    		<td class="datecolumn">11/14/2012</td> 
+    	    <td class="norightborder"></td>
+            <td></td>
+            <td class="norightborder"></td>
+            <td></td>
+            <td class="norightborder"></td>
+            <td></td>
+            <td class="norightborder"></td>
+            <td></td>
+    	</tr>
+        
+        <!-- Begin bottom summary rows -->
+        <tr class="summaryrows first even"> 
+            <td class="summaryrowstext datecolumn">Glucose Average</td> 
+            <td colspan="2" class="tdcenter">170.2</td>
+            <td colspan="2" class="tdcenter"></td>
+            <td colspan="2" class="tdcenter"></td>
+            <td colspan="2" class="tdcenter"></td>
+            
+        </tr>
+        <tr class="summaryrows odd"> 
+            <td class="summaryrowstext datecolumn">In Target</td> 
+            <td colspan="2" class="tdcenter">40.5%</td>
+            <td colspan="2" class="tdcenter"></td>
+            <td colspan="2" class="tdcenter"></td>
+            <td colspan="2" class="tdcenter"></td>
+        </tr>
+        <tr class="summaryrows even"> 
+            <td class="summaryrowstext datecolumn">SD</td> 
+            <td colspan="2" class="tdcenter">38</td>
+            <td colspan="2" class="tdcenter"></td>
+            <td colspan="2" class="tdcenter"></td>
+            <td colspan="2" class="tdcenter"></td>
+        </tr>
+        <tr class="summaryrows last odd"> 
+            <td class="summaryrowstext datecolumn"># of Gluc. Readings</td> 
+            <td colspan="2" class="tdcenter">5</td>
+            <td colspan="2" class="tdcenter"></td>
+            <td colspan="2" class="tdcenter"></td>
+            <td colspan="2" class="tdcenter"></td>
+        </tr>
+    </tbody>
+</table> 
+
+<table class="legendprintdisplay" style="margin-top: 10px"><caption style="text-align: left; font-weight: bold"><span style="margin-right: 305px">Glucose Readings:</span><span>Other Recorded Values:</span></caption>
+	<tbody>
+    	<tr>
+        	<td><img src="/static/images/printablereports/before-ico.png" /></td>
+            <td>Before Meal</td>
+            <td><img src="/static/images/printablereports/ontarget-ico.png" /></td>
+            <td>In Target</td>
+            <td><img src="/static/images/printablereports/meal-ico.png" /></td>
+            <td>Meal</td>
+            <td><img src="/static/images/printablereports/meds-ico.png" /></td>
+            <td>Meds, units in mL</td>
+        </tr>
+        <tr>
+        	<td><img src="/static/images/printablereports/after-ico.png" /></td>
+            <td>After Meal</td>
+            <td><img src="/static/images/printablereports/o-down-ico.png" /></td>
+            <td>Below Target</td>
+            <td><img src="/static/images/printablereports/bp-ico.png" /></td>
+            <td>BP, units in mmHg</td>
+            <td><img src="/static/images/printablereports/w-ico.png" /></td>
+            <td>Weekend</td>
+        </tr>
+        <tr>
+        	<td><img src="/static/images/printablereports/g-ico.png" /></td>
+            <td>General</td>
+            <td><img src="/static/images/printablereports/o-up-ico.png" /></td>
+            <td>Above Target</td>
+            <td><img src="/static/images/printablereports/weight-ico.png" /></td>
+            <td>Weight, units in lbs.</td>
+            <td></td>
+            <td></td>
+        </tr>
+        <tr>
+        	<td></td>
+            <td>Units in mg/dL</td>
+            <td><img src="/static/images/printablereports/911-ico.png" /></td>
+            <td>Hypo/Hyper Glycemic</td>
+            <td><img src="/static/images/printablereports/exercise-ico.png" /></td>
+            <td>Exercise (Units = Minutes)</td>
+            <td></td>
+            <td><strong>LEGEND</strong></td>
+        </tr>
+    </tbody>
+</table>
+
+<table class="summaryfooter" id="summaryfooterprint">
+<caption class="printcaption">14-Day Summary Statistics:</caption>
+	<tbody>
+    	<tr>
+        	<td>Glucose Average:</td>
+            <td>172</td>
+            <td>Avg Readings/Day:</td>
+           	<td>0</td>
+            <td># of Hypo/Hyper Readings:</td>
+            <td>5 / 2</td>
+            <td>Estimated A1C:</td>
+            <td>6.7</td>
+        </tr>
+        <tr>
+        	<td>% Within Range:</td>
+            <td>15%</td>
+           	<td>Standard Deviation:</td>
+            <td>40</td>
+            <td># of Glucose Readings:</td>
+            <td>0</td>
+            <td></td>
+            <td></td>
+        </tr>
+    </tbody>
+</table>
+
+<div class="otherreportsprint">
+    <div class="testhistoryprint">
+    	<h2 class="otherreportsh2">Test History</h2>
+    </div>
+    <div class="targetrangeprint">
+    	<h2 class="otherreportsh2">Target Range</h2>
+        	<table class="targetrangeprinttable">
+            	<tbody>
+                	<tr>
+                    	<td></td>
+                        <td style="text-align:center">This Period<br/>11/01/2012 - 11/14/2012</td>
+                        <td style="text-align:center">Prev Period<br/>11/01/2012 - 11/14/2012</td>
+                    </tr>
+                    <tr>
+                    	<td style="border-right: 1px solid #999">Glucose Average</td>
+                        <td style="border-right: 1px solid #999; text-align:center">172</td>
+                        <td style="text-align: center">180</td>
+                    </tr>
+                    <tr>
+                    	<td style="border-right: 1px solid #999">Compliance %</td>
+                        <td style="border-right: 1px solid #999; text-align:center">50%</td>
+                        <td style="text-align: center">70%</td>
+                    </tr>
+                    <tr>
+                    	<td style="border-right: 1px solid #999"># of Hyper/Hypo</td>
+                        <td style="border-right: 1px solid #999; text-align:center">2/3</td>
+                        <td style="text-align: center">3/4</td>
+                    </tr>
+                </tbody>
+            </table>
+    	</div>
+	</div>
+	<br clear="all" />
+
+    <div class="footnotesprint">
+    <h2 class="footnotes">Footnotes</h2>
+        <ol>
+            <li>The lines that connect blood sugar readsings in this graph do not reflect actual glucose levels.</li>
+            <li>When a given meal alot for a given day contains more than one results, only the most recent result is shown. The statistics, however, include all results.</li>
+        </ol>
+    </div>	
+
+</body>
+</html>

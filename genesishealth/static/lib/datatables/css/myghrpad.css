@@ -1,0 +1,921 @@
+/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+ * DataTables features
+ */
+
+.dataTables_wrapper, {
+	position: relative;
+	min-height: 302px;
+	clear: both;
+	height: 302px;
+	zoom: 1; /* Feeling sorry for IE */
+	margin-top: 0px;
+}
+
+.dataTable {
+	position: relative;
+	clear:both;
+	zoom: 1;
+	margin-top: 0px;
+}
+
+.dataTables_processing {
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	width: 250px;
+	height: 30px;
+	margin-left: -125px;
+	margin-top: -15px;
+	padding: 14px 0 2px 0;
+	border: 1px solid #ddd;
+	text-align: center;
+	color: #999;
+	font-size: 14px;
+	background-color: white;
+}
+
+.dataTables_length {
+	width: 40%;
+	float: left;
+}
+
+.dataTables_filter {
+	/*width: 50%;*/
+	float: right;
+	margin-right: 85px; /* Added for action buttons to fit on right */
+    margin-bottom: 10px;
+	text-align: right;
+}
+
+.dataTables_info {
+	float: left;
+    line-height: 24px;
+    margin-top: 10px;
+	width: 40%;
+}
+
+.dataTables_paginate {
+	width: auto;
+	* width: 50px;
+	float: right;
+	text-align: right;
+}
+
+/* Pagination nested */
+.paginate_disabled_previous, .paginate_disabled_next {
+	height: 19px;
+	width: auto;
+	margin-left: 3px;
+	float: left;
+	color:#c1c1c1;
+}
+
+.paginate_enabled_previous, .paginate_enabled_next {
+	height: 19px;
+	width: auto;
+	margin-left: 3px;
+	float: left;
+}
+
+.paginate_disabled_previous {
+	background-image: /*url('../images/back_disabled.jpg');*/none;
+}
+
+.paginate_enabled_previous {
+	background-image: /*url('../images/back_enabled.jpg');*/none;
+}
+
+.paginate_disabled_next {
+	background-image: /*url('../images/forward_disabled.jpg');*/none;
+}
+
+.paginate_enabled_next {
+	background-image: /*url('../images/forward_enabled.jpg');*/none;
+}
+
+
+
+/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+ * DataTables display
+ */
+table.display, table.dataTable {
+  	border: 1px solid #CCC;
+	margin: 0 auto;
+	clear: both;
+	width: 100% !important;
+	
+	/* Note Firefox 3.5 and before have a bug with border-collapse
+	 * ( https://bugzilla.mozilla.org/show%5Fbug.cgi?id=155955 ) 
+	 * border-spacing: 0; is one possible option. Conditional-css.com is
+	 * useful for this kind of thing
+	 *
+	 * Further note IE 6/7 has problems when calculating widths with border width.
+	 * It subtracts one px relative to the other browsers from the first column, and
+	 * adds one to the end...
+	 *
+	 * If you want that effect I'd suggest setting a border-top/left on th/td's and 
+	 * then filling in the gaps with other borders.
+	 */
+}
+
+table.display tr, table.dataTable tr {
+    position: relative;
+		border-bottom: 1px solid #ccc;
+}
+
+table.display thead tr, table.display tfoot tr, table.dataTable thead tr, table.dataTable tfood tr {
+    filter: none !important;
+}
+
+table.display thead th, table.dataTable thead th {
+	border-bottom: 1px solid #CCC;
+	cursor: pointer;
+	font-weight: bold;
+	padding: 3px 18px 3px 10px;
+}
+
+table.display tfoot th, table.dataTable tfoot th {
+	border-top: 1px solid #CCC;
+	padding: 3px 18px 3px 10px;
+	font-weight: bold;
+}
+
+table.display thead th:not(:last-child), table.display tfoot th:not(:last-child), table.dataTable thead th:not(:last-child), table.dataTable tfood th:not(:last-child) {
+    border-right: 1px solid #CCC;
+    -moz-box-shadow: inset 1px 1px #FFF;
+    -webkit-box-shadow: inset 1px 1px #FFF;
+    box-shadow: inset 1px 1px #FFF;
+}
+
+table.display tr.heading2 td, table.dataTable tr.heading2 td {
+	border-bottom: 1px solid #aaa;
+}
+
+table.display td, table.dataTable td {
+	padding: 2px 2px;
+	border-right:1px solid #ccc;
+}
+
+table.display td.center, table.dataTable td.center {
+	text-align: center;
+}
+
+
+
+/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+ * DataTables sorting
+ */
+
+.sorting_asc {
+	background: url('../images/sort_asc.png') no-repeat center right;
+}
+
+.sorting_desc {
+	background: url('../images/sort_desc.png') no-repeat center right;
+}
+
+.sorting {
+	background: url('../images/sort_both.png') no-repeat center right;
+}
+
+.sorting_asc_disabled {
+	background: url('../images/sort_asc_disabled.png') no-repeat center right;
+}
+
+.sorting_desc_disabled {
+	background: url('../images/sort_desc_disabled.png') no-repeat center right;
+}
+
+
+
+
+
+/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+ * DataTables row classes
+ */
+
+span.r-apple, span.food-ico, span.ex-ico, span.meds-ico, span.bp-ico, span.weight-ico, span.after-ico, span.normal-read  {
+	background-repeat: no-repeat;
+	background-position: left;
+	padding-left: 20px;
+ 	font-size: 12px;
+	font-weight: bold;
+	text-align: left;
+	float: left;
+	clear: left;
+	display:block;
+}
+
+
+span.r-apple {background-image: url('/static/images/r-apple.png');}
+span.food-ico {background-image: url('/static/images/food-ico.png');}
+span.ex-ico {background-image: url('/static/images/ex-ico.png');}
+span.meds-ico {background-image: url('/static/images/meds-ico.png');}
+span.bp-ico {background-image: url('/static/images/bp-ico.png');}
+span.weight-ico {background-image: url('/static/images/weight-ico.png');}
+span.after-ico {background-image: url('/static/images/after-ico.png');}
+span.normal-read {background-image: url('/static/images/onlinereports/g-ico.png');}
+
+span.o-exclam {background-image: url('/static/images/o-exclam.png');}
+span.o-up-ico {background-image: url('/static/images/o-up-ico.png');}
+span.o-down-ico {background-image: url('/static/images/o-down-ico.png');}
+span.target-ico {background-image: url('/static/images/target-ico.png');}
+
+span.o-exclam, span.o-up-ico, span.o-down-ico, span.target-ico {
+	display:block;
+	text-align:right;
+	background-repeat:no-repeat;
+	background-position:right;
+}
+
+div.entry-wrapper {
+	border: 1px solid #ccc;
+	background: #fff;
+	padding-left: 2px;
+	padding-right: 2px;
+	border-radius: 3px;
+	margin-bottom: 1px;
+	transition: all 0.25s ease-in-out;
+    -webkit-transition: all 0.25s ease-in-out;
+    -moz-transition: all 0.25s ease-in-out;
+	cursor:pointer;
+}
+
+div.entry-wrapper:hover {
+	border: 1px solid #999;
+	
+}
+
+table.display tr td.notestub, table.dataTable tr td.notestub {
+	position:relative;
+    
+}
+
+
+
+ 
+ 
+ 
+table.display th.small, table.dataTable th.small {
+	font-size:9px;
+	font-weight:normal;
+}
+ 
+table.display tr.weekend, table.dataTable tr.weekend {
+	background-color:#f1f1f1;
+}
+
+table.display tr td.note, table.dataTable tr td.note {
+	background-color:#FF9;
+}
+
+table.display tr.odd.gradeA, table.dataTable tr.odd.gradeA {
+	background-color: #ddffdd;
+}
+
+table.display tr.even.gradeA, table.dataTable tr.even.gradeA {
+	background-color: #eeffee;
+}
+
+table.display tr.odd.gradeC, table.dataTable tr.odd.gradeC {
+	background-color: #ddddff;
+}
+
+table.display tr.even.gradeC, table.dataTable tr.even.gradeC {
+	background-color: #eeeeff;
+}
+
+table.display tr.odd.gradeX, table.dataTable tr.odd.gradeX {
+	background-color: #ffdddd;
+}
+
+table.display tr.even.gradeX, table.dataTable tr.even.gradeX {
+	background-color: #ffeeee;
+}
+
+table.display tr.odd.gradeU, table.dataTable tr.odd.gradeU {
+	background-color: #ddd;
+}
+
+table.display tr.even.gradeU, table.dataTable tr.even.gradeU {
+	background-color: #eee;
+}
+
+
+tr.odd {
+	background-color: #E2E4FF;
+}
+
+tr.even {
+	background-color: white;
+}
+
+
+
+
+
+/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+ * Misc
+ */
+.dataTables_scroll {
+	clear: both;
+}
+
+.dataTables_scrollBody {
+	*margin-top: -1px;
+}
+
+.top, .bottom {
+	padding: 15px;
+	background-color: #F5F5F5;
+	border: 1px solid #CCCCCC;
+}
+
+.top .dataTables_info {
+	float: none;
+}
+
+.clear {
+	clear: both;
+}
+
+.dataTables_empty {
+	text-align: center;
+}
+
+tfoot input {
+	margin: 0.5em 0;
+	width: 100%;
+	color: #444;
+}
+
+tfoot input.search_init {
+	color: #999;
+}
+
+td.group {
+	background-color: #d1cfd0;
+	border-bottom: 2px solid #A19B9E;
+	border-top: 2px solid #A19B9E;
+}
+
+td.details {
+	background-color: #d1cfd0;
+	border: 2px solid #A19B9E;
+}
+
+
+.example_alt_pagination div.dataTables_info {
+	width: 40%;
+}
+
+.paging_full_numbers {
+	height: 22px;
+	line-height: 22px;
+    margin-top: 10px;
+	width: 375px;
+}
+
+table.display tr.even.row_selected td, table.dataTable tr.even.row_selected td {
+	background-color: #B0BED9;
+}
+
+table.display tr.odd.row_selected td, table.dataTable tr.odd.row_selected td {
+	background-color: #9FAFD1;
+}
+
+
+/*
+ * Sorting classes for columns
+ */
+/* For the standard odd/even */
+tr.odd td.sorting_1 {
+	background-color: #D3D6FF;
+}
+
+tr.odd td.sorting_2 {
+	background-color: #DADCFF;
+}
+
+tr.odd td.sorting_3 {
+	background-color: #E0E2FF;
+}
+
+tr.even td.sorting_1 {
+	background-color: #EAEBFF;
+}
+
+tr.even td.sorting_2 {
+	background-color: #F2F3FF;
+}
+
+tr.even td.sorting_3 {
+	background-color: #F9F9FF;
+}
+
+
+/* For the Conditional-CSS grading rows */
+/*
+ 	Colour calculations (based off the main row colours)
+  Level 1:
+		dd > c4
+		ee > d5
+	Level 2:
+	  dd > d1
+	  ee > e2
+ */
+tr.odd.gradeA td.sorting_1 {
+	background-color: #c4ffc4;
+}
+
+tr.odd.gradeA td.sorting_2 {
+	background-color: #d1ffd1;
+}
+
+tr.odd.gradeA td.sorting_3 {
+	background-color: #d1ffd1;
+}
+
+tr.even.gradeA td.sorting_1 {
+	background-color: #d5ffd5;
+}
+
+tr.even.gradeA td.sorting_2 {
+	background-color: #e2ffe2;
+}
+
+tr.even.gradeA td.sorting_3 {
+	background-color: #e2ffe2;
+}
+
+tr.odd.gradeC td.sorting_1 {
+	background-color: #c4c4ff;
+}
+
+tr.odd.gradeC td.sorting_2 {
+	background-color: #d1d1ff;
+}
+
+tr.odd.gradeC td.sorting_3 {
+	background-color: #d1d1ff;
+}
+
+tr.even.gradeC td.sorting_1 {
+	background-color: #d5d5ff;
+}
+
+tr.even.gradeC td.sorting_2 {
+	background-color: #e2e2ff;
+}
+
+tr.even.gradeC td.sorting_3 {
+	background-color: #e2e2ff;
+}
+
+tr.odd.gradeX td.sorting_1 {
+	background-color: #ffc4c4;
+}
+
+tr.odd.gradeX td.sorting_2 {
+	background-color: #ffd1d1;
+}
+
+tr.odd.gradeX td.sorting_3 {
+	background-color: #ffd1d1;
+}
+
+tr.even.gradeX td.sorting_1 {
+	background-color: #ffd5d5;
+}
+
+tr.even.gradeX td.sorting_2 {
+	background-color: #ffe2e2;
+}
+
+tr.even.gradeX td.sorting_3 {
+	background-color: #ffe2e2;
+}
+
+tr.odd.gradeU td.sorting_1 {
+	background-color: #c4c4c4;
+}
+
+tr.odd.gradeU td.sorting_2 {
+	background-color: #d1d1d1;
+}
+
+tr.odd.gradeU td.sorting_3 {
+	background-color: #d1d1d1;
+}
+
+tr.even.gradeU td.sorting_1 {
+	background-color: #d5d5d5;
+}
+
+tr.even.gradeU td.sorting_2 {
+	background-color: #e2e2e2;
+}
+
+tr.even.gradeU td.sorting_3 {
+	background-color: #e2e2e2;
+}
+
+
+/*
+ * Row highlighting example
+ */
+.ex_highlight #example tbody tr.even:hover, #example tbody tr.even td.highlighted {
+	background-color: #ECFFB3;
+}
+
+.ex_highlight #example tbody tr.odd:hover, #example tbody tr.odd td.highlighted {
+	background-color: #E6FF99;
+}
+
+.ex_highlight_row #example tr.even:hover {
+	background-color: #ECFFB3;
+}
+
+.ex_highlight_row #example tr.even:hover td.sorting_1 {
+	background-color: #DDFF75;
+}
+
+.ex_highlight_row #example tr.even:hover td.sorting_2 {
+	background-color: #E7FF9E;
+}
+
+.ex_highlight_row #example tr.even:hover td.sorting_3 {
+	background-color: #E2FF89;
+}
+
+.ex_highlight_row #example tr.odd:hover {
+	background-color: #E6FF99;
+}
+
+.ex_highlight_row #example tr.odd:hover td.sorting_1 {
+	background-color: #D6FF5C;
+}
+
+.ex_highlight_row #example tr.odd:hover td.sorting_2 {
+	background-color: #E0FF84;
+}
+
+.ex_highlight_row #example tr.odd:hover td.sorting_3 {
+	background-color: #DBFF70;
+}
+
+
+/*
+ * KeyTable
+ */
+table.KeyTable td {
+	border: 3px solid transparent;
+}
+
+table.KeyTable td.focus {
+	border: 3px solid #3366FF;
+}
+
+table.display tr.gradeA, table.dataTable tr.gradeA {
+	background-color: #eeffee;
+}
+
+table.display tr.gradeC, table.dataTable tr.gradeC {
+	background-color: #ddddff;
+}
+
+table.display tr.gradeX, table.dataTable tr.gradeX {
+	background-color: #ffdddd;
+}
+
+table.display tr.gradeU, table.dataTable tr.gradeU {
+	background-color: #ddd;
+}
+
+/* MODAL POPUPS */
+
+div.modal-box.wrapper {position: absolute;margin: 25% auto;float: none;border: 1px solid #d4d4d4;border-radius:3px;-moz-border-radius:3px; -khtml-border-radius:3px; -webkit-border-radius:3px;font: 14px "Helvetica Neue", Arial, Helvetica, Geneva, sans-serif;z-index: 2000;text-align: left;left: 25%;right: 25%;background-color: #fffeff;}
+div.modal-box div.inside {margin: 3px;padding: 10px;overflow: visible;z-index: 2000;}
+
+/* Each Box's specified width: Required so that they're showing in the middle of the page */
+
+div#add-food.modal-box {width: 400px;}
+div.modal-box div.hr {height: 5px;background: url('/static/images/hr.png') repeat-x;}
+
+#add-food span.rbutton.white.save {margin-left: 95px;}
+div.modal-box div.inside.blue {background: #e0e7ea url('/static/images/blue-bg.jpg') repeat-x 0 -2px;}
+
+
+
+/* Close Buttons */
+div.modal-box span.modal-close {position: absolute;top: -13px;right: -13px;width: 35px;height: 35px;background: url('/static/images/close-buttons-sprite.png') no-repeat;}
+div.modal-box span.modal-close:hover {background-position: 0 -37px;cursor: pointer;}
+div.modal-box span.modal-close span {display: none;}
+div.modal-box span.modal-close.left {top: -13px;left: -13px;}
+
+div.modal-box h3 {font-size: 30px;font-weight: bold;margin: 10px 0px 5px;color: #464646;letter-spacing: -1px;}
+div.modal-box .red h3, div.modal-box .yellow h3 {color: #fffeff;margin-top: 0px;}
+div#restricted-content.modal-box h3 {margin-top: 90px;}
+
+div.modal-box p {text-shadow: rgba(255,254,255,0.5) 0 1px 0;color: #7a7a7a;margin: 5px 0px 10px;}
+
+div.modal-box div.clear{height: 1px;clear: both;}
+div.modal-box.centered {text-align: center;}
+
+/* Image Styles */
+div.modal-box img{float: left;margin-right: 20px;}
+div.modal-box img.right {float: right;margin-right: 0px;margin-left: 20px;}
+div.modal-box.centered img {float: none;}
+div.modal-box img.pop-out {margin-top: -42px;z-index: 2001;position: absolute;left: 94px;}
+
+/* Basic Buttons */
+div.modal-box a.rbutton, div.modal-box span.rbutton{display: block;float: left;position: relative;height: 34px;line-height: 33px;background: url('/static/images/buttons-sprite.png') no-repeat 0 -1px;padding-left: 20px;margin: 2px 30px 10px 0px;font-size: 15px;font-weight: bold;color: #585858;text-decoration: none;}
+div.modal-box a.rbutton:hover, div.modal-box span.rbutton:hover {background-position: 0 -37px;cursor: pointer;}
+div.modal-box a.rbutton span, div.modal-box span.rbutton span{display: block;float: left;position: relative;height: 34px;padding-right: 20px;margin-right: -20px;background: url('/static/images/buttons-sprite.png') no-repeat right -1px;}
+div.modal-box a.button:rhover span, div.modal-box span.rbutton:hover span {background-position: right -37px;cursor: pointer;}
+div.modal-box.centered a.rbutton {margin:0px 0px 0px 90px;}
+
+
+/* Form Elements */
+div.modal-box form input {height: 43px;width: 270px;margin: 0px 0px;border-style: none;background: transparent url('/static/images/input-bg.png') no-repeat 0 0;position: relative;padding: 10px 10px;color: #9f9f9f;font-size: 13px;}
+div.modal-box form input.submit {width: 81px;margin-left: -5px;position: relative;background: url('/static/images/submit-bg.png') 0 0px;color: #fffeff;font-weight: bold;text-shadow: #000 0 1px 1px;font-size: 13px;}
+div.modal-box form input.submit:hover {background-position: 0 -42px;cursor: pointer;}
+div.modal-box form label {line-height: 20px;}
+div.modal-box form fieldset {border: none;padding: 0px;line-height: 15px;margin: 20px 0px;clear: both;color: #484848;}
+div.modal-box form input.text {width: 348px;}
+div.modal-box form input.radio {margin: 5px;width: 15px;height: 15px;}
+div.modal-box form input.checkbox {margin: 5px;width: 15px;height: 15px;}
+
+div#adjust-settings.modal-box form {margin: 0px auto;width: 350px;}
+
+span.modal-link {cursor: pointer;}
+
+
+table.full {
+	width: 100%;
+}
+
+table.legend {
+}
+
+/*
+ * Pagination
+ */
+.dataTables_paginate {
+    float: right;
+    text-align: right;
+}
+
+/* Two button pagination - previous / next */
+.paginate_disabled_previous,
+.paginate_enabled_previous,
+.paginate_disabled_next,
+.paginate_enabled_next {
+    height: 19px;
+    float: left;
+    cursor: pointer;
+    *cursor: hand;
+    color: #111 !important;
+}
+.paginate_disabled_previous:hover,
+.paginate_enabled_previous:hover,
+.paginate_disabled_next:hover,
+.paginate_enabled_next:hover {
+    text-decoration: none !important;
+}
+.paginate_disabled_previous:active,
+.paginate_enabled_previous:active,
+.paginate_disabled_next:active,
+.paginate_enabled_next:active {
+    outline: none;
+}
+
+.paginate_disabled_previous,
+.paginate_disabled_next {
+    color: #666 !important;
+}
+.paginate_disabled_previous,
+.paginate_enabled_previous {
+    padding-left: 23px;
+}
+.paginate_disabled_next,
+.paginate_enabled_next {
+    padding-right: 23px;
+    margin-left: 10px;
+}
+
+.paginate_enabled_previous { background: url('../images/back_enabled.png') no-repeat top left; }
+.paginate_enabled_previous:hover { background: url('../images/back_enabled_hover.png') no-repeat top left; }
+.paginate_disabled_previous { background: url('../images/back_disabled.png') no-repeat top left; }
+
+.paginate_enabled_next { background: url('../images/forward_enabled.png') no-repeat top right; }
+.paginate_enabled_next:hover { background: url('../images/forward_enabled_hover.png') no-repeat top right; }
+.paginate_disabled_next { background: url('../images/forward_disabled.png') no-repeat top right; }
+
+/* Full number pagination */
+.paging_full_numbers {
+    height: 22px;
+    line-height: 22px;
+}
+.paging_full_numbers a:active {
+    outline: none
+}
+.paging_full_numbers a:hover {
+    text-decoration: none;
+}
+
+.paging_full_numbers a.paginate_button,
+.paging_full_numbers a.paginate_active {
+    border: 1px solid #aaa;
+    -webkit-border-radius: 5px;
+    -moz-border-radius: 5px;
+    border-radius: 5px;
+    padding: 2px 5px;
+    margin: 0 3px;
+    cursor: pointer;
+    *cursor: hand;
+    color: #333 !important;
+}
+
+.paging_full_numbers a.paginate_button {
+    background-color: #ddd;
+}
+
+.paging_full_numbers a.paginate_button:hover {
+    background-color: #ccc;
+    text-decoration: none !important;
+}
+
+.paging_full_numbers a.paginate_active {
+    background-color: #99B3FF;
+}
+
+/*  Button Temp Change 
+a.tableButton {position:absolute; right:0px; top: 47px;}
+a.tableButton button {
+	background-color: #F00;
+	background-image: url('../../svg.php?stops=%F00 0%,%900 100%');
+	background-image: -o-linear-gradient(top, #F00, #900);
+	background-image: -ms-linear-gradient(top, #F00, #900);
+	background-image: -moz-linear-gradient(top, #F00, #900);
+	background-image: -webkit-gradient(linear, left top, left bottom, from(#F00), to(#900));
+	background-image: -webkit-linear-gradient(top, #F00, #900);
+	background-image: linear-gradient(top, #F00, #900);
+	border-color: #AAA;
+	-moz-box-shadow: none;
+	-webkit-box-shadow: none;
+	box-shadow: none;
+	color: #fff;
+	font-weight: bold;
+	text-shadow: 0 1px 0 #555;
+}
+a.tableButton:hover button {
+	background-color: #F00;
+	background-image: url('../../svg.php?stops=%F00 0%,%900 100%');
+	background-image: -o-linear-gradient(top, #900, #900);
+	background-image: -ms-linear-gradient(top, #900, #900);
+	background-image: -moz-linear-gradient(top, #900, #900);
+	background-image: -webkit-gradient(linear, left top, left bottom, from(#900), to(#900));
+	background-image: -webkit-linear-gradient(top, #900, #900);
+	background-image: linear-gradient(top, #900, #900);
+	border-color: #AAA;
+	-moz-box-shadow: none;
+	-webkit-box-shadow: none;
+	box-shadow: none;
+	color: #fff;
+	font-weight: bold;
+	text-shadow: 0 1px 0 #555;
+	
+}
+a.tableButton:focus button {
+	background-color: #F00;
+	background-image: url('../../svg.php?stops=%F00 0%,%900 100%');
+	background-image: -o-linear-gradient(top, #900, #900);
+	background-image: -ms-linear-gradient(top, #900, #900);
+	background-image: -moz-linear-gradient(top, #900, #900);
+	background-image: -webkit-gradient(linear, left top, left bottom, from(#900), to(#900));
+	background-image: -webkit-linear-gradient(top, #900, #900);
+	background-image: linear-gradient(top, #900, #900);
+	box-shadow: inset 1px 2px 2px #555;
+	color: #fff;
+	font-weight: bold;
+	text-shadow: 0 1px 0 #555;
+	
+} */
+
+.fc-header-right {padding-right: 80px !important;} 
+.dataTables_filter {margin-right: 0px;} <!-- Moves the search over so the "Add Item" button can display absolute for both tables -->
+#logbook8_wrapper {display: none !important;} <!-- Hides detail 8 column table on page load until made visible by javascript -->
+table.display td {padding: 1px 10px !important;}
+span.modal-link {}
+div.modal-buttons {}
+ul.modal-buttons {padding-left:0px;}
+span.addentry-links {font-size: 14px;}
+div#additem-div {min-width: 280px !important;}
+li.modal-link {cursor:pointer;border-bottom: 1px solid #ccc; padding-top:5px; padding-bottom: 5px; padding-left: 5px;}
+li.modal-link:hover {background-color:#f1f1f1;}
+span.modal-image {margin-right:10%;vertical-align:middle;}
+input.additem-button, a.tableButton  button {
+	margin-left: 3px;
+	float: right;
+}
+input.additem-button, a.tableButton button {
+	background-color: #F00;
+	background-image: url('../../svg.php?stops=%F00 0%,%900 100%');
+	background-image: -o-linear-gradient(top, #F00, #900);
+	background-image: -ms-linear-gradient(top, #F00, #900);
+	background-image: -moz-linear-gradient(top, #F00, #900);
+	background-image: -webkit-gradient(linear, left top, left bottom, from(#F00), to(#900));
+	background-image: -webkit-linear-gradient(top, #F00, #900);
+	background-image: linear-gradient(top, #F00, #900);
+	border-color: #AAA;
+	-moz-box-shadow: none;
+	-webkit-box-shadow: none;
+	box-shadow: none;
+	color: #fff;
+	font-weight: bold;
+	text-shadow: 0 1px 0 #555;
+}
+input.additem-button:hover, a.tableButton:hover button {
+	background-color: #F00;
+	background-image: url('../../svg.php?stops=%F00 0%,%900 100%');
+	background-image: -o-linear-gradient(top, #900, #900);
+	background-image: -ms-linear-gradient(top, #900, #900);
+	background-image: -moz-linear-gradient(top, #900, #900);
+	background-image: -webkit-gradient(linear, left top, left bottom, from(#900), to(#900));
+	background-image: -webkit-linear-gradient(top, #900, #900);
+	background-image: linear-gradient(top, #900, #900);
+	border-color: #AAA;
+	-moz-box-shadow: none;
+	-webkit-box-shadow: none;
+	box-shadow: none;
+	color: #fff;
+	font-weight: bold;
+	text-shadow: 0 1px 0 #555;
+	
+}
+input.additem-button:focus, a.tableButton:focus button {
+	background-color: #F00;
+	background-image: url('../../svg.php?stops=%F00 0%,%900 100%');
+	background-image: -o-linear-gradient(top, #900, #900);
+	background-image: -ms-linear-gradient(top, #900, #900);
+	background-image: -moz-linear-gradient(top, #900, #900);
+	background-image: -webkit-gradient(linear, left top, left bottom, from(#900), to(#900));
+	background-image: -webkit-linear-gradient(top, #900, #900);
+	background-image: linear-gradient(top, #900, #900);
+	box-shadow: inset 1px 2px 2px #555;
+	color: #fff;
+	font-weight: bold;
+	text-shadow: 0 1px 0 #555;
+	
+}
+
+div.legendwrap {
+	float: left;
+}
+
+ul.legendlist {
+	padding-left: 0px;
+	margin-right:10px;
+	margin-bottom:10px;
+	
+}
+ul li span.legendimg {
+	vertical-align: text-top;
+	margin-right: 10px;
+}
+ul li span.legendtext {}
+
+.switch {
+	display: block;
+	height: 25px;
+}
+
+.toggle label, .toggle p, .switch label {
+	line-height: 24px;
+}
+
+.batchDropdown {
+	position:relative;
+	top: 5px;
+	width: 33%;
+}
+
+div.dataTables_wrapper {
+	clear:both;
+	padding-top:10px;
+}
+
+div.togglecontainer {
+	width: 310px;
+	overflow: hidden;
+        float: left;
+}
+
+div.hasNotes, div.hasNotes:hover {
+	border-right: 20px solid orange;
+}
+
+div.selector {
+	margin-right: 3px;
+}

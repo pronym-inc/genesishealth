@@ -1,0 +1,117 @@
+#loading-container {position: absolute; top:50%; left:50%;}
+#loading-content {width:800px; text-align:center; margin-left: -400px; height:50px; margin-top:-25px; line-height: 50px;}
+#loading-content {font-family: "Helvetica", "Arial", sans-serif; font-size: 18px; color: black; text-shadow: 0px 1px 0px white; }
+#loading-graphic {margin-right: 0.2em; margin-bottom:-2px;}
+#loading {
+  background-color:#abc4ff;
+  background-image: -moz-radial-gradient(50% 50%, ellipse closest-side, #abc4ff, #87a7ff 100%);
+  background-image: -webkit-radial-gradient(50% 50%, ellipse closest-side, #abc4ff, #87a7ff 100%);
+  background-image: -o-radial-gradient(50% 50%, ellipse closest-side, #abc4ff, #87a7ff 100%);
+  background-image: -ms-radial-gradient(50% 50%, ellipse closest-side, #abc4ff, #87a7ff 100%);
+  background-image: radial-gradient(50% 50%, ellipse closest-side, #abc4ff, #87a7ff 100%);
+  height:100%; width:100%; overflow:hidden; position: absolute; left: 0; top: 0; z-index: 99999;
+}
+.innerloader {position: absolute; left: 255px !important; top: 13px !important; width: 20px; height: 20px; display:none;}
+
+.fc-header-right {padding-right: 80px !important;} 
+.dataTables_filter {margin-right: 85px;} <!-- Moves the search over so the "Add Item" button can display absolute for both tables -->
+#logbook8_wrapper {display: none !important;} <!-- Hides detail 8 column table on page load until made visible by javascript -->
+table.display td {padding: 1px 10px !important;}
+span.modal-link {}
+div.modal-buttons {}
+ul.modal-buttons {padding-left:0px;}
+span.addentry-links {font-size: 14px;}
+div#additem-div {min-width: 280px !important;}
+li.modal-link {cursor:pointer;border-bottom: 1px solid #ccc; padding-top:5px; padding-bottom: 5px; padding-left: 5px;}
+li.modal-link:hover {background-color:#f1f1f1;}
+span.modal-image {margin-right:10%;vertical-align:middle;}
+input.additem-button {
+    background-color: #F00;
+    background-image: url('../../svg.php?stops=%F00 0%,%900 100%');
+    background-image: -o-linear-gradient(top, #F00, #900);
+    background-image: -ms-linear-gradient(top, #F00, #900);
+    background-image: -moz-linear-gradient(top, #F00, #900);
+    background-image: -webkit-gradient(linear, left top, left bottom, from(#F00), to(#900));
+    background-image: -webkit-linear-gradient(top, #F00, #900);
+    background-image: linear-gradient(top, #F00, #900);
+    border-color: #AAA;
+    -moz-box-shadow: none;
+    -webkit-box-shadow: none;
+    box-shadow: none;
+    color: #fff;
+    font-weight: bold;
+    text-shadow: 0 1px 0 #555;
+}
+input.additem-button:hover {
+    background-color: #F00;
+    background-image: url('../../svg.php?stops=%F00 0%,%900 100%');
+    background-image: -o-linear-gradient(top, #900, #900);
+    background-image: -ms-linear-gradient(top, #900, #900);
+    background-image: -moz-linear-gradient(top, #900, #900);
+    background-image: -webkit-gradient(linear, left top, left bottom, from(#900), to(#900));
+    background-image: -webkit-linear-gradient(top, #900, #900);
+    background-image: linear-gradient(top, #900, #900);
+    border-color: #AAA;
+    -moz-box-shadow: none;
+    -webkit-box-shadow: none;
+    box-shadow: none;
+    color: #fff;
+    font-weight: bold;
+    text-shadow: 0 1px 0 #555;
+    
+}
+input.additem-button:focus {
+    background-color: #F00;
+    background-image: url('../../svg.php?stops=%F00 0%,%900 100%');
+    background-image: -o-linear-gradient(top, #900, #900);
+    background-image: -ms-linear-gradient(top, #900, #900);
+    background-image: -moz-linear-gradient(top, #900, #900);
+    background-image: -webkit-gradient(linear, left top, left bottom, from(#900), to(#900));
+    background-image: -webkit-linear-gradient(top, #900, #900);
+    background-image: linear-gradient(top, #900, #900);
+    box-shadow: inset 1px 2px 2px #555;
+    color: #fff;
+    font-weight: bold;
+    text-shadow: 0 1px 0 #555;
+    
+}
+
+div.legendwrap {
+    float: left;
+}
+
+ul.legendlist {
+    padding-left: 0px;
+    margin-right:10px;
+    margin-bottom:10px;
+    
+}
+ul li span.legendimg {
+    vertical-align: text-top;
+    margin-right: 10px;
+}
+ul li span.legendtext {}
+
+.breadcrumbs {
+    margin-left: 5px;
+    margin-top: 5px;
+    font-size: 14px;
+}
+
+.breadcrumbs a {
+    font-size: 14px;
+    color: black;
+    text-decoration: underline;
+}
+
+.drilldownMenu {
+    height: 100%;
+}
+
+i.gbutton.fa {
+    font-size: 18px;
+}
+
+a.btnRight {
+    margin-top: 3px !important;
+}

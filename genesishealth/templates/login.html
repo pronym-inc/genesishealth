@@ -1,0 +1,230 @@
+{% load compress %}
+<!doctype html>
+<!--[if IE 7 ]>   <html lang="en" class="ie7 lte8"> <![endif]--> 
+<!--[if IE 8 ]>   <html lang="en" class="ie8 lte8"> <![endif]--> 
+<!--[if IE 9 ]>   <html lang="en" class="ie9"> <![endif]--> 
+<!--[if gt IE 9]> <html lang="en"> <![endif]-->
+<!--[if !IE]><!--> <html lang="en"> <!--<![endif]-->
+<head>
+<meta charset="utf-8">
+<!--[if lte IE 9 ]><meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"><![endif]-->
+
+<!-- iPad Settings -->
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" /> 
+<meta name="viewport" content="width=device-width, minimum-scale=1.0, maximum-scale=1.0" />
+<!-- Adding "maximum-scale=1" fixes the Mobile Safari auto-zoom bug: http://filamentgroup.com/examples/iosScaleBug/ -->
+<!-- iPad End -->
+
+<title>MyGHR Secured Login</title>
+
+<!-- iOS ICONS -->
+<link rel="apple-touch-icon" href="touch-icon-iphone.png" />
+<link rel="apple-touch-icon" sizes="72x72" href="touch-icon-ipad.png" />
+<link rel="apple-touch-icon" sizes="114x114" href="touch-icon-iphone4.png" />
+<link rel="apple-touch-startup-image" href="touch-startup-image.png">
+<!-- iOS ICONS END -->
+
+{% compress css %}
+    <link rel="stylesheet" media="screen" href="/static/css/reset.css" />
+    <link rel="stylesheet" media="screen" href="/static/css/grids.css" />
+    <link rel="stylesheet" media="screen" href="/static/css/device/general.css" />
+    <link rel="stylesheet" media="screen" href="/static/css/style.css" />
+    <link rel="stylesheet" media="screen" href="/static/css/ui.css" />
+    <link rel="stylesheet" media="screen" href="/static/css/jquery.uniform.css" />
+    <link rel="stylesheet" media="screen" href="/static/css/forms.css" />
+    <link rel="stylesheet" media="screen" href="/static/css/themes/lightblue/style.css" />
+    <link rel="stylesheet" media="screen" href="/static/css/jquery.fancybox.css" />
+{% endcompress %}
+
+<!--[if !IE]>-->
+    <link rel="stylesheet" href="/static/css/device/mobile.css" media="only screen and (max-width: 767px)" />
+<!--<![endif]-->
+
+<style type="text/css">
+  #browsersupport {display: none;}
+</style>
+
+<!--[if lt IE 9]>
+<style type="text/css">
+#browsersupport {
+  display: block !important;
+  color: #222;
+  height: auto;
+  margin: 0 auto;
+  margin-top: 20px;
+  width: 50%;
+}
+
+#browsersupport p {
+  font-size: 14px;
+  margin-bottom: 5px;
+}
+</style>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  {% compress js %}
+    <script type="text/javascript" src="/static/js/html5.js"></script>
+    <script type="text/javascript" src="/static/js/selectivizr.js"></script>
+  {% endcompress %}
+<![endif]-->
+
+</head>
+<body class="login" style="overflow: hidden;">
+    <div id="loading">
+      <script type="text/javascript">
+        document.write("<div id='loading-container'><p id='loading-content'>" +
+                     "<img id='loading-graphic' width='16' height='16' src='/static/images/ajax-loader-abc4ff.gif' /> " +
+                     "Loading...</p></div>");
+    </script>
+    </div>
+  
+  <div id="browsersupport" class="message error">
+      	<h3>Unsupported Browser Detected!</h3>
+        <p>For the best possible experience, please upgrade your browser to the latest version of Internet Explorer.</p>
+        <p>If you are unable to upgrade we would suggest installing an alternative browser such as <a href="https://www.google.com/chrome/" target="_blank">Google Chrome</a> or <a href="http://firefox.com" target="_blank">Firefox</a>.</p>
+  </div>	
+  
+  
+  <div class="login-box">
+  
+  
+  
+    <section class="login-box-top">
+      <noscript style="position:absolute;z-index:99999999">
+		    <div class="message error">
+					<h3>JavaScript Error!</h3>
+					<p>JavaScript is off. Please enable to view full site and utilize features.</p>
+          <p><a href="http://enable-javascript.com">How To Enable Javascript</a></p>
+				</div>
+    	</noscript>
+      
+      	
+      <header>
+      	<img style="display:block;margin:auto;" src="/static/images/ght_logo_login.png"/>
+      </header>
+      <header>
+      	{% if form.errors %}
+        	<div style="margin-top:15px;font-size:12px;text-align:center;color:#006">The provided username and password did not match any records in the database.  Please try again.</div>
+      	{% else %}
+      		{% if 'manual' in request.GET %}
+    			<div style="margin-top:15px;font-size:12px;text-align:center;color:#006">You have successfully logged out. If this was a mistake, feel free to login using your credentials below.</div>
+    			{% else %}
+    			  {% if 'timeout' in request.GET %}
+    			<div style="margin-top:15px;font-size:12px;text-align:center;color:#006">You have been logged out due to inactivity.  Feel free to login again using your credentials below.</div>
+    		    {% endif %}
+      		{% endif %}
+    		{% endif %}
+      </header>
+      	<section>
+        	<form id="form" class="has-validation" method="post" style="margin-top: 30px">
+          	{% csrf_token %}
+            <div class="user-pass">
+            	<input type="text" id="username" class="full" value="" name="username" required placeholder="Username" />
+              <input type="password" id="password" class="full" value="" name="password" required placeholder="Password" />
+            </div>
+            <p class="clearfix">
+            	<button class="fr" type="submit">Login</button><br />
+                <span><a href="/dashboard/public/#/accounts/lost_password/">Forgot your password?</a></span><br />
+                <span><a href="/dashboard/public/#/accounts/retrieve_username/">Retrieve Username</a></span><br />
+                <span><a href="/dashboard/public/#/accounts/retrieve_username/">Activate New Account</a></span>
+            </p>
+            <p><a href="#setupMyGHR" class="fancy">First time here?</a></p>
+          </form>
+        </section>
+      </section>
+      <p style="text-align: center">If you have any questions about your account, please call us at (888) 263-0003</p>
+  	</div>
+  	<div id="setupMyGHR" style="display:none; width: 500px;">
+  		<div class="message info">
+    		<h3>How do I set up my MyGHR patient account?</h3>
+      	<p style="font-size: 14px;">You will be able to set up your MyGHR Patient Account by contacting the healthcare professional that referred the GHT Meter or by calling Genesis Customer Support at (888) 263-0003.<br/><br/>
+    	Once your account is created you will be able to log in to your MyGHR Patient Account with your assigned username and password.</p>
+    </div>  
+    
+<!-- MAIN JAVASCRIPTS -->
+<script src='https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js'></script>
+<script>window.jQuery || document.write("<script src='/static/js/jquery.min.js'>\x3C/script>")</script>
+
+{% compress js %}
+    <script type="text/javascript" src="/static/js/jquery.tools.min.js"></script>
+    <script type="text/javascript" src="/static/js/jquery.uniform.min.js"></script>
+    <script type="text/javascript" src="/static/js/jquery.easing.js"></script>
+    <script type="text/javascript" src="/static/js/jquery.ui.totop.js"></script>
+    <script type="text/javascript" src="/static/js/jquery.fancybox.pack.js"></script>
+{% endcompress %}
+
+<!--[if lt IE 9]>
+  {% compress js %}
+    <script type="text/javascript" src="/static/js/PIE.js"></script>
+    <script type="text/javascript" src="/static/js/ie.js"></script>
+  {% endcompress %}
+<![endif]-->
+
+<!-- MAIN JAVASCRIPTS END -->
+
+<!-- LOADING SCRIPT -->
+<script type="text/javascript">
+  $(document).ready(function() {
+    $(".fancy").fancybox();
+  });
+</script>
+<script>
+$(window).load(function() {
+    $("#loading").fadeOut(function() {
+        $(this).remove();
+        $('body').removeAttr('style');
+    });
+});
+</script>
+
+<script type="text/javascript">
+    $(function() {
+        if(!$.support.placeholder) {
+            var active = document.activeElement;
+            $(':text').focus(function() {
+                if ($(this).attr('placeholder') != '' && $(this).val() == $(this).attr('placeholder')) {
+                    $(this).val('').removeClass('hasPlaceholder');
+                }
+            }).blur(function() {
+                if ($(this).attr('placeholder') != '' && ($(this).val() == '' || $(this).val() == $(this).attr('placeholder'))) {
+                    $(this).val($(this).attr('placeholder')).addClass('hasPlaceholder');
+                }
+            });
+            $(':text').blur();
+            $(active).focus();
+        }
+    });
+</script>
+ 
+<script type="text/javascript">
+    $(function() {
+        if(!$.support.placeholder) {
+            var active = document.activeElement;
+            $(':password').focus(function() {
+                if ($(this).attr('placeholder') != '' && $(this).val() == $(this).attr('placeholder')) {
+                    $(this).val('').removeClass('hasPlaceholder');
+                }
+            }).blur(function() {
+                if ($(this).attr('placeholder') != '' && ($(this).val() == '' || $(this).val() == $(this).attr('placeholder'))) {
+                    $(this).val($(this).attr('placeholder')).addClass('hasPlaceholder');
+                }
+            });
+            $(':password').blur();
+            $(active).focus();
+            $('form').submit(function() {
+                $(this).find('.hasPlaceholder').each(function() {
+                    if ($(this).attr('placeholder') != '' && $(this).val() == $(this).attr('placeholder')) {
+                        $(this).val('');
+                    }
+                });
+            });
+        }
+    });
+</script>
+
+<!-- LOADING SCRIPT -->
+
+</body>
+</html>

@@ -1,0 +1,89 @@
+<!-- Code for Messages -->                
+
+<script type = "text/javascript">
+	function create( template, vars, opts ){
+		return $container.notify("create", template, vars, opts);
+	}
+	
+	$(function(){
+		$container = $("#container").notify();
+
+		$("#messagegrowl").click(function(){
+			create("default-container", { title:'Message Sent Successfully', text:'You have successfully send your message to the requested recipient!'});
+		});
+
+	});
+</script>
+
+
+<section class="tabs grid_12 leading">
+	<div class="dropui dropui-menu dropui-red" style="position:absolute; right:0px;">
+    	<a href="javascript:;" class="dropui-tab">Send a Message</a>
+        <div class="dropui-content">
+        	<ul>
+            	<li><a href="#sendmessage" class="fancybox">To a Patient</a></li>
+                <li><a href="#sendmessage" class="fancybox">To a Professional</a></li>
+                <li><a href="#sendmessage" class="fancybox">To a Option</a></li>
+                <li><a href="#sendmessage" class="fancybox">To a Option</a></li>
+            </ul>
+        </div>
+    </div>
+    
+    <ul class="clearfix">
+    	<li style="position:relative"><a href="#" class="current"><i class="icon-inbox"></i>Inbox {% if request.user.get_profile.get_unread_messages.count %}<span class="message-count" id="message-counter">{{ request.user.get_profile.get_unread_messages.count }}</span>{% endif %}</a></li>
+        <li style="position:relative"><a href="#">Sent</a></li>
+    </ul>
+    
+    <section>
+    	<section class="clearfix" style="display: none;">
+        	<p style="min-width: 500px"> <!-- Gregg, remove the min-width. It's there just for mockup purposes -->
+            	<div class="batchDropdown">
+                	<select id="dda_2" style="opacity: 0;">
+                    	<option value="/accounts/messages/batch/read/">Mark as Read</option>
+                        <option value="/accounts/messages/batch/unread/">Mark as Unread</option>
+                        <option value="/accounts/messages/batch/delete/">Delete</option>
+                    </select>
+                    <input type="submit" for="dda_2" value="Apply to Selected" class="dropdownSubmitter">
+                </div>
+            </p>
+            <p>
+                Inbox table goes here
+            </p>
+        </section>
+        <section class="clearfix" style="display: block;">
+        	<p style="min-width: 500px"> <!-- Gregg, remove the min-width. It's there just for mockup purposes -->
+            	<div class="message info">You haven't sent any messages yet.</div>
+            </p>
+        </section>
+    </section>
+</section>
+
+<!-- Hidden Popup for Message -->
+<div id="sendmessage" style="display:none">
+	<div class="message info">
+    	<h3>Sending a Message</h3>
+        <p>Fill out all the fields below and click send.</p>
+    </div>
+    <p>
+    	<form class="form" method="post" formType="message">
+            <fieldset>
+                <input type="button" id="messagegrowl" value="Send Message" onClick="javascript:$.fancybox.close();" />
+            </fieldset>
+		</form>
+    </p>
+</div>  
+<!-- /Popup -->
+<!-- Growl for successful message -->
+<div id="container">
+	<div id="default-container">
+        <h1>#{title}</h1>
+        <p>#{text}</p>
+    </div>
+</div>
+<!-- /Growl -->
+    
+<script type="text/javascript">
+	$(document).ready(function() {
+		$(".fancybox").fancybox();
+	});
+</script>

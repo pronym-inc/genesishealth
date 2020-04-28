@@ -1,0 +1,43 @@
+<div class="container_12 clearfix leading">
+	<div class="grid_12">
+		<div class="message warning">
+  		<h3>Warning:</h3>
+    	<p>Your email is currently set to %. Please note that if your login is set to your email, changing your email will also cause your login information to change.</p>
+  	</div>
+  </div>
+  
+  <div class="grid_12">
+    
+    <form action="" method="post" class="form" novalidate="novalidate" onsubmit="return confirm('Remember, if you are currently using your email as your login, changing your email will also cause your login information to change.');">
+    	<div style="display:none">
+      	<input type="hidden" name="csrfmiddlewaretoken" value="xIkLS4c6FPGgrNOhQA9nEQfR1ZkbXMIF">
+      </div>
+        
+      <p class="required">
+      	<label for="id_current_password">Current password: <em>*</em></label>
+        <input name="current_password" maxlength="100" required="required" type="password" class="required" id="id_current_password">
+      </p>
+      
+      <p class="required">
+      	<label for="id_email">Email: <em>*</em></label>
+        <input id="id_email" required="required" type="email" class="required" name="email">
+        <span id="email_warning" class="warning" style="display: none;">If your login is set to your email, changing your email will also cause your login information to change.</span>
+      </p>
+      
+      <p class="required">
+      	<label for="id_confirm_email">Confirm email: <em>*</em></label>
+        <input id="id_confirm_email" required="required" type="email" class="required" name="confirm_email">
+      </p>
+
+      <p><input type="submit" value="Submit"></p>
+    </form>
+
+    </div>
+  </div>
+  
+<script type="text/javascript">
+	$(document).ready(function() {
+		// Handle warning message toggle on email field
+		$('#id_email').bind('focus | blur', function(){$('#email_warning').toggle();});
+	});
+</script>

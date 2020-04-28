@@ -80,7 +80,7 @@ class ProfileManager(models.Manager):
         if password is None:
             password = make_password()
         user = User.objects.create_user(username, email, password)
-        for k, v in filter_dict_to_model_fields(kwargs, User).iteritems():
+        for k, v in filter_dict_to_model_fields(kwargs, User).items():
             setattr(user, k, v)
         user.save()
         self.create_profile(user, **kwargs)
@@ -288,7 +288,7 @@ class BaseProfile(models.Model):
         """Method updates a patient provided a dictionary of new items."""
         for obj in (self, self.user, self.contact):
             fkwargs = filter_dict_to_model_fields(kwargs, obj)
-            for key, value in fkwargs.iteritems():
+            for key, value in fkwargs.items():
                 setattr(obj, key, value)
             if save:
                 obj.save()

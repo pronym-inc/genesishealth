@@ -1,0 +1,113 @@
+==============
+Server Setup
+==============
+
+Upgrade
+-------
+::
+
+    sudo apt-get dist-upgrade
+    shutdown -r now
+
+Base package install
+--------------------
+
+::
+
+    sudo su -
+
+::
+
+    apt-get install -y python-setuptools python-dev git-core
+    apt-get install -y libpq-dev
+    apt-get install -y nginx
+    apt-get install -y rabbitmq-server
+
+Nginx configuration
+-------------------
+
+::
+
+    # Edit nginx.conf to add project /etc/*.nginx.conf
+    nano /etc/nginx/nginx.conf
+    # Change include /etc/nginx/conf.d/*.conf to
+    include /apps/*/src/*/server_configs/*/*nginx.conf;
+
+Base Python package install
+---------------------------
+
+::
+
+    easy_install supervisor
+    easy_install virtualenv
+    easy_install pip
+
+Set up Supervisord
+------------------
+
+::
+
+    echo_supervisord_conf > /etc/supervisord.conf
+
+::
+
+    # Edit /etc/supervisord.conf, add:
+    [include]
+    files = /apps/*/src/*/server_configs/*/*supervisord.ini
+
+    nano /etc/init.d/supervisord
+
+    # Supervisord auto-start
+    #
+    # description: Auto-starts supervisord
+    # processname: supervisord
+    # pidfile: /var/run/supervisord.pid
+
+    SUPERVISORD=/usr/local/bin/supervisord
+    SUPERVISORCTL=/usr/local/bin/supervisorctl
+
+    case $1 in
+    start)
+            echo -n "Starting supervisord: "
+            $SUPERVISORD
+            echo
+            ;;
+    stop)
+            echo -n "Stopping supervisord: "
+            $SUPERVISORCTL shutdown
+            echo
+            ;;
+    restart)
+            echo -n "Stopping supervisord: "
+            $SUPERVISORCTL shutdown
+            echo
+            echo -n "Starting supervisord: "
+            $SUPERVISORD
+            echo
+            ;;
+    esac
+
+::
+
+    chmod +x /etc/init.d/supervisord
+    update-rc.d supervisord defaults
+    /etc/init.d/supervisord start
+
+Set up deploy environment
+-------------------------
+
+::
+
+    adduser deploy
+    mkdir /apps
+    chown deploy:deploy /apps
+
+Set up deploy user sudo access
+------------------------------
+
+::
+
+    nano /etc/sudoers
+    deploy ALL=NOPASSWD: /usr/local/bin/supervisorctl, /etc/init.d/nginx
+
+.. Add ssh key to deploy user's authorized_keys

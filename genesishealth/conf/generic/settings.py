@@ -177,6 +177,10 @@ STATICFILES_FINDERS += (
     'compressor.finders.CompressorFinder',
 )
 
+STATICFILES_DIRS = (
+    os.path.join(BASE_DIR, 'static'),
+)
+
 VAR_ROOT = os.path.join(VIRTUALENV_DIR, 'var')
 
 STATIC_URL = '/static/'

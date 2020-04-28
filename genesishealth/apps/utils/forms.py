@@ -40,7 +40,7 @@ class MultiItemWidget(forms.Widget):
 
     def value_from_datadict(self, data, files, name):
         items = {}
-        for k, v in data.iteritems():
+        for k, v in data.items():
             if k.startswith('%s_' % name):
                 res = re.findall(r'^%s_(\d+)_(.+?)$' % name, k)
                 if len(res) <= 0:
@@ -225,7 +225,7 @@ class GenesisModelForm(forms.ModelForm):
         field_info = {}
         for model_name in self.get_all_models():
             field_info[model_name] = []
-        for field_name, field in self.fields.iteritems():
+        for field_name, field in self.fields.items():
             for model_name, available_model in models.items():
                 for model_field in available_model._meta.fields:
                     if model_field.name == field_name:
@@ -281,7 +281,7 @@ def add_widget_class(self, field_name, new_class):
 
 
 def genesis_form_init(self):
-    for field_name, field in self.fields.iteritems():
+    for field_name, field in self.fields.items():
         if (field.required and not field.widget.attrs.get('required') and
                 not isinstance(field.widget, forms.CheckboxSelectMultiple)):
             field.widget.attrs['required'] = 'required'

@@ -1,0 +1,25 @@
+.. _remote-server-updates:
+
+Updates
+=======
+
+Developers should not ever make updates to production environments.  The system administration team is tasked with all things production-related.
+
+All updates must go into the git repository, into the appropriate branch.
+
+All updates to servers should be done by using the fabric build scripts.  Updates should NEVER be done manually via SSH or (S)FTP.
+
+Updating with Fabric
+--------------------
+
+Deploy new code to an existing installation is easy and requires just one command (after the code has been committed and pushed to the git repository):
+
+   ::
+
+      fab -R <your_instance_name> deploy
+
+   This will make all necessary file and database changes and will restart the server.  If you ever have to change any configuration settings in the fabric scripts, you can apploy those with:
+
+   ::
+
+      fab -R <your_instance_name> sync_config

@@ -127,7 +127,7 @@ class RetrieveUsernameView(TemplateView):  # REFACTOR
                 del hidden_data['date_of_birth']
 
             submitted = any([
-                True for k, v in request.POST.iteritems()
+                True for k, v in request.POST.items()
                 if k.startswith('f2-')])
             if not submitted:
                 del form_kwargs['data']

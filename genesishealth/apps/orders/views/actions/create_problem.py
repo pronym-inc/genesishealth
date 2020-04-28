@@ -17,7 +17,7 @@ class OrderProblemForm(GenesisModelForm):
         self.order = kwargs.pop('order')
         self.requester = kwargs.pop('requester')
         super(OrderProblemForm, self).__init__(*args, **kwargs)
-        for field_name, field in self.fields.iteritems():
+        for field_name, field in self.fields.items():
             field.required = False
 
     def save(self):

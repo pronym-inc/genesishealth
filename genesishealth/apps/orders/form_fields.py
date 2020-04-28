@@ -67,7 +67,7 @@ class SelectProductsField(forms.Field):
         output = []
         for row in parsed:
             # Make sure only appropriate fields find their way in.
-            data = {k: v for k, v in row.iteritems() if k in form_fields}
+            data = {k: v for k, v in row.items() if k in form_fields}
             f = OrderProductForm(data)
             if f.is_valid():
                 output.append(f.save(commit=False))

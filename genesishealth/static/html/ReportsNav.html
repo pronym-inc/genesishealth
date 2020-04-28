@@ -1,0 +1,74 @@
+<style type="text/css">
+ ul.tempnav {
+	 width: 300px;
+	 margin-top: 25px;
+ }
+ ul.tempnav li a {
+	 display: block;
+ }
+ ul.tempnav li img {
+	 vertical-align: middle;
+ }
+ ul.tempnav li {
+	 position: relative;
+	 border-left:1px solid #ccc;
+	 border-right:1px solid #ccc;
+	 border-bottom: 1px solid #ccc;
+	 display: block;
+	 -o-transition-duration: 0.2s;
+     -ms-transition-duration: 0.2s;
+     -moz-transition-duration: 0.2s;
+     -khtml-transition-duration: 0.2s;
+     -webkit-transition-duration: 0.2s;
+     transition-duration: 0.2s;
+ }
+ 
+ ul.tempnav li:hover {
+	 background-color:#f1f1f1;
+	 
+ }
+ ul.tempnav li span {
+	 -o-transition-duration: 0.2s;
+    -ms-transition-duration: 0.2s;
+    -moz-transition-duration: 0.2s;
+    -khtml-transition-duration: 0.2s;
+    -webkit-transition-duration: 0.2s;
+    transition-duration: 0.2s;
+ }
+ ul.tempnav li:hover span {
+	 padding-left:5px;
+ }
+ 
+</style>
+
+<div class="message info">
+	<h3>Navigate Reports</h3>
+    <p>To navigate between reports, select the report of interest below. On that page, you'll have the option to return to this page to select a different report type.</p>
+</div>
+
+<ul class="tempnav">
+	<li style="border-top:1px solid #ccc;">
+    	<a href="/dashboard/#/reports/summary/" class="summarylink" title="Summary Report">
+        	<img src="/static/images/navicons/153.png" alt=""><span>Summary Report</span>
+        </a>
+        <img class="innerloader" id="menulevelloader" src="/static/images/ajax-loader-menu.gif" style="display: none;">
+    </li>
+	<li>
+    	<a href="/dashboard/#/reports/logbook_with_summary/" title="Logbook">
+    		<img src="/static/images/navicons/160.png" alt=""><span>Logbook</span>
+        </a>
+        <img class="innerloader" id="menulevelloader" src="/static/images/ajax-loader-menu.gif" style="display: none;">
+    </li>
+    <li>
+    	<a href="/dashboard/#/reports/test_history/" title="Test History">
+        	<img src="/static/images/navicons/83.png" alt=""><span>Test History</span>
+        </a>
+        <img class="innerloader" id="menulevelloader" src="/static/images/ajax-loader-menu.gif" style="display: none;">
+    </li>
+    <li>
+    	<a href="/dashboard/#/reports/trending/average/" title="Target Range Outcome">
+        	<img src="/static/images/navicons/77.png" alt=""><span>Target Range Outcome</span>
+        </a>
+        <img class="innerloader" id="menulevelloader" src="/static/images/ajax-loader-menu.gif" style="display: none;">
+    </li>
+</ul>

@@ -1,0 +1,24 @@
+#logo {
+    text-align: center;
+    margin-top: 100px;
+}
+
+#login-form {
+    margin: auto auto;
+    margin-top: 20px;
+    padding: 20px;
+    width: 300px;
+    border-top: 2px solid #003366;
+    border-right: 2px solid #cccccc;
+    border-bottom: 2px solid #cccccc;
+    background-color: #ffffff;
+}
+
+#login-form label {
+    display: block;
+}
+
+#login-form input {
+    font-size: 12px;
+    padding: 5px;
+}

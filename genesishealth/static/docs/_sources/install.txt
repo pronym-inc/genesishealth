@@ -1,0 +1,217 @@
+.. _install:
+
+Installation
+============
+
+In practice, there are two different ways the source code will be installed: on a remote server and on the developer's local machine.  Installation on a remote server is pretty much entirely automated, except for a few short steps.  Local installation is pretty much a manual process, and will vary somewhat from system to system.
+
+.. _remote-server-installation:
+
+Remote Server Installation
+--------------------------
+
+Setting up a new server should be done primarily using the fabric scripts available in the repository.  There are several steps involved in this:
+
+#. First, you need to update all of the relevant fabric configuration files (and create some new ones, probably) with all of the information of the new server.  It should be pretty clear from the many existing examples what needs to go where.  It's especially important to add your SSH key to the configuration so that you're not prompted repeatedly when running fabric scripts.
+
+#. Next, you need to manually add the IP of the new server to the security configuration of the database server:
+
+   ::
+
+        vi /etc/postgresql/8.4/main/pg_hba.conf
+
+   Then restart the database server:
+
+   ::
+
+        /etc/init.d/postgresql reload
+
+#. Now we just need to run Fabric.  Change into the directory that contains fabfile.py and run the following commands.  Note that you may be prompted a few times for the system's root password.
+
+   ::
+
+      fab -R <new_installation_role_name> bootstrap_chef
+      fab -R <new_installation_role_name> clone
+      fab -R <new_installation_role_name> deploy
+      fab -R <new_installation_role_name> sync_config
+
+   If you're using a new database and want to use the USDA food database, you'll need one more command.  Note, that this one takes a LONG time to run, because it's importing hundreds of thousands of nutrition records.
+
+   ::
+
+      fab -R import_usda_data
+
+   After these commands finish running, your server should be up and running.
+
+Local Server Installation
+-------------------------
+
+Unless you happen to be lucky enough to be running the exact same environment that our servers are using, you probably will not be able to use the fabric scripts to deploy the code to your own local machine.  This means it will pretty much be a manual process.  It is assumed that this is a Unix-like environment.  If you're installing on a Windows command, the below should at least detail the general steps you'll need to take.
+
+Install Requirements
+^^^^^^^^^^^^^^^^^^^^
+
+The following pieces of software are required by the Genesis applications.  Some might not be necessary for every project, as noted below.
+
+#. `nginx`_ .  You could use Apache or whatever else you want to, but the typical set up is with nginx.  You could also probably get away with using Django's development server if you really wanted to.
+#. `PostgreSQL`_.  You can avoid installing this locally if you just want to remotely connect to the development server's database.  Note, you'll need to add your development machine's IP to the list of allowed connections (see :ref:`remote-server-installation`).
+#. `RabbitMQ`_.  This is only necessary if setting up a queue server.
+
+.. _nginx: http://nginx.org/
+.. _PostgreSQL: http://www.postgresql.org/
+.. _RabbitMQ: http://www.rabbitmq.com/
+
+Each of these will also require its own setup and configuration, which is not detailed here since it is highly system- and preference-dependent.
+
+Python dependencies will be installed automatically in a later step.
+
+Environment Setup
+^^^^^^^^^^^^^^^^^
+
+#. If you haven't already, install `pip`_.
+#. Now, install virtualenv:
+
+   ::
+   
+       pip install virtualenv
+
+#. Create a virtual environment:
+   
+   ::
+
+       virtualenv your_instance_name
+
+#. Go into the directory and activate the virtual environment:
+
+   ::
+
+       cd your_instance_name
+       source bin/activate
+
+#. Create some directories that we'll need
+
+   ::
+
+      mkdir src etc var var/log var/log/gunicorn
+
+#. Create a `Green Unicorn`_ (gunicorn) configuration file.  The server runs through gunicorn (already installed with requirements.pip) but needs a simple configuration file.  This will depend somewhat on your nginx configuration, but here is a sample file:
+
+   ::
+
+      bind = "127.0.0.1:8001"
+      accesslog = "/Users/greggkeithley/Work/Genesis/test_site/var/log/gunicorn/access.log"
+      errorlog = "/Users/greggkeithley/Work/Genesis/test_site/var/log/gunicorn/error.log"
+
+   You'll need to update your paths appropriately, and the bind address will depend upon how you set up nginx.
+
+#. Install fabric.  This isn't included in requirements.pip, because the servers don't need it.
+
+   ::
+
+      pip install Fabric==1.4.3
+
+#. Create a manage.py script in your virtualenv's bin.  Follow the example below:
+
+   ::
+
+      #!/Users/greggkeithley/Work/Genesis/test_site/bin/python
+      import sys
+      sys.path.append('/Users/greggkeithley/Work/Genesis/test_site/src/genesishealth')
+      __file__ = '/Users/greggkeithley/Work/Genesis/test_site/src/genesishealth/genesishealth/bin/manage.py'
+      execfile(__file__)
+
+#. (Optional) Install and configure `supervisor`_.
+
+   ::
+
+      pip install supervisor
+
+   This will install supervisor just for your virtualenv and place two executables in the virtualenv's bin folder: supervisord and supervisorctl.  You'll need to create a simple configuration file, probably in your virtualenv's etc folder.  This will vary depending on your system, but here is a sample one:
+
+   ::
+
+      [unix_http_server]
+      file=/tmp/supervisor_genesis_test.sock   ; (the path to the socket file)
+      
+      [supervisord]
+      logfile=/tmp/supervisord.log 
+      logfile_maxbytes=50MB        
+      logfile_backups=10           
+      loglevel=debug               
+      pidfile=/tmp/supervisord.pid 
+      nodaemon=false               
+      minfds=1024                  
+      minprocs=200                 
+      
+      [rpcinterface:supervisor]
+      supervisor.rpcinterface_factory = supervisor.rpcinterface:make_main_rpcinterface
+      
+      [supervisorctl]
+      serverurl=unix:///tmp/supervisor_genesis_test.sock ; use a unix:// URL  for a unix socket
+      
+      [program:genesis_gunicorn]
+      command=/Users/greggkeithley/Work/Genesis/test_site/bin/python /Users/greggkeithley/Work/Genesis/test_site/bin/manage.py run_gunicorn -c /Users/greggkeithley/Work/Genesis/test_site/etc/gunicorn.conf.py
+      autostart=true
+      autorestart=true
+
+   The server's not ready to start, but when it is, run:
+
+   ::
+
+      supervisord -c etc/supervisord.conf
+   
+   To restart the server (e.g. when you've made changes), use:
+
+   ::
+
+      supervisorctl restart all
+
+.. _pip: http://pypi.python.org/pypi/pip
+.. _supervisor: http://pypi.python.org/pypi/supervisor
+.. _Green Unicorn: http://gunicorn.org/
+
+Application Installation
+^^^^^^^^^^^^^^^^^^^^^^^^
+
+#. Clone the repository into your virtualenv's src directory.  Note which branch you'll be working on:
+
+   ::
+
+      git clone <git_url> -b <branch>
+
+#. Install application dependencies
+
+   ::
+
+      cd genesishealth/dependencies
+      pip install -r requirements.pip
+
+#. Create a settings file for your environment.  Add a folder to genesishealth/conf with some descriptive name and create __init__.py, urls.py, and settings.py inside of it.  You can just look at other settings files as templates; you should really only have to change a few things that are system-specific.  You probably will not need to change anything in urls.py.
+
+   You then need to sym link the file into local:
+
+   ::
+
+      ln -s /path/to/your/settings/directory/* /path/to/project/genesishealth/conf/local
+
+   You can make sure the system is getting your settings correctly by running 'manage.py'.  It should show you a list of available commands, including some non-default ones, like schemamigration and run_gunicorn.  If you get anything else, it means something is wrong with one of the following: your settings file, the sym link, or your manage.py script.
+
+#. Sync your database.  Note, this step is not required if you're using a remote database.
+
+   ::
+
+      manage.py syncdb --migrate
+
+#. Next, we'll load a fixture to add a single admin user to the database.  Ask someone on development team for username and password.
+
+   ::
+
+      manage.py loaddata initial_logins
+
+#. (Optional) If you want to use the USDA food database, you'll need to run the import script.  This is in the scripts folder.  Just run:
+
+   ::
+
+      python import_sr25.py
+
+#. You should be good to go to now start your server.

@@ -247,7 +247,7 @@ class GlucoseReading(ModelWithNotes):
         """Takes a dict of values and generates a reading from it."""
         # Encrypt all the data.
         encrypted_data = {}
-        for key, value in data.iteritems():
+        for key, value in data.items():
             encrypted_value = encrypt(value)
             # The data has to be spaced out into bytes (two characters)
             r = range(0, len(encrypted_value), 2)
@@ -297,7 +297,7 @@ class GlucoseReading(ModelWithNotes):
 
         def justplain(d):
             d2 = dict()
-            for k, v in d.iteritems():
+            for k, v in d.items():
                 d2[k.lower()] = v['plain']
             return d2
 

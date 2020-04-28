@@ -1,0 +1,3 @@
+Patient Name: {{ reading.patient.get_full_name }} 
+Reading Date: {{ reading.reading_datetime|date:"M d, Y" }} at {{ reading.reading_datetime|date:"h:i A"}} 
+Glucose Value: {{ reading.value1 }}

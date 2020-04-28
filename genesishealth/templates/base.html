@@ -1,0 +1,19 @@
+{% load genesis_tools %}
+{% block extrahead %}{% endblock %}
+<link rel="stylesheet" media="screen" href="/static/lib/datatables/css/myghrpad.css" />
+
+<h1 class="page-title">{% block pageTitle %}{% endblock %}</h1>
+{% if request.user.is_admin %}
+<div class="breadcrumbs">
+    {% for breadcrumb in breadcrumbs %}
+    <a href="{{ breadcrumb.link }}">{{ breadcrumb.title }}</a>
+    {% if not forloop.last %} / {% endif %}
+    {% endfor %}
+</div>
+{% endif %}
+<div class="container_12 clearfix leading">
+    <div class="grid_12">
+    {% display_system_messages %}
+   {% block main_content %}{% endblock %}
+    </div>
+</div>

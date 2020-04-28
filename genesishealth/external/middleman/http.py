@@ -9,7 +9,7 @@ def urlencode(data):
 
 def lowerkeys(d):
     d2 = {}
-    for k, v in d.iteritems():
+    for k, v in d.items():
         d2[str(k).lower()] = v
     return d2
 

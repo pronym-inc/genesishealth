@@ -36,7 +36,7 @@ class CSVImportForm(GenesisForm):
                 cleaned_errors = list(map(
                     lambda k: "[Line {0} - {1}] {2}".format(
                         line_number, k[0], k[1]),
-                    errors.iteritems()))
+                    errors.items()))
                 line_errors.extend(cleaned_errors)
             line_number += 1
         if line_errors:

@@ -1,0 +1,68 @@
+/* ---------------BreadCrumbs------------ */
+	#crumbwrapper{
+	  margin: 0px auto;
+	  width: auto;
+	  padding: 20px 40px 40px 40px;
+	}
+	#glbreadcrumbs-three{
+	  /* Clear floats */
+	  overflow: hidden;
+	  width: 100%;
+	}
+	
+	#glbreadcrumbs-three li{
+	  float: left;
+	  margin: 0 2em 0 0;
+	}
+	
+	#glbreadcrumbs-three a{
+	  padding: .7em 1em .7em 2em;
+	  float: left;
+	  text-decoration: none;
+	  color: #373836;
+	  background: #C2C2C2;  
+	  position: relative;
+	  z-index: 1;
+	  text-shadow: 1px 1px 1px rgba(255,255,255,.5);  
+	  -moz-border-radius: .4em 0 0 .4em;
+	  -webkit-border-radius: .4em 0 0 .4em;
+	  border-radius: .4em 0 0 .4em;  
+	}
+	
+	#glbreadcrumbs-three a:hover{
+	  background: #DFE0DE;
+	}
+	
+	#glbreadcrumbs-three a::after{
+	  background: #C2C2C2;
+	  content: "";
+	  height: 2.5em;
+	  margin-top: -1.25em;
+	  position: absolute;
+	  right: -1em;
+	  top: 50%;
+	  width: 2.5em;
+	  z-index: -1;  
+	  -webkit-transform: rotate(45deg); 
+	  -moz-transform: rotate(45deg);
+	  -ms-transform: rotate(45deg);
+	  -o-transform: rotate(45deg); 
+	  transform: rotate(45deg);
+	  -moz-border-radius: .4em;
+	  -webkit-border-radius: .4em;
+	  border-radius: .4em;
+	}
+	
+	#glbreadcrumbs-three a:hover::after{
+	  background: #DFE0DE;
+	}
+	
+	#glbreadcrumbs-three .current,
+	#glbreadcrumbs-three .current:hover{
+	  font-weight: bold;
+	  background: none;
+	}
+	
+	#glbreadcrumbs-three .current::after{
+	  content: normal;
+	}

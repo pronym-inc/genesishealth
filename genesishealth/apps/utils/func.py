@@ -95,7 +95,7 @@ def filter_dict_to_model_fields(in_dict, model):
     only contains fields with names that match a field name on the model."""
     new_dict = {}
     field_names = [f.name for f in model._meta.get_fields() if f.concrete]
-    for k, v in in_dict.iteritems():
+    for k, v in in_dict.items():
         if k in field_names:
             new_dict[k] = v
     return new_dict
@@ -111,7 +111,7 @@ def read_csv_file(csv_file, field_names, skip_lines=None):
     for i in range(skip_lines):
         fixed_csv.readline()
     for line in DictReader(fixed_csv, field_names, 'extra', ''):
-        for k, v in line.iteritems():
+        for k, v in line.items():
             try:
                 line[k] = v.strip()
             except AttributeError:

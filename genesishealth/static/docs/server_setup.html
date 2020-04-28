@@ -1,0 +1,215 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Server Setup &mdash; genesishealth 3.0 documentation</title>
+    
+    <link rel="stylesheet" href="_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '',
+        VERSION:     '3.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="genesishealth 3.0 documentation" href="index.html" />
+    <link rel="next" title="Installation" href="install.html" />
+    <link rel="prev" title="Welcome to GHT’s documentation!" href="index.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="install.html" title="Installation"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="index.html" title="Welcome to GHT’s documentation!"
+             accesskey="P">previous</a> |</li>
+        <li><a href="index.html">genesishealth 3.0 documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="server-setup">
+<h1>Server Setup<a class="headerlink" href="#server-setup" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="upgrade">
+<h2>Upgrade<a class="headerlink" href="#upgrade" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-python"><pre>sudo apt-get dist-upgrade
+shutdown -r now</pre>
+</div>
+</div>
+<div class="section" id="base-package-install">
+<h2>Base package install<a class="headerlink" href="#base-package-install" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-python"><pre>sudo su -</pre>
+</div>
+<div class="highlight-python"><pre>apt-get install -y python-setuptools python-dev git-core
+apt-get install -y libpq-dev
+apt-get install -y nginx
+apt-get install -y rabbitmq-server</pre>
+</div>
+</div>
+<div class="section" id="nginx-configuration">
+<h2>Nginx configuration<a class="headerlink" href="#nginx-configuration" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-python"><pre># Edit nginx.conf to add project /etc/*.nginx.conf
+nano /etc/nginx/nginx.conf
+# Change include /etc/nginx/conf.d/*.conf to
+include /apps/*/src/*/server_configs/*/*nginx.conf;</pre>
+</div>
+</div>
+<div class="section" id="base-python-package-install">
+<h2>Base Python package install<a class="headerlink" href="#base-python-package-install" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-python"><pre>easy_install supervisor
+easy_install virtualenv
+easy_install pip</pre>
+</div>
+</div>
+<div class="section" id="set-up-supervisord">
+<h2>Set up Supervisord<a class="headerlink" href="#set-up-supervisord" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-python"><pre>echo_supervisord_conf &gt; /etc/supervisord.conf</pre>
+</div>
+<div class="highlight-python"><pre># Edit /etc/supervisord.conf, add:
+[include]
+files = /apps/*/src/*/server_configs/*/*supervisord.ini
+
+nano /etc/init.d/supervisord
+
+# Supervisord auto-start
+#
+# description: Auto-starts supervisord
+# processname: supervisord
+# pidfile: /var/run/supervisord.pid
+
+SUPERVISORD=/usr/local/bin/supervisord
+SUPERVISORCTL=/usr/local/bin/supervisorctl
+
+case $1 in
+start)
+        echo -n "Starting supervisord: "
+        $SUPERVISORD
+        echo
+        ;;
+stop)
+        echo -n "Stopping supervisord: "
+        $SUPERVISORCTL shutdown
+        echo
+        ;;
+restart)
+        echo -n "Stopping supervisord: "
+        $SUPERVISORCTL shutdown
+        echo
+        echo -n "Starting supervisord: "
+        $SUPERVISORD
+        echo
+        ;;
+esac</pre>
+</div>
+<div class="highlight-python"><pre>chmod +x /etc/init.d/supervisord
+update-rc.d supervisord defaults
+/etc/init.d/supervisord start</pre>
+</div>
+</div>
+<div class="section" id="set-up-deploy-environment">
+<h2>Set up deploy environment<a class="headerlink" href="#set-up-deploy-environment" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-python"><pre>adduser deploy
+mkdir /apps
+chown deploy:deploy /apps</pre>
+</div>
+</div>
+<div class="section" id="set-up-deploy-user-sudo-access">
+<h2>Set up deploy user sudo access<a class="headerlink" href="#set-up-deploy-user-sudo-access" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-python"><pre>nano /etc/sudoers
+deploy ALL=NOPASSWD: /usr/local/bin/supervisorctl, /etc/init.d/nginx</pre>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Server Setup</a><ul>
+<li><a class="reference internal" href="#upgrade">Upgrade</a></li>
+<li><a class="reference internal" href="#base-package-install">Base package install</a></li>
+<li><a class="reference internal" href="#nginx-configuration">Nginx configuration</a></li>
+<li><a class="reference internal" href="#base-python-package-install">Base Python package install</a></li>
+<li><a class="reference internal" href="#set-up-supervisord">Set up Supervisord</a></li>
+<li><a class="reference internal" href="#set-up-deploy-environment">Set up deploy environment</a></li>
+<li><a class="reference internal" href="#set-up-deploy-user-sudo-access">Set up deploy user sudo access</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="index.html"
+                        title="previous chapter">Welcome to GHT&#8217;s documentation!</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="install.html"
+                        title="next chapter">Installation</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="_sources/server_setup.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="install.html" title="Installation"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="index.html" title="Welcome to GHT’s documentation!"
+             >previous</a> |</li>
+        <li><a href="index.html">genesishealth 3.0 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2012, Gregg Keithley.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
+    </div>
+  </body>
+</html>

@@ -26,7 +26,7 @@ def ords(bs):
 
 def debug(parsed):
     s = io.StringIO()
-    for k, data in parsed.iteritems():
+    for k, data in parsed.items():
         s.write('%s %-11s len:%2d %s \n' % (data['raw'], k, len(data['plain']),
                                             ords(data['plain'])))
     return s.getvalue()

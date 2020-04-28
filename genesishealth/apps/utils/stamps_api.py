@@ -35,7 +35,7 @@ def get_rates(rate_names, shipment_data, connection=None):
     'ShipDate': date.today ().isoformat()}"""
     connection = connection if connection else create_stamps_connection()
     shipping_obj = connection.create_shipping()
-    for key, value in shipment_data.iteritems():
+    for key, value in shipment_data.items():
         setattr(shipping_obj, key, value)
     rates = connection.get_rates(shipping_obj)
     return filter(lambda x: x.ServiceType in rate_names, rates)

@@ -15,7 +15,7 @@
     <form action="" method="post" class="form has-validation">
         {% if hidden_data %}
             <div style="display:none">
-                {% for key, value in hidden_data.iteritems %}
+                {% for key, value in hidden_data.items %}
                     <input type="hidden" name="{{ key }}" value="{{ value }}">
                 {% endfor %}
             </div>

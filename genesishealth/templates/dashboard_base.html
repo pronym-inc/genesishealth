@@ -1,0 +1,756 @@
+{% load genesis_tools %}
+{% load compress %}
+<!DOCTYPE html>
+<!--[if lt IE 7 ]><html class="ie ie6" lang="en"> <![endif]-->
+<!--[if IE 7 ]><html class="ie ie7" lang="en"> <![endif]-->
+<!--[if IE 8 ]><html class="ie ie8" lang="en"> <![endif]-->
+<!--[if (gte IE 9)|!(IE)]><!--><html lang="en"> <!--<![endif]-->
+<head><!--[if lte IE 9 ]><meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"><![endif]-->
+
+<!-- iPad Settings -->
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" /> 
+<meta name="viewport" content="width=device-width, minimum-scale=1.0, maximum-scale=1.0" />
+
+<!-- Adding "maximum-scale=1" fixes the Mobile Safari auto-zoom bug: http://filamentgroup.com/examples/iosScaleBug/ -->
+<!-- iPad Settings End -->
+
+<title>MyGHR</title>
+
+<link rel="shortcut icon" href="favicon.ico">
+
+<!-- iOS ICONS -->
+<link rel="apple-touch-icon" href="touch-icon-iphone.png" />
+<link rel="apple-touch-icon" sizes="72x72" href="touch-icon-ipad.png" />
+<link rel="apple-touch-icon" sizes="114x114" href="touch-icon-iphone4.png" />
+<link rel="apple-touch-startup-image" href="touch-startup-image.png">
+<!-- iOS ICONS END -->
+
+{% compress css %}
+    <link rel="stylesheet" media="screen" href="/static/css/reset.css" />
+    <link rel="stylesheet" media="screen" href="/static/css/grids.css" />
+    <link rel="stylesheet" media="screen" href="/static/css/device/general.css" />
+    <link rel="stylesheet" media="screen" href="/static/css/style.css" />
+    <link rel="stylesheet" media="screen" href="/static/css/ui.css" />
+    <link rel="stylesheet" media="screen" href="/static/css/forms.css" />
+    <link rel="stylesheet" media="screen" href="/static/css/jquery.uniform.css" />
+    <link rel="stylesheet" media="screen" href="/static/css/themes/lightblue/style.css" />
+    <link rel="stylesheet" media="screen" href="/static/css/jquery.fancybox.css" />
+{% endcompress %}
+{% compress css %}
+    <link rel="stylesheet" href="/static/css/notifications.css" media="screen" />
+    <link rel="stylesheet" href="/static/css/device/general.css" media="screen" />
+    <link rel="stylesheet" href="/static/css/buttons_rev.css" media="screen" />
+    <link rel="stylesheet" href="/static/css/tipTip.css" media="screen" />
+    <link rel="stylesheet" href="/static/css/smoothness/jquery-ui.css" media="screen" />
+    <link rel="stylesheet" href="/static/css/jquery.popover.css" media="screen" />
+    <link rel="stylesheet" href="/static/css/anytime.css" media="screen" />
+    <link rel="stylesheet" href="/static/css/font-awesome.min.css" media="screen" />
+{% endcompress %}
+
+<!--[if !IE]>-->
+    <link rel="stylesheet" href="/static/css/device/mobile.css" media="only screen and (max-width: 767px)" />
+<!--<![endif]-->
+
+<!--[if lt IE 9]>
+  {% compress js %}
+    <script type="text/javascript" src="/static/js/html5.js"></script>
+    <script type="text/javascript" src="/static/js/selectivizr.js"></script>
+  {% endcompress %}
+<![endif]-->
+
+</head>
+
+<body style="overflow: hidden;">
+	<div id="freeze-clicks" style="display: none;"></div>
+	<div id="loading"> 
+  	<script type = "text/javascript"> 
+    	document.write("<div id='loading-container'><p id='loading-content'>" +
+                     "<img id='loading-graphic' width='16' height='16' src='/static/images/ajax-loader-abc4ff.gif' /> " +
+                     "Loading...</p></div>");
+    </script> 
+	</div> 
+  
+  <div id="wrapper">
+  	<header>
+    	<h1><a href="/">myGHR</a></h1>
+      <nav>
+        <div class="container_12">
+          <div class="grid_12">
+            <ul class="toolbar clearfix fl">
+            </ul>
+            
+            {% if user.is_authenticated %}
+              <a href="{% get_dashboard_url accounts:logout %}" title="Logout" class="button icon-with-text fr"><img src="/static/images/navicons-small/129.png" alt=""/>Logout</a>
+              <div class="user-info fr">
+                Logged in as <a href="{% get_dashboard_url accounts:update-email %}">{{ user.first_name }} {{ user.last_name }} {% if user.is_professional %}({{ user.professional_profile.parent_group.name }}){% endif %}</a>
+              </div>
+            {% else %}
+              <a href="{% url 'accounts:login' %}" title="Login" class="button icon-with-text fr"><img src="/static/images/navicons-small/129.png" alt=""/>Login</a>
+            {% endif %}
+            
+            <div style="float:right; margin-top: 5px; margin-right: 10px"><a href="{% get_dashboard_url contact:contact-main %}">Having Trouble?</a></div>
+          </div>
+        </div>
+      </nav>
+    </header>
+        
+    <section>
+    <!-- Sidebar -->
+    	<aside>
+      	<nav class="drilldownMenu" style="position: relative;"><h1><span class="title">Main Menu</span><button title="Go Back" class="back">Back</button></h1>
+          <ul class="tlm">
+          	{% if user.is_professional %}
+                <li class="current">
+                  <a href="{% get_dashboard_url dashboard:home %}" title="My Home">
+                    <img src="/static/images/navicons/53.png" alt=""/><span>My Home</span>
+                  </a><img class="innerloader"  src="/static/images/ajax-loader-menu.gif" />
+                </li>
+                <li>
+                  <a href="{% get_dashboard_url accounts:manage-patients %}" title="My Patients">
+                    <img src="/static/images/navicons/112.png" alt=""/><span>My Patients</span>
+                  </a><img class="innerloader"  src="/static/images/ajax-loader-menu.gif" />
+                </li>
+                <li>
+                  <a href="{% get_dashboard_url accounts:watch-list %}" title="My Watch List">
+                    <img src="/static/images/navicons/29.png" alt="" /><span>My Watch List</span>
+                  </a><img class="innerloader"  src="/static/images/ajax-loader-menu.gif" />
+                </li>
+                <li>
+                  <a href="{% get_dashboard_url reports:professional-patient-reports %}" title="My Patient Reports">
+                    <img src="/static/images/navicons/29.png" alt=""/><span>My Downloadable Reports</span>
+                  </a><img class="innerloader"  src="/static/images/ajax-loader-menu.gif" />
+                </li>
+                <li class="hasul">
+                  <a href="#" title="My Account">
+                    <img src="/static/images/navicons/20.png" alt=""/><span>My Account</span>
+                  </a>
+                  <ul>
+                    <li>
+                      <a href="{% get_dashboard_url accounts:update-password %}" title="Update Password">
+                        <img src="/static/images/navicons/54.png" alt=""/><span>Update Password</span>
+                      </a><img class="innerloader"  src="/static/images/ajax-loader-menu.gif" />
+                    </li>
+                    <li>
+                      <a href="{% get_dashboard_url accounts:update-email %}" title="Update Email">
+                        <img src="/static/images/navicons/18.png" alt=""/><span>Update Email</span>
+                      </a><img class="innerloader"  src="/static/images/ajax-loader-menu.gif" />
+                    </li>
+                    <li>
+                      <a href="{% get_dashboard_url accounts:profile %}" title="Profile Information">
+                        <img src="/static/images/navicons/111.png" alt=""/><span>Profile Information</span>
+                      </a>
+                    </li>
+                    <li>
+                      <a href="{% get_dashboard_url accounts:security-questions %}" title="Security Questions">
+                        <img src="/static/images/navicons/20.png" alt=""/><span>Security Questions</span>
+                      </a>
+                    </li>
+                    <li>
+                      <a href="{% get_dashboard_url accounts:logout %}" title="Logout">
+                        <img src="/static/images/navicons/129.png" alt=""/><span>Logout</span>
+                      </a>
+                    </li>
+                  </ul>
+                </li>
+              {% endif %}
+              {% if user.is_admin %}
+                <li class="current">
+                  <a href="{% get_dashboard_url ghtadmin:dashboard %}" title="Admin Dashboard">
+                    <img src="/static/images/navicons/53.png" alt=""/><span>Admin Dashboard</span>
+                  </a><img class="innerloader"  src="/static/images/ajax-loader-menu.gif" />
+                </li>
+                {% if "monitoring" in user.admin_profile.all_permissions %}
+                <li class="current">
+                  <a href="{% get_dashboard_url monitoring:dashboard %}" title="Monitoring">
+                    <img src="/static/images/navicons/122.png" alt=""/><span>Monitoring</span>
+                  </a><img class="innerloader"  src="/static/images/ajax-loader-menu.gif" />
+                </li>
+                <li class="current">
+                  <a href="{% get_dashboard_url monitoring:scalability %}" title="Scalability">
+                    <img src="/static/images/navicons/17.png" alt=""/><span>Scalability</span>
+                  </a><img class="innerloader"  src="/static/images/ajax-loader-menu.gif" />
+                </li>
+                {% endif %}
+                {% if "manage-users" in user.admin_profile.all_permissions %}
+                <li class="current">
+                  <a href="{% get_dashboard_url accounts:manage-users %}" title="Manage Users">
+                    <img src="/static/images/navicons/111.png" alt=""/><span>Manage Users</span>
+                  </a><img class="innerloader"  src="/static/images/ajax-loader-menu.gif" />
+                </li>
+                {% endif %}
+                {% if "manage-devices" in user.admin_profile.all_permissions %}
+                <li class="hasul">
+                  <a href="#" title="Devices">
+                    <img src="/static/images/navicons/32.png" alt=""/><span>Manage Devices</span>
+                  </a><img class="innerloader"  src="/static/images/ajax-loader-menu.gif" />
+                  <ul>
+                    <li>
+                      <a href="{% get_dashboard_url gdrives:assigned %}" title="Assigned Devices">
+                        <img src="/static/images/navicons/93.png" alt=""><span>Assigned Devices</span>
+                      </a><img class="innerloader"  src="/static/images/ajax-loader-menu.gif" />
+                    </li>
+                    <li>
+                      <a href="{% get_dashboard_url gdrives:unassigned %}" title="Unassigned Devices">
+                        <img src="/static/images/navicons/134.png" alt=""><span>Unassigned Devices</span>
+                      </a><img class="innerloader"  src="/static/images/ajax-loader-menu.gif" />
+                    </li>
+                    <li>
+                      <a href="{% get_dashboard_url gdrives:available %}" title="Available Devices">
+                        <img src="/static/images/navicons/10.png" alt=""><span>Available Devices</span>
+                      </a><img class="innerloader"  src="/static/images/ajax-loader-menu.gif" />
+                    </li>
+                    <li>
+                      <a href="{% get_dashboard_url gdrives:non-conforming-devices %}" title="Non-Conforming Devices">
+                        <img src="/static/images/navicons/110.png" alt=""><span>Non-Conforming Devices</span>
+                      </a><img class="innerloader"  src="/static/images/ajax-loader-menu.gif" />
+                    </li>
+                    <li>
+                      <a href="{% get_dashboard_url gdrives:new-devices %}" title="New Devices">
+                        <img src="/static/images/navicons/21.png" alt=""><span>New Devices</span>
+                      </a><img class="innerloader"  src="/static/images/ajax-loader-menu.gif" />
+                    </li>
+                    <li>
+                      <a href="{% get_dashboard_url gdrives:reworked-devices %}" title="Reworked Devices">
+                        <img src="/static/images/navicons/03.png" alt=""><span>Reworked Devices</span>
+                      </a><img class="innerloader"  src="/static/images/ajax-loader-menu.gif" />
+                    </li>
+                    <li>
+                      <a href="{% get_dashboard_url gdrives:partner-devices %}" title="Partner Devices">
+                        <img src="/static/images/navicons/111.png" alt=""><span>Partner Devices</span>
+                      </a><img class="innerloader"  src="/static/images/ajax-loader-menu.gif" />
+                    </li>
+                    <li>
+                      <a href="{% get_dashboard_url gdrives:manufacturer-cartons %}" title="Manufacturer Cartons">
+                        <img src="/static/images/navicons/41.png" alt=""><span>Manufacturer Cartons</span>
+                      </a><img class="innerloader"  src="/static/images/ajax-loader-menu.gif" />
+                    </li>
+                    {% if "cellular-management" in user.admin_profile.all_permissions %}
+                    <li>
+                      <a href="{% get_dashboard_url gdrives:cellular-management %}" title="Cellular Management">
+                        <img src="/static/images/navicons/114.png" alt=""><span>Cellular Management</span>
+                      </a><img class="innerloader"  src="/static/images/ajax-loader-menu.gif" />
+                    </li>
+                    {% endif %}
+                    <li>
+                      <a href="{% get_dashboard_url logs:audit-qa %}" title="QA Log">
+                        <img src="/static/images/navicons/54.png" alt=""/><span>QA Log</span>
+                      </a><img class="innerloader"  src="/static/images/ajax-loader-menu.gif" />
+                    </li>
+                  </ul>
+                </li>
+                {% endif %}
+                {% if "manage-business-partners" in user.admin_profile.all_permissions %}
+                <li class="hasul">
+                  <a href="#" title="Business Partners">
+                    <img src="/static/images/navicons/27.png" alt=""/><span>Business Partners</span>
+                  </a>
+                  <ul>
+                    <li class="current">
+                      <a href="{% get_dashboard_url accounts:manage-groups %}" title="My Business Partners">
+                        <img src="/static/images/navicons/27.png" alt=""/><span>My Business Partners</span>
+                      </a><img class="innerloader"  src="/static/images/ajax-loader-menu.gif" />
+                    </li>
+                    <li>
+                      <a href="{% get_dashboard_url pharmacy:index %}" title="Pharmacy Partners">
+                        <img src="/static/images/navicons/112.png" alt=""><span>Pharmacy Partners</span>
+                      </a><img class="innerloader"  src="/static/images/ajax-loader-menu.gif" />
+                    </li>
+                    
+                    <li>
+                      <a href="{% get_dashboard_url nursing:index %}" title="Nursing Group">
+                        <img src="/static/images/navicons/123.png" alt=""><span>Nursing Group</span>
+                      </a><img class="innerloader"  src="/static/images/ajax-loader-menu.gif" />
+                    </li>
+                  </ul>
+                </li>
+                {% endif %}
+                {% if "manage-orders" in user.admin_profile.all_permissions %}
+                <li class="hasul">
+                  <a href="#" title="Manage Orders">
+                    <img src="/static/images/navicons/136.png" alt=""/><span>Manage Orders</span>
+                  </a>
+                  <ul>
+                    <li>
+                      <a href="{% get_dashboard_url orders:index %}" title="Orders">
+                        <img src="/static/images/navicons/140.png" alt=""><span>Orders</span>
+                      </a><img class="innerloader"  src="/static/images/ajax-loader-menu.gif" />
+                    </li>
+                    <li>
+                      <a href="{% get_dashboard_url orders:open-orders %}" title="Open Orders">
+                        <img src="/static/images/navicons/40.png" alt=""><span>Open Orders</span>
+                      </a><img class="innerloader"  src="/static/images/ajax-loader-menu.gif" />
+                    </li>
+                    <li>
+                      <a href="{% get_dashboard_url orders:problem-orders %}" title="Problem Orders">
+                        <img src="/static/images/navicons/163.png" alt=""><span>Problem Orders</span>
+                      </a><img class="innerloader"  src="/static/images/ajax-loader-menu.gif" />
+                    </li>
+                    <li>
+                      <a href="{% get_dashboard_url orders:hold-orders %}" title="On Hold">
+                        <img src="/static/images/navicons/11.png" alt=""><span>On Hold</span>
+                      </a><img class="innerloader"  src="/static/images/ajax-loader-menu.gif" />
+                    </li>
+                    <li>
+                      <a href="{% get_dashboard_url orders:worklist %}" title="Worklist">
+                        <img src="/static/images/navicons/35.png" alt=""><span>Worklist</span>
+                      </a><img class="innerloader"  src="/static/images/ajax-loader-menu.gif" />
+                    </li>
+                    <li>
+                      <a href="{% get_dashboard_url orders:shipments %}" title="Shipments">
+                        <img src="/static/images/navicons/21.png" alt=""><span>Shipments</span>
+                      </a><img class="innerloader"  src="/static/images/ajax-loader-menu.gif" />
+                    </li>
+                    <li>
+                      <a href="{% get_dashboard_url orders:shipping-history %}" title="Shipping History">
+                        <img src="/static/images/navicons/21.png" alt=""><span>Shipping History</span>
+                      </a><img class="innerloader"  src="/static/images/ajax-loader-menu.gif" />
+                    </li>
+                    <li>
+                      <a href="{% get_dashboard_url orders:canceled %}" title="Shipments">
+                        <img src="/static/images/navicons/172.png" alt=""><span>Canceled Orders</span>
+                      </a><img class="innerloader"  src="/static/images/ajax-loader-menu.gif" />
+                    </li>
+                    <li>
+                      <a href="{% get_dashboard_url products:index %}" title="Products">
+                        <img src="/static/images/navicons/15.png" alt=""><span>Products</span>
+                      </a><img class="innerloader"  src="/static/images/ajax-loader-menu.gif" />
+                    </li>
+                    <li>
+                      <a href="{% get_dashboard_url orders:reports-index %}" title="Reports">
+                        <img src="/static/images/navicons/160.png" alt=""><span>Reports</span>
+                      </a><img class="innerloader"  src="/static/images/ajax-loader-menu.gif" />
+                    </li>
+                    <li>
+                      <a href="{% get_dashboard_url gdrives:warehouse-cartons %}" title="Warehouse Cartons">
+                        <img src="/static/images/navicons/139.png" alt=""><span>Warehouse Cartons</span>
+                      </a><img class="innerloader"  src="/static/images/ajax-loader-menu.gif" />
+                    </li>
+                  </ul>
+                </li>
+                {% endif %}
+                {% if "contact-history" in user.admin_profile.all_permissions %}
+                <li class="current">
+                  <a href="{% get_dashboard_url accounts:communications %}" title="Contact History">
+                    <img src="/static/images/navicons/153.png" alt=""/><span>Contact History</span>
+                  </a><img class="innerloader"  src="/static/images/ajax-loader-menu.gif" />
+                </li>
+                {% endif %}
+                {% if "system-auditing" in user.admin_profile.all_permissions %}
+                <li class="hasul">
+                  <a href="#" title="System Auditing">
+                    <img src="/static/images/navicons/77.png" alt=""/><span>System Auditing</span>
+                  </a>
+                  <ul>
+                    <li>
+                      <a href="{% get_dashboard_url logs:reading-log %}" title="Logs">
+                        <img src="/static/images/navicons/160.png" alt=""/><span>View Logs</span>
+                      </a><img class="innerloader"  src="/static/images/ajax-loader-menu.gif" />
+                    </li>
+                    <li>
+                      <a href="{% get_dashboard_url logs:reading-log-api %}" title="API Logs">
+                        <img src="/static/images/navicons/153.png" alt=""/><span>View API Logs</span>
+                      </a><img class="innerloader"  src="/static/images/ajax-loader-menu.gif" />
+                    </li>
+                    <li>
+                      <a href="{% get_dashboard_url logs:reading-log-transmission %}" title="Transmission Logs">
+                        <img src="/static/images/navicons/160.png" alt=""/><span>View Transmission Logs</span>
+                      </a><img class="innerloader"  src="/static/images/ajax-loader-menu.gif" />
+                    </li>
+                    <li>
+                      <a href="{% get_dashboard_url logs:index %}" title="Download Logs">
+                        <img src="/static/images/navicons/153.png" alt=""/><span>Download Logs</span>
+                      </a><img class="innerloader"  src="/static/images/ajax-loader-menu.gif" />
+                    </li>
+                    <li>
+                      <a href="{% get_dashboard_url logs:audit-orphaned %}" title="Orphaned">
+                        <img src="/static/images/navicons/54.png" alt=""/><span>Orphaned</span>
+                      </a><img class="innerloader"  src="/static/images/ajax-loader-menu.gif" />
+                    </li>
+                    <li>
+                      <a href="{% get_dashboard_url logs:reading-log-notification %}" title="Notification Logs">
+                        <img src="/static/images/navicons/153.png" alt=""/><span>View Notification Logs</span>
+                      </a><img class="innerloader"  src="/static/images/ajax-loader-menu.gif" />
+                    </li>
+                    <li>
+                      <a href="{% get_dashboard_url logs:audit-average-report %}" title="Daily Average Report">
+                        <img src="/static/images/navicons/54.png" alt=""/><span>Daily Average Report</span>
+                      </a><img class="innerloader"  src="/static/images/ajax-loader-menu.gif" />
+                    </li>
+                    <li>
+                      <a href="{% get_dashboard_url logs:audit-summary %}" title="GHRS Summary Report">
+                        <img src="/static/images/navicons/54.png" alt=""/><span>GHRS Summary Report</span>
+                      </a><img class="innerloader"  src="/static/images/ajax-loader-menu.gif" />
+                    </li>
+                    <li>
+                      <a href="{% get_dashboard_url logs:audit-api %}" title="API Summary Report">
+                        <img src="/static/images/navicons/54.png" alt=""/><span>API Summary Report</span>
+                      </a><img class="innerloader"  src="/static/images/ajax-loader-menu.gif" />
+                    </li>
+                    <li>
+                      <a href="{% get_dashboard_url logs:audit-control-log %}" title="Control Solution Log">
+                        <img src="/static/images/navicons/54.png" alt=""/><span>Control Solution Log</span>
+                      </a><img class="innerloader"  src="/static/images/ajax-loader-menu.gif" />
+                    </li>
+                    <li>
+                      <a href="{% get_dashboard_url logs:audit-control-report %}" title="Control Solution Report">
+                        <img src="/static/images/navicons/54.png" alt=""/><span>Control Solution Report</span>
+                      </a><img class="innerloader"  src="/static/images/ajax-loader-menu.gif" />
+                    </li>
+                    <li>
+                      <a href="{% get_dashboard_url epc:order-log %}" title="EPC Order Log">
+                        <img src="/static/images/navicons/54.png" alt=""/><span>EPC Order Log</span>
+                      </a><img class="innerloader"  src="/static/images/ajax-loader-menu.gif" />
+                    </li>
+                    <li>
+                      <a href="{% get_dashboard_url epc:error-log %}" title="EPC Error Log">
+                        <img src="/static/images/navicons/54.png" alt=""/><span>EPC Error Log</span>
+                      </a><img class="innerloader"  src="/static/images/ajax-loader-menu.gif" />
+                    </li>
+                    <li>
+                      <a href="{% get_dashboard_url epc:patient-log %}" title="EPC Patient Log">
+                        <img src="/static/images/navicons/54.png" alt=""/><span>EPC Patient Log</span>
+                      </a><img class="innerloader"  src="/static/images/ajax-loader-menu.gif" />
+                    </li>
+                    <li>
+                      <a href="{% get_dashboard_url epc:log %}" title="EPC API Log">
+                        <img src="/static/images/navicons/54.png" alt=""/><span>EPC API Log</span>
+                      </a><img class="innerloader"  src="/static/images/ajax-loader-menu.gif" />
+                    </li>
+                  </ul>
+                </li>
+                {% endif %}
+                
+                <li class="hasul">
+                  <a href="#" title="My Account">
+                    <img src="/static/images/navicons/20.png" alt=""/><span>My Account</span>
+                  </a>
+                  <ul>
+                    <li>
+                      <a href="{% get_dashboard_url accounts:update-password %}" title="Update Password">
+                        <img src="/static/images/navicons/54.png" alt=""/><span>Update Password</span>
+                      </a><img class="innerloader"  src="/static/images/ajax-loader-menu.gif" />
+                    </li>
+                    <li>
+                      <a href="{% get_dashboard_url accounts:update-email %}" title="Update Email">
+                        <img src="/static/images/navicons/18.png" alt=""/><span>Update Email</span>
+                      </a><img class="innerloader"  src="/static/images/ajax-loader-menu.gif" />
+                    </li>
+                    {% if user.is_admin %}
+                    <li>
+                      <a href="{% get_dashboard_url reports:temp-download-index %}" title="My Downloads">
+                        <img src="/static/images/navicons/40.png" alt=""/><span>My Downloads</span>
+                      </a><img class="innerloader"  src="/static/images/ajax-loader-menu.gif" />
+                    </li>
+                    {% endif %}
+                    <li>
+                      <a href="{% get_dashboard_url accounts:logout %}" title="Logout">
+                        <img src="/static/images/navicons/129.png" alt=""/><span>Logout</span>
+                      </a><img class="innerloader"  src="/static/images/ajax-loader-menu.gif" />
+                    </li>
+                  </ul>
+                </li>
+              {% endif %}
+  
+              {% if user.is_patient %}
+                <li class="current">
+                  <a href="{% get_dashboard_url dashboard:home %}" title="MyGHR Home">
+                    <img src="/static/images/navicons/53.png" alt=""/><span>My Home</span>
+                  </a><img class="innerloader"  src="/static/images/ajax-loader-menu.gif" />
+                </li>
+                <li class="hasul">
+                  <a  href="#" onClick="setTimeout(function(){parent.location='{% get_dashboard_url reports:summary-report %}'}, 300); $('.summarylink').trigger('click');">
+                    <img src="/static/images/navicons/30.png" alt=""/><span>My Reports</span>
+                  </a>
+                  <ul>
+                    <li class="current">
+                      <a href="{% get_dashboard_url reports:summary-report %}" class="summarylink" title="Summary Report">
+                        <img src="/static/images/navicons/153.png" alt=""/><span>Summary Report</span>
+                      </a><img class="innerloader"  src="/static/images/ajax-loader-menu.gif" />
+                    </li>
+                    <li>
+                      <a href="{% get_dashboard_url reports:logbook %}" title="Logbook">
+                        <img src="/static/images/navicons/160.png" alt=""/><span>Logbook</span>
+                      </a><img class="innerloader"  src="/static/images/ajax-loader-menu.gif" />
+                    </li>
+                    <li>
+                      <a href="{% get_dashboard_url reports:test-history %}" title="Test History">
+                        <img src="/static/images/navicons/83.png" alt=""/><span>Test History</span>
+                      </a><img class="innerloader"  src="/static/images/ajax-loader-menu.gif" />
+                    </li>
+                    <li>
+                      <a href="{% get_dashboard_url reports:trending %}" title="Target Range Outcome">
+                        <img src="/static/images/navicons/77.png" alt=""/><span>Target Range Outcome</span>
+                      </a><img class="innerloader"  src="/static/images/ajax-loader-menu.gif" />
+                    </li>
+                	</ul>
+              	</li>
+              	<li>
+                  <a href="{% get_dashboard_url health_information:edit-health-information %}" title="My Health Targets">
+                    <img src="/static/images/navicons/13.png" alt=""/><span>My Health Targets</span>
+                  </a><img class="innerloader" id="healthtargetsloader" src="/static/images/ajax-loader-menu.gif" />
+                </li>
+                <li>
+                  <a href="{% get_dashboard_url alerts:alerts %}" title="My Alerts">
+                    <img src="/static/images/navicons/61.png" alt=""/><span>My Alerts</span>
+                  </a><img class="innerloader"  src="/static/images/ajax-loader-menu.gif" />
+                </li>
+                <li class="hasul">
+                  <a href="#" title="My Account">
+                    <img src="/static/images/navicons/20.png" alt=""/><span>My Account</span>
+                  </a>
+                  <ul>
+                    <li>
+                      <a href="{% get_dashboard_url accounts:update-password %}" title="Update Password">
+                        <img src="/static/images/navicons/54.png" alt=""/><span>Update Password</span>
+                      </a><img class="innerloader"  src="/static/images/ajax-loader-menu.gif" />
+                    </li>
+                    <li>
+                      <a href="{% get_dashboard_url accounts:update-email %}" title="Update Email">
+                        <img src="/static/images/navicons/18.png" alt=""/><span>Update Email</span>
+                      </a><img class="innerloader"  src="/static/images/ajax-loader-menu.gif" />
+                    </li>
+                    <li>
+                    <li>
+                      <a href="{% get_dashboard_url accounts:profile %}" title="Profile Information">
+                        <img src="/static/images/navicons/111.png" alt=""/><span>Profile Information</span>
+                      </a>
+                    </li>
+                    <li>
+                      <a href="{% get_dashboard_url accounts:security-questions %}" title="Security Questions">
+                        <img src="/static/images/navicons/20.png" alt=""/><span>Security Questions</span>
+                      </a>
+                    </li>
+                    <li>
+                      <a href="{% get_dashboard_url accounts:logout %}" title="Logout">
+                        <img src="/static/images/navicons/129.png" alt=""/><span>Logout</span>
+                      </a>
+                    </li>
+                  </ul>
+                </li>
+                <!-- Begin new tutorial -->
+                <li class="hasul">
+                	<a  href="#" onClick="setTimeout(function(){parent.location='/dashboard/#/tutorial_1/'}, 300); $('.tutorialLink').trigger('click');">
+                  	<img src="/static/images/navicons/102.png" alt=""/><span>MyGHR Tutorial</span>
+                  </a>
+                  <ul>
+                  	<li>
+                  		<a href="/dashboard/#/tutorial_1/" title="Introduction" class="tutorialLink">
+                    		<img src="/static/images/navicons/102.png" alt=""/><span>Introduction</span>
+                      </a><img class="innerloader"  src="/static/images/ajax-loader-menu.gif" />
+                		</li>
+                    <li>
+                  		<a href="/dashboard/#/tutorial_2/" title="Data Management">
+                    		<img src="/static/images/navicons/30.png" alt=""/><span>Data Management</span>
+                      </a><img class="innerloader"  src="/static/images/ajax-loader-menu.gif" />
+                		</li>
+                    <li>
+                  		<a href="/dashboard/#/tutorial_3/" title="Setting Goals">
+                    		<img src="/static/images/navicons/13.png" alt=""/><span>Setting Goals</span>
+                      </a><img class="innerloader"  src="/static/images/ajax-loader-menu.gif" />
+                		</li>
+                    <li>
+                  		<a href="/dashboard/#/tutorial_4/" title="Text Messages and Alerts">
+                    		<img src="/static/images/navicons/61.png" alt=""/><span>Text Messages &amp; Alerts</span>
+                      </a><img class="innerloader"  src="/static/images/ajax-loader-menu.gif" />
+                		</li>
+                    <li>
+                  		<a href="/dashboard/#/tutorial_5/" title="Personal Information">
+                    		<img src="/static/images/navicons/20.png" alt=""/><span>Personal Information</span>
+                      </a><img class="innerloader"  src="/static/images/ajax-loader-menu.gif" />
+                		</li>
+                    <li>
+                  		<a href="/dashboard/#/tutorial_6/" title="FAQ">
+                    		<img src="/static/images/navicons/163.png" alt=""/><span>FAQ</span>
+                      </a><img class="innerloader"  src="/static/images/ajax-loader-menu.gif" />
+                		</li>
+                    <li>
+                  		<a href="/dashboard/#/tutorial_7/" title="Contact Informatio">
+                    		<img src="/static/images/navicons/76.png" alt=""/><span>Contact Information</span>
+                      </a><img class="innerloader"  src="/static/images/ajax-loader-menu.gif" />
+                		</li>
+                  </ul><br/><br/><br clear="all" />
+                </li>
+                
+                <!--<li>
+                  <a href="{% get_dashboard_url support %}" title="Frequently Asked Questions">
+                    <img src="/static/images/navicons/163.png" alt=""/><span>FAQ</span>
+                  </a><img class="innerloader"  src="/static/images/ajax-loader-menu.gif" />
+                </li> -->
+              {% endif %}                       
+            </ul>
+          </nav>
+        </aside>
+     <!-- Sidebar End -->
+        <section style="min-height:600px">
+	        <header>
+  	        <div class="container_12 clearfix">
+    	        <a href="#menu" class="showmenu button">Menu</a>
+              <h1 class="grid_12">myGHR Home</h1>
+            </div>
+          </header>
+          <section id="main-content" class="clearfix">
+          </section>
+          <footer class="clearfix">
+      	    <div class="container_12">
+        	    <div class="grid_12">
+          	    Copyright &copy; {% now "Y" %} Genesis Health Technologies&nbsp;&nbsp;<a href="/dashboard/{% if is_public %}public/{% endif %}#/terms/">Terms of Use</a>&nbsp;&nbsp;<a href="/dashboard/{% if is_public %}public/{% endif %}#/privacy/">Privacy Statement</a>
+              </div>
+            </div>
+          </footer>
+        </section>
+            <!-- Main Section End -->
+    </section>
+  </div>
+    
+<!-- MAIN JAVASCRIPTS -->
+<script src='https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js'></script>
+<script>window.jQuery || document.write("<script src='/static/js/jquery.min.js'>\x3C/script>")</script>
+
+{% compress js %}
+    <script type="text/javascript" src="/static/js/jquery.tools.min.js"></script>
+    <script type="text/javascript" src="/static/js/jquery.uniform.min.js"></script>
+    <script type="text/javascript" src="/static/js/jquery.easing.js"></script>
+    <script type="text/javascript" src="/static/js/jquery.ui.totop.js"></script>
+    <script type="text/javascript" src="/static/js/jquery.fancybox.pack.js"></script>
+{% endcompress %}
+{% compress js %}
+    <script type="text/javascript" src="/static/js/jquery-ui.js"></script>
+    <script type="text/javascript" src="/static/js/jquery.mask.js"></script>
+    <script type="text/javascript" src="/static/js/anytime.js"></script>
+    <script type="text/javascript" src="/static/js/jquery.ui.widget.min.js"></script>
+    <script type="text/javascript" src="/static/js/jquery.iframe-transport.js"></script>
+    <script type="text/javascript" src="/static/js/jquery.hashchange.min.js"></script>
+    <script type="text/javascript" src="/static/js/jquery.notify.js"></script>
+    <script type="text/javascript" src="/static/js/jquery.tipTip.js"></script>
+    <script type="text/javascript" src="/static/js/jquery.drilldownmenu.js"></script>
+    <script type="text/javascript" src="/static/js/jquery.isotope.min.js"></script>
+    <script type="text/javascript" src="/static/js/jquery.popover.js"></script>
+    <script type="text/javascript" src="/static/js/jquery.textresize.js"></script>
+    <script type="text/javascript" src="/static/js/jquery.placeholder.js"></script>
+    <script type="text/javascript" src="/static/js/checknet.js"></script>
+    <script type="text/javascript" src="/static/js/queue.js"></script>
+    <script type="text/javascript" src="/static/js/setresize.js"></script>
+    <script type="text/javascript" src="/static/js/sessiontimer.js"></script>
+    <script type="text/javascript" src="/static/js/phonewidget.js"></script>
+    <script type="text/javascript" src="/static/js/functions-ajax.js"></script>
+    <script type="text/javascript" src="/static/js/functions.js"></script>
+    <script type="text/javascript" src="/static/js/logbook.js"></script>
+    <script type="text/javascript" src="/static/js/global.js"></script>
+{% endcompress %}
+
+<!--[if lt IE 9]>
+  {% compress js %}
+    <script type="text/javascript" src="/static/js/PIE.js"></script>
+    <script type="text/javascript" src="/static/js/ie.js"></script>
+  {% endcompress %}
+<![endif]-->
+
+{% if post %}
+<script type="text/javascript">
+    var postDataIn = {% templatetag openbrace %}
+                   {% for k,v in post.items %}
+                   {{ k }}: "{{ v }}"{% if not forloop.last %},{% endif %}
+                   {% endfor %}
+                   {% templatetag closebrace %};
+</script>
+{% endif %}
+<!-- MAIN JAVASCRIPTS END -->
+
+<!-- LOADING SCRIPT -->
+<script>
+    $(window).load(function() {
+        $('.buttonwrapper squarebutton a').click(function() {
+            $(this).removeClass("squarebutton");
+            $(this).addClass("bsquarebutton");
+            return false;
+        });
+    });
+</script>
+<!-- LOADING SCRIPT -->
+<script>
+    $(window).load(function() {
+        $("#loading").fadeOut(function() {
+            $(this).remove();
+            $('body').removeAttr('style');
+        });
+    });
+</script>
+<script>
+    $(document).ready(function() {
+        $(".tipTip").tipTip();
+    });
+</script>
+<script>
+    $(document.body).ready(function() {
+        $("#reportslanding").on("click", "a", function(e) {
+            e.preventDefault();
+            $("#main-content").load('/dashboard/#/reports/test_history/');
+        });
+    });
+</script>
+<script>
+    $(document).ready(function() {
+        $('#activity-button').popover('#activity-popover', {preventRight: true});
+        $('#notifications-button').popover('#notifications-popover', {preventRight: true});
+        $('#settings-button').popover('#settings-popover', {preventRight: true});
+    });
+</script>
+
+<!-- Activity and Message buttons at top -->
+{% if user.is_professional %}
+<div id="activity-popover" class="popover">
+<header>Alerts</header>
+	<section>
+  	<div class="content">
+    	<nav>
+      	<ul>
+        </ul>
+      </nav>
+    </div>
+  </section>
+</div>
+{% endif %}
+
+{% if user.is_professional or user.is_patient %}
+<div id="notifications-popover" class="popover">
+	<header>Notifications</header>
+	<section>
+  	<div class="content">
+    	<nav>
+      	<ul>
+        </ul>
+      </nav>
+    </div>
+  </section>
+</div>
+{% endif %}
+
+<div id="settings-popover" class="popover">
+  <header>Settings</header>
+  <section>
+    <div class="content">
+      <nav>
+        <ul>
+          <li><a href="{% get_dashboard_url accounts:update-password %}">Update Password</a></li>
+        </ul>
+        <ul>
+          <li><a href="{% get_dashboard_url accounts:update-email %}">Update Email</a></li>
+        </ul>
+      </nav>
+    </div>
+  </section>
+</div>
+
+<link rel="stylesheet" href="/static/css/checknet.css" media="all" />
+<script type="text/javascript">
+    $.fn.checknet();
+    checknet.config.checkInterval = 10000;
+    checknet.config.warnMsg = "Internet connection has been lost.";
+    if( screen.width <= 480 || typeof window.orientation !== 'undefined') {
+        alert('Warning: It is recommended to view The MyGHR System with a larger device such as a tablet or personal computer.');
+    }
+</script>
+
+</body>
+</html>

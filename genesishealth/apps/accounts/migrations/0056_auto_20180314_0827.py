@@ -19,7 +19,7 @@ def update_rx_fields(apps, schema_editor):
     for profile in PatientProfile.objects.filter(company__isnull=False):
         company = profile.company
         save = False
-        for company_field, profile_field in inherit_fields.iteritems():
+        for company_field, profile_field in inherit_fields.items():
             company_val = getattr(company, company_field)
             profile_val = getattr(profile, profile_field)
             if company_val is not None and profile_val != company_val:

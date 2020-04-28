@@ -1,0 +1,149 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Development Procedures &mdash; genesishealth 3.0 documentation</title>
+    
+    <link rel="stylesheet" href="_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '',
+        VERSION:     '3.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="genesishealth 3.0 documentation" href="index.html" />
+    <link rel="next" title="Installation" href="install.html" />
+    <link rel="prev" title="Welcome to GHT’s documentation!" href="index.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="install.html" title="Installation"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="index.html" title="Welcome to GHT’s documentation!"
+             accesskey="P">previous</a> |</li>
+        <li><a href="index.html">genesishealth 3.0 documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="development-procedures">
+<h1>Development Procedures<a class="headerlink" href="#development-procedures" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="overview">
+<h2>Overview<a class="headerlink" href="#overview" title="Permalink to this headline">¶</a></h2>
+<p>Genesis development is geared towards long-term stability and maintanability.  This means:</p>
+<ol class="arabic simple">
+<li>Please adhere to the <a class="reference external" href="http://en.wikipedia.org/wiki/Don't_repeat_yourself">DRY principle</a> as much as possible.  There are a lot of generic tools and views generated for the system, and those should be used as much as possible.  Along these same lines, please try to employ <a class="reference external" href="http://en.wikipedia.org/wiki/Encapsulation_(object-oriented_programming)">encapsulation</a> as much as possible.</li>
+<li>Please conform to the prevailing standards in the code.  This means please use the same format for variable names (all_lowercase_with_underscores), for function names (same as variable names), class names (UpperCaseNoUnderscores).</li>
+<li>Document as needed.  Not every function needs a novel, but a simple doc string at least should be provided.  Confusing or complex parts of the code should be explained.  Documentation is especially important when creating or updating core functionality (like generic views), since those are the most likely to be reused.</li>
+<li>Use unit tests.  Before any code is checked in, it should pass all of the tests run by manage.py tests.  More information on Genesis&#8217;s unit testing can be found below.</li>
+<li>Please, generally, follow the <a class="reference external" href="http://www.python.org/dev/peps/pep-0008/">Python Style Guide</a>.  However, readability and clarity trump all other considerations, so feel free to deviate when necessary.</li>
+</ol>
+</div>
+<div class="section" id="git">
+<h2>Git<a class="headerlink" href="#git" title="Permalink to this headline">¶</a></h2>
+<p>All code should be checked in regularly via git.  Developers should feel free to make branches as necessary.</p>
+</div>
+<div class="section" id="code-deployment">
+<h2>Code Deployment<a class="headerlink" href="#code-deployment" title="Permalink to this headline">¶</a></h2>
+<p>Code should never be deployed manually (e.g. via SSH or FTP) to a server.  Code should only ever be deployed via the fabric scripts included in the repository.  For more on this, see <a class="reference internal" href="updates.html#remote-server-updates"><em>Updates</em></a>.</p>
+</div>
+<div class="section" id="server-environments">
+<h2>Server Environments<a class="headerlink" href="#server-environments" title="Permalink to this headline">¶</a></h2>
+<p>In general, Genesis has three different types of environments: development, staging, and production.</p>
+<p>The development server is not used for active development; each developer should have his or her own local development site.  The dev site is used to show the most recent, relatively stable version of the development code to management for their review.  Pushes to the dev site need not be coordinated in any particular way, but please be aware what branch you are checking your code into!  If you check into the development branch, that code should be ready to appear on the development site.</p>
+<p>The staging server is used as the final testing and review platform before code is promoted to production.  Pushes of new versions of code to the staging server should be coordinated among the development team.</p>
+<p>The production server is obviously the server actually being used by customers.  In general, the developers should have relatively little interaction with the production server.  Pushes of new versions of the code to the production server should be handled by the system administration team.</p>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Development Procedures</a><ul>
+<li><a class="reference internal" href="#overview">Overview</a></li>
+<li><a class="reference internal" href="#git">Git</a></li>
+<li><a class="reference internal" href="#code-deployment">Code Deployment</a></li>
+<li><a class="reference internal" href="#server-environments">Server Environments</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="index.html"
+                        title="previous chapter">Welcome to GHT&#8217;s documentation!</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="install.html"
+                        title="next chapter">Installation</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="_sources/development_procedures.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="install.html" title="Installation"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="index.html" title="Welcome to GHT’s documentation!"
+             >previous</a> |</li>
+        <li><a href="index.html">genesishealth 3.0 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2012, Gregg Keithley.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
+    </div>
+  </body>
+</html>

@@ -1,0 +1,284 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Installation &mdash; genesishealth 3.0 documentation</title>
+    
+    <link rel="stylesheet" href="_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '',
+        VERSION:     '3.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="genesishealth 3.0 documentation" href="index.html" />
+    <link rel="next" title="Updates" href="updates.html" />
+    <link rel="prev" title="Development Procedures" href="development_procedures.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="updates.html" title="Updates"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="development_procedures.html" title="Development Procedures"
+             accesskey="P">previous</a> |</li>
+        <li><a href="index.html">genesishealth 3.0 documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="installation">
+<span id="install"></span><h1>Installation<a class="headerlink" href="#installation" title="Permalink to this headline">¶</a></h1>
+<p>In practice, there are two different ways the source code will be installed: on a remote server and on the developer&#8217;s local machine.  Installation on a remote server is pretty much entirely automated, except for a few short steps.  Local installation is pretty much a manual process, and will vary somewhat from system to system.</p>
+<div class="section" id="remote-server-installation">
+<span id="id1"></span><h2>Remote Server Installation<a class="headerlink" href="#remote-server-installation" title="Permalink to this headline">¶</a></h2>
+<p>Setting up a new server should be done primarily using the fabric scripts available in the repository.  There are several steps involved in this:</p>
+<ol class="arabic">
+<li><p class="first">First, you need to update all of the relevant fabric configuration files (and create some new ones, probably) with all of the information of the new server.  It should be pretty clear from the many existing examples what needs to go where.  It&#8217;s especially important to add your SSH key to the configuration so that you&#8217;re not prompted repeatedly when running fabric scripts.</p>
+</li>
+<li><p class="first">Next, you need to manually add the IP of the new server to the security configuration of the database server:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">vi</span> <span class="o">/</span><span class="n">etc</span><span class="o">/</span><span class="n">postgresql</span><span class="o">/</span><span class="mf">8.4</span><span class="o">/</span><span class="n">main</span><span class="o">/</span><span class="n">pg_hba</span><span class="o">.</span><span class="n">conf</span>
+</pre></div>
+</div>
+<p>Then restart the database server:</p>
+<div class="highlight-python"><pre>/etc/init.d/postgresql reload</pre>
+</div>
+</li>
+<li><p class="first">Now we just need to run Fabric.  Change into the directory that contains fabfile.py and run the following commands.  Note that you may be prompted a few times for the system&#8217;s root password.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">fab</span> <span class="o">-</span><span class="n">R</span> <span class="o">&lt;</span><span class="n">new_installation_role_name</span><span class="o">&gt;</span> <span class="n">bootstrap_chef</span>
+<span class="n">fab</span> <span class="o">-</span><span class="n">R</span> <span class="o">&lt;</span><span class="n">new_installation_role_name</span><span class="o">&gt;</span> <span class="n">clone</span>
+<span class="n">fab</span> <span class="o">-</span><span class="n">R</span> <span class="o">&lt;</span><span class="n">new_installation_role_name</span><span class="o">&gt;</span> <span class="n">deploy</span>
+<span class="n">fab</span> <span class="o">-</span><span class="n">R</span> <span class="o">&lt;</span><span class="n">new_installation_role_name</span><span class="o">&gt;</span> <span class="n">sync_config</span>
+</pre></div>
+</div>
+<p>If you&#8217;re using a new database and want to use the USDA food database, you&#8217;ll need one more command.  Note, that this one takes a LONG time to run, because it&#8217;s importing hundreds of thousands of nutrition records.</p>
+<div class="highlight-python"><pre>fab -R import_usda_data</pre>
+</div>
+<p>After these commands finish running, your server should be up and running.</p>
+</li>
+</ol>
+</div>
+<div class="section" id="local-server-installation">
+<h2>Local Server Installation<a class="headerlink" href="#local-server-installation" title="Permalink to this headline">¶</a></h2>
+<p>Unless you happen to be lucky enough to be running the exact same environment that our servers are using, you probably will not be able to use the fabric scripts to deploy the code to your own local machine.  This means it will pretty much be a manual process.  It is assumed that this is a Unix-like environment.  If you&#8217;re installing on a Windows command, the below should at least detail the general steps you&#8217;ll need to take.</p>
+<div class="section" id="install-requirements">
+<h3>Install Requirements<a class="headerlink" href="#install-requirements" title="Permalink to this headline">¶</a></h3>
+<p>The following pieces of software are required by the Genesis applications.  Some might not be necessary for every project, as noted below.</p>
+<ol class="arabic simple">
+<li><a class="reference external" href="http://nginx.org/">nginx</a> .  You could use Apache or whatever else you want to, but the typical set up is with nginx.  You could also probably get away with using Django&#8217;s development server if you really wanted to.</li>
+<li><a class="reference external" href="http://www.postgresql.org/">PostgreSQL</a>.  You can avoid installing this locally if you just want to remotely connect to the development server&#8217;s database.  Note, you&#8217;ll need to add your development machine&#8217;s IP to the list of allowed connections (see <a class="reference internal" href="#remote-server-installation"><em>Remote Server Installation</em></a>).</li>
+<li><a class="reference external" href="http://www.rabbitmq.com/">RabbitMQ</a>.  This is only necessary if setting up a queue server.</li>
+</ol>
+<p>Each of these will also require its own setup and configuration, which is not detailed here since it is highly system- and preference-dependent.</p>
+<p>Python dependencies will be installed automatically in a later step.</p>
+</div>
+<div class="section" id="environment-setup">
+<h3>Environment Setup<a class="headerlink" href="#environment-setup" title="Permalink to this headline">¶</a></h3>
+<ol class="arabic">
+<li><p class="first">If you haven&#8217;t already, install <a class="reference external" href="http://pypi.python.org/pypi/pip">pip</a>.</p>
+</li>
+<li><p class="first">Now, install virtualenv:</p>
+<div class="highlight-python"><pre>pip install virtualenv</pre>
+</div>
+</li>
+<li><p class="first">Create a virtual environment:</p>
+<div class="highlight-python"><pre>virtualenv your_instance_name</pre>
+</div>
+</li>
+<li><p class="first">Go into the directory and activate the virtual environment:</p>
+<div class="highlight-python"><pre>cd your_instance_name
+source bin/activate</pre>
+</div>
+</li>
+<li><p class="first">Create some directories that we&#8217;ll need</p>
+<div class="highlight-python"><pre>mkdir src etc var var/log var/log/gunicorn</pre>
+</div>
+</li>
+<li><p class="first">Create a <a class="reference external" href="http://gunicorn.org/">Green Unicorn</a> (gunicorn) configuration file.  The server runs through gunicorn (already installed with requirements.pip) but needs a simple configuration file.  This will depend somewhat on your nginx configuration, but here is a sample file:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">bind</span> <span class="o">=</span> <span class="s">&quot;127.0.0.1:8001&quot;</span>
+<span class="n">accesslog</span> <span class="o">=</span> <span class="s">&quot;/Users/greggkeithley/Work/Genesis/test_site/var/log/gunicorn/access.log&quot;</span>
+<span class="n">errorlog</span> <span class="o">=</span> <span class="s">&quot;/Users/greggkeithley/Work/Genesis/test_site/var/log/gunicorn/error.log&quot;</span>
+</pre></div>
+</div>
+<p>You&#8217;ll need to update your paths appropriately, and the bind address will depend upon how you set up nginx.</p>
+</li>
+<li><p class="first">Install fabric.  This isn&#8217;t included in requirements.pip, because the servers don&#8217;t need it.</p>
+<div class="highlight-python"><pre>pip install Fabric==1.4.3</pre>
+</div>
+</li>
+<li><p class="first">Create a manage.py script in your virtualenv&#8217;s bin.  Follow the example below:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="c">#!/Users/greggkeithley/Work/Genesis/test_site/bin/python</span>
+<span class="kn">import</span> <span class="nn">sys</span>
+<span class="n">sys</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s">&#39;/Users/greggkeithley/Work/Genesis/test_site/src/genesishealth&#39;</span><span class="p">)</span>
+<span class="n">__file__</span> <span class="o">=</span> <span class="s">&#39;/Users/greggkeithley/Work/Genesis/test_site/src/genesishealth/genesishealth/bin/manage.py&#39;</span>
+<span class="nb">execfile</span><span class="p">(</span><span class="n">__file__</span><span class="p">)</span>
+</pre></div>
+</div>
+</li>
+<li><p class="first">(Optional) Install and configure <a class="reference external" href="http://pypi.python.org/pypi/supervisor">supervisor</a>.</p>
+<div class="highlight-python"><pre>pip install supervisor</pre>
+</div>
+<p>This will install supervisor just for your virtualenv and place two executables in the virtualenv&#8217;s bin folder: supervisord and supervisorctl.  You&#8217;ll need to create a simple configuration file, probably in your virtualenv&#8217;s etc folder.  This will vary depending on your system, but here is a sample one:</p>
+<div class="highlight-python"><pre>[unix_http_server]
+file=/tmp/supervisor_genesis_test.sock   ; (the path to the socket file)
+
+[supervisord]
+logfile=/tmp/supervisord.log
+logfile_maxbytes=50MB
+logfile_backups=10
+loglevel=debug
+pidfile=/tmp/supervisord.pid
+nodaemon=false
+minfds=1024
+minprocs=200
+
+[rpcinterface:supervisor]
+supervisor.rpcinterface_factory = supervisor.rpcinterface:make_main_rpcinterface
+
+[supervisorctl]
+serverurl=unix:///tmp/supervisor_genesis_test.sock ; use a unix:// URL  for a unix socket
+
+[program:genesis_gunicorn]
+command=/Users/greggkeithley/Work/Genesis/test_site/bin/python /Users/greggkeithley/Work/Genesis/test_site/bin/manage.py run_gunicorn -c /Users/greggkeithley/Work/Genesis/test_site/etc/gunicorn.conf.py
+autostart=true
+autorestart=true</pre>
+</div>
+<p>The server&#8217;s not ready to start, but when it is, run:</p>
+<div class="highlight-python"><pre>supervisord -c etc/supervisord.conf</pre>
+</div>
+<p>To restart the server (e.g. when you&#8217;ve made changes), use:</p>
+<div class="highlight-python"><pre>supervisorctl restart all</pre>
+</div>
+</li>
+</ol>
+</div>
+<div class="section" id="application-installation">
+<h3>Application Installation<a class="headerlink" href="#application-installation" title="Permalink to this headline">¶</a></h3>
+<ol class="arabic">
+<li><p class="first">Clone the repository into your virtualenv&#8217;s src directory.  Note which branch you&#8217;ll be working on:</p>
+<div class="highlight-python"><pre>git clone &lt;git_url&gt; -b &lt;branch&gt;</pre>
+</div>
+</li>
+<li><p class="first">Install application dependencies</p>
+<div class="highlight-python"><pre>cd genesishealth/dependencies
+pip install -r requirements.pip</pre>
+</div>
+</li>
+<li><p class="first">Create a settings file for your environment.  Add a folder to genesishealth/conf with some descriptive name and create __init__.py, urls.py, and settings.py inside of it.  You can just look at other settings files as templates; you should really only have to change a few things that are system-specific.  You probably will not need to change anything in urls.py.</p>
+<p>You then need to sym link the file into local:</p>
+<div class="highlight-python"><pre>ln -s /path/to/your/settings/directory/* /path/to/project/genesishealth/conf/local</pre>
+</div>
+<p>You can make sure the system is getting your settings correctly by running &#8216;manage.py&#8217;.  It should show you a list of available commands, including some non-default ones, like schemamigration and run_gunicorn.  If you get anything else, it means something is wrong with one of the following: your settings file, the sym link, or your manage.py script.</p>
+</li>
+<li><p class="first">Sync your database.  Note, this step is not required if you&#8217;re using a remote database.</p>
+<div class="highlight-python"><pre>manage.py syncdb --migrate</pre>
+</div>
+</li>
+<li><p class="first">Next, we&#8217;ll load a fixture to add a single admin user to the database.  Ask someone on development team for username and password.</p>
+<div class="highlight-python"><pre>manage.py loaddata initial_logins</pre>
+</div>
+</li>
+<li><p class="first">(Optional) If you want to use the USDA food database, you&#8217;ll need to run the import script.  This is in the scripts folder.  Just run:</p>
+<div class="highlight-python"><pre>python import_sr25.py</pre>
+</div>
+</li>
+<li><p class="first">You should be good to go to now start your server.</p>
+</li>
+</ol>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Installation</a><ul>
+<li><a class="reference internal" href="#remote-server-installation">Remote Server Installation</a></li>
+<li><a class="reference internal" href="#local-server-installation">Local Server Installation</a><ul>
+<li><a class="reference internal" href="#install-requirements">Install Requirements</a></li>
+<li><a class="reference internal" href="#environment-setup">Environment Setup</a></li>
+<li><a class="reference internal" href="#application-installation">Application Installation</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="development_procedures.html"
+                        title="previous chapter">Development Procedures</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="updates.html"
+                        title="next chapter">Updates</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="_sources/install.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="updates.html" title="Updates"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="development_procedures.html" title="Development Procedures"
+             >previous</a> |</li>
+        <li><a href="index.html">genesishealth 3.0 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2012, Gregg Keithley.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
+    </div>
+  </body>
+</html>
