@@ -5,4 +5,4 @@ DEBUG = True
 DEBUG_STATIC_FILES = True
 
 SITE_URL = 'dev-myghr.genesishealthtechnologies.com'
-ALLOWED_HOSTS = ['dev-myghr.genesishealthtechnologies.com']
+ALLOWED_HOSTS = ['dev-myghr.genesishealthtechnologies.com', 'dev-aws-myghr.genesishealthtechnologies.com']
