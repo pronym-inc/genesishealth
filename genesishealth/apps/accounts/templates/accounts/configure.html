@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+
+{% block pageTitle %}{% if myghr_user.user_type == "Patient" %}Activate Your Account{% else %}Activate Account{% endif %}{% endblock %}
+
+{% block extrahead %}
+<script type="text/javascript">
+    $(document).ready(function() {
+        $('#send_to_user_button').click(function() {
+            $('#id_send_to_user').val('True');
+        });
+    });
+</script>
+{% endblock %}
+
+{% block main_content %}
+    <form action="/dashboard/#/accounts/configure/{{ target.id }}/" id="configure_form" method="post">{% csrf_token %}
+        {% if target.email %}<input type="hidden" name="send_to_user" id="id_send_to_user" value="False" />
+        <input type="submit" id="send_to_user_button" value="Send Activation to User" disabled="disabled" /><br />{% endif %}
+        {{ form.as_p }}
+        <p><input type="submit" value="Submit"></p>
+    </form>
+{% endblock %}

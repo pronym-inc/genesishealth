@@ -1,0 +1,14 @@
+{% extends "logs/base_audit_print.html" %}
+
+{% block pageTitle %}API Health Report{% endblock %}
+
+{% block audit_content %}
+    {% for entry in data %}
+    <h2>{{ entry.name }}</h2>
+    <p>Expected: <strong>{{ entry.expected }}</strong></p>
+    <p>Sent: <strong>{{ entry.sent }}</strong></p>
+    <p>Success: <strong>{{ entry.success }}</strong></p>
+    <p>Failed: <strong>{{ entry.errors }}</strong></p>
+    {% endfor %}
+    <p><u><h4>Total</h4></u><strong>{{ total }}</strong></p>
+{% endblock %}

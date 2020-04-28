@@ -1,0 +1,47 @@
+[
+    {
+        "pk": 1,
+        "model": "gdrives.gdrive",
+        "fields": {
+            "group": 1,
+            "patient": 4,
+            "meid": "A0000TEST1",
+            "device_id": "A1",
+            "created_at": "2013-03-25T04:00:24+05:00",
+            "assigned_at": "2013-03-25T04:00:24+05:00"
+        }
+    },
+    {
+        "pk": 2,
+        "model": "gdrives.gdrive",
+        "fields": {
+            "group": 1,
+            "meid": "A0000TEST2",
+            "device_id": "A2",
+            "created_at": "2013-03-25T04:00:24+05:00"
+        }
+    },
+    {
+        "pk": 3,
+        "model": "gdrives.gdrive",
+        "fields": {
+            "group": 1,
+            "patient": 5,
+            "meid": "A0000DEMO1",
+            "device_id": "D1",
+            "created_at": "2013-03-25T04:00:24+05:00"
+        }
+    },
+    {
+        "pk": 4,
+        "model": "gdrives.gdrive",
+        "fields": {
+            "group": 1,
+            "patient": 6,
+            "meid": "A0000TEST3",
+            "device_id": "A3",
+            "created_at": "2013-03-25T04:00:24+05:00",
+            "assigned_at": "2013-03-25T04:00:24+05:00"
+        }
+    }
+]

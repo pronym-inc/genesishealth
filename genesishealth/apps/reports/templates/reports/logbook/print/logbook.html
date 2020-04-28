@@ -1,0 +1,14 @@
+{% extends 'reports/logbook/print/base.html' %}
+
+{% block extra_head %}
+<script src="/static/js/highcharts/highcharts.js" type="text/javascript" charset="utf-8"></script>
+<script type="text/javascript" src="/static/js/reports/print-report.js"></script>
+<script type="text/javascript">
+window.chart_patient_id = {{ patient.id }};
+window.isPDFExport = true;
+</script>
+{% endblock %}
+
+{% block footnotes %}
+<li>When a given meal alot for a given day contains more than one results, only the two most recent results are shown. The statistics, however, include all results.</li>
+{% endblock %}

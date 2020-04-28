@@ -1,0 +1,14 @@
+{% extends "utils/generic_table_templates/base.html" %}
+
+{% block main_content %}
+    {% if form_message %}
+    <p>{{ form_message }}</p>
+    {% endif %}
+    <p>I attest that all glucose meters in carton {{ carton.number }} were tested by me according to Genesis Meter Acceptance Testing Procedures.  All non-conforming meters have been identified and specific non-conformities have been recorded.</p>
+    <form action="" method="post" class="form">{% csrf_token %}
+        {{ form.as_p }}
+        <p><input type="submit" value="Submit"></p>
+    </form>
+    <h3>Non-Conforming Devices</h3>
+    {{ block.super }}
+{% endblock %}

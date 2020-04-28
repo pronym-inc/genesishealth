@@ -1,0 +1,24 @@
+{% extends "reports/print_base.html" %}
+
+{% block extra_head %}
+    <link rel="stylesheet" href="/static/css/ui.css"/>
+    <style type="text/css">
+        .spacer {
+            height: 25px;
+        }
+    </style>
+{% endblock %}
+
+{% block pageTitle %}Call Log Report{% endblock %}
+
+{% block patient_header %}{% endblock %}
+
+{% block main_content %}
+<div class="spacer"></div>
+<div>
+    <img src="/static/images/ght_logo.png">
+</div>
+{% include "gdrives/reports/non_conformity_include.html" with is_print="yes" %}
+{% endblock %}
+
+{% block footnote_container %}{% endblock %}

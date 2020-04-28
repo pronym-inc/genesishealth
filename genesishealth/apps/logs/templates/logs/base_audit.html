@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+
+{% block extrahead %}
+<script type="text/javascript">
+updateCallbackQueue.push(function(div) {
+    div.find('#submitButton').click(function(e) {
+        e.preventDefault();
+        var fixed = location.hash.match(/^#(.+\/)(\?|$)/)[1];
+        var startDate = $('#start_date').val();
+        var endDate = $('#end_date').val();
+        var qs = [];
+        if (startDate) {
+            qs.push("start_date=" + encodeURIComponent(startDate));
+        }
+        if (endDate) {
+            qs.push("end_date=" + encodeURIComponent(endDate));
+        }
+        var querystring = qs.join("&");
+        var final = "#" + fixed + "?" + querystring;
+        location.hash = final;
+    });
+    setTimeout(function() { div.find('#start_date').val("{{ start_date|date:"m/d/y" }}"); }, 0);
+    setTimeout(function() { div.find('#end_date').val("{{ end_date|date:"m/d/y" }}"); }, 0);
+
+});
+</script>
+{% endblock %}
+
+{% block main_content %}
+<form id="dateForm">
+    <label for="start_date">Start Date</label>
+    <input type="date" id="start_date" name="start_date"><br>
+    <label for="start_date">End Date</label>
+    <input type="date" id="end_date" name="end_date"><br>
+    <input id="submitButton" type="submit">
+</form>
+{% block audit_content %}{% endblock %}
+{% endblock %}

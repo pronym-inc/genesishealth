@@ -1,0 +1,13 @@
+{% extends "utils/generic_form.html" %}
+
+{% block main_content %}
+<p>This procedure will remove these meter(s) form the current patient's account.  Are you sure you wish to continue?</p>
+<table>
+    <tbody>
+        {% for device in batch_queryset %}
+        <tr>{{ device.meid }}</tr>
+        {% endfor %}
+    </tbody>
+</table>
+{{ block.super }}
+{% endblock %}

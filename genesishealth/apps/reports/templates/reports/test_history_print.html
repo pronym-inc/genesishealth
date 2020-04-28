@@ -1,0 +1,47 @@
+{% extends "reports/print_base.html" %}
+
+{% block extra_head %}
+    <link rel="stylesheet" href="/static/css/ui.css" media="screen" />
+    <style type="text/css">
+        section table {
+            width: 380px;
+        }
+        section {
+            margin: 10px;
+        }
+    </style>
+    <script src="/static/js/highcharts/highcharts.js" type="text/javascript" charset="utf-8"></script>
+    <script src="/static/js/highcharts/exporting.js" type="text/javascript" charset="utf-8"></script>
+    <script src="/static/js/reports/th-report.js" type="text/javascript"></script>
+    <script type="text/javascript">
+        window.chart_patient_id = {{ patient.id }};
+        window.isPDFExport = true;
+        $(function() {
+            postCallbackQueue.process($('#main_content'));
+        });
+    </script>
+{% endblock %}
+
+{% block pageTitle %}Test History{% if request.user != patient %} for {{ patient.get_full_name }}{% endif %}{% endblock %}
+
+{% block main_content %}
+<form id="testHistoryDateForm" action="." method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+</form>
+<section class="portlet grid_6 leading graph">
+    {% include "reports/report_quarter.html" with prefix="premeal" days=form.premeal_days.value start_date=form.premeal_start_date.value end_date=form.premeal_end_date.value empty=premeal_empty chartClass="thChart" %}
+</section>
+
+<section class="portlet grid_6 leading graph">
+    {% include "reports/report_quarter.html" with prefix="postmeal" days=form.postmeal_days.value start_date=form.postmeal_start_date.value end_date=form.postmeal_end_date.value empty=postmeal_empty chartClass="thChart" %}
+</section><div style="clear: both"></div>
+
+<section class="portlet grid_6 leading graph">
+    {% include "reports/report_quarter.html" with prefix="combined" days=form.combined_days.value start_date=form.combined_start_date.value end_date=form.combined_end_date.value empty=combined_empty chartClass="thChart" %}
+</section>
+
+<section class="portlet grid_6 leading graph">
+    {% include "reports/summary_quarter.html" with prefix="summary" days=form.summary_days.value start_date=form.summary_start_date.value end_date=form.summary_end_date.value empty=summary_empty %}
+</section>
+{% endblock %}

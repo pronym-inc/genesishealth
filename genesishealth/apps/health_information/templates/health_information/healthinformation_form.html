@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+
+{% block pageTitle %}Health Information{% if professional_view %} for {{ patient.get_full_name }}{% endif %}{% endblock %}
+
+{% block main_content %}
+    <form action="" method="post">{% csrf_token %}
+        {{ form.as_p }}
+
+        <p><input type="submit" value="Submit"></p>
+    </form>
+{% endblock %}

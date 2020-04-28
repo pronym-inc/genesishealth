@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+
+{% block pageTitle %}Return Meter Testing Determination Report{% endblock %}
+
+{% block extrahead %}
+<script src="/static/js/highcharts/highcharts-5_0_10.js" type="text/javascript"></script>
+<script src="/static/pages/rma_determination_report.js" type="text/javascript"></script>
+<script type="text/javascript">
+updateCallbackQueue.push(function(div) {
+    var chartTitle = "{{ chart_title }}";
+    var categories = [{% for category in categories %}'{{ category }}',{% endfor %}];
+    var series = [
+        {% for s in series %}
+        {
+            name: "{{ s.name }}",
+            data: [{% for point in s.data %}{{ point }}, {% endfor %}]
+        },
+        {% endfor %}
+    ];
+    createCharts(chartTitle, categories, series, true);
+});
+</script>
+<style>
+body {
+    margin-top: 25px;
+}
+</style>
+{% endblock %}
+
+{% block main_content %}
+<div class="container_12">
+    <p>
+        <a href="{% url "gdrives:rma-summary-report-pdf" %}?{{ querystring }}" class="btnRight sbm sbm_red"><i class="icon-plus"></i>Generate PDF</a>
+    </p>
+</div>
+<br><br><br>
+{% include "gdrives/reports/rma_summary_include.html" %}
+{% endblock %}

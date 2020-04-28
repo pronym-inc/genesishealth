@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+
+{% block pageTitle %}{% ifequal myghr_user.user_type "professional" %}Device Details{% else %}My Meter{% endifequal %}{% endblock %}
+
+{% block main_content %}
+    <p>
+        {% ifequal myghr_user.user_type "professional" %}<a href="#/devices/edit/">Edit</a><br />{% endifequal %}
+        <a href="#/contact/">Problem with your device?</a>
+    </p>
+    <div class="gdrive">
+        <p><label>MEID:</label> {{ object.meid }}</p>
+    </div>
+{% endblock %}

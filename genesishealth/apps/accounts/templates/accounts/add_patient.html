@@ -1,0 +1,201 @@
+{% extends "base.html" %}
+
+{% load fieldsets %}
+
+{% block pageTitle %}{{ title }}{% endblock %}
+
+{% block extrahead %}
+<style type="text/css">
+    div.form-error {display: none !important;}
+    nav.addpatientWizard ul > li.active {
+        background-image: none !important;
+    }
+</style>
+<script type="text/javascript" src="/static/js/jquery.wizard.js"></script>
+<script type="text/javascript">
+    updateCallbackQueue.push(function(div) {
+        $('.wizard').wizard({
+            validatorErrorInputEvent: 'keyup change',
+            validatorOnSuccess: function(event, elements) {
+                $('select').each(function() {
+                    var ele = $(this)
+                    if ( !ele.hasClass('invalid') ) {
+                        ele.parent().removeClass('invalid');
+                    }
+                });
+            },
+            validatorOnFail: function(event, elements) {
+                elements.forEach(function(ele) {
+                    if ( ele.input.is('select') ) {
+                        ele.input.parent().addClass('invalid');
+                    }
+                });
+            }
+        });
+    });
+</script>
+<script type="text/javascript">
+  var rawCompanyData = '{{ company_json|safe }}',
+    companyData = JSON.parse(rawCompanyData);
+	// Handles dynamic change of required fields on step 2
+	function toggleEmail() {
+		// Capture specific form ID's to change attributes
+		var $email = $('#id_email, #id_email_confirm');
+		var $phone = $('#id_phone_0_phone');
+		var emailChecked = $('#id_preferred_contact_method_0').is(':checked');
+		// If email is checked, perform the following
+		if (emailChecked == true) {
+			$email.parent('p').addClass('required').children('input').attr('required', 'true').parent().find('em').remove();
+			if ($email.parent().find('em').length == 0) {$email.parent('p').find('label').append('<em> *</em>');}
+			$phone.parent('p').removeClass('required').children().removeAttr('required').parent().find('em').remove();
+			// Toggle messages to user
+			$('#emailWarning').show();
+			$('#phoneWarning').hide();
+		} else {
+			$email.parent('p').removeClass('required').children('input').removeAttr('required').removeClass('invalid').parent().find('em').remove();
+			if ($phone.parent().find('em').length == 0) {$phone.parent('p').find('label').append('<em> *</em>');}
+			$phone.parent('p').addClass('required').children('input').attr('required', 'required').addClass('invalid');
+			$('#emailWarning').hide();
+			$('#phoneWarning').show();
+		}							
+	}; // toggleEmail()
+	
+	function resizeForm() {
+		var newHeight = $('section.current').height() + $('nav').height() - 5 + "px";
+		$('form.wizard').animate({height: newHeight}, 'fast');
+	}
+	
+	function fixTimezone() {
+		var newValue = $('#id_timezone_name').val();
+		$('#id_timezone_name').prev('span').text(newValue);	
+	}	
+	
+	$(document).ready(function() {	
+		// Force toggleEmail() to load
+		$('.next, .prev, #id_preferred_contact_method_1, #id_preferred_contact_method_0').click(toggleEmail);
+		$('form').change(fixTimezone);
+		$('form.wizard').click(resizeForm);
+        $(document).on('keyup', function(event) {
+            if ( $(event.target).is('[aria-controls]') ) {
+                resizeForm();
+            }
+        });
+	});
+	$(document).on('change', function() {
+		$.uniform.update();
+	});
+  $(function() {
+      $('a[data-device-pk]').click(function(event) {
+          var devicePK = $(this).data('device-pk');
+          $('input[name=device]').val(devicePK);
+          $('form').submit();
+      });
+      $(document).on('change', '#id_company', function() {
+        var companyId = parseInt($(this).val()),
+          bin = companyData[companyId].bin,
+          pcn = companyData[companyId].pcn;
+        $('#id_bin_number').val(bin);
+        $('#id_pcn_number').val(pcn);
+      });
+  });
+</script>
+{% endblock %}
+
+{% block main_content %}
+
+<div class="grid_12">
+  <!-- wizard -->
+  <form action="" method="post" class="wizard form addpatient" novalidate>
+    {% csrf_token %}
+    <div style="display:none">
+      <input type="hidden" name="device" value="">
+    </div>
+    <nav class="addpatientWizard">
+      <ul class="clearfix">
+        <li class="active"><strong>1.</strong> Patient Information</li>
+        <li><strong>2.</strong> Contact Method</li>
+        <li><strong>3.</strong> Address &amp; Company</li>
+      </ul>
+    </nav>
+    <div class="items">
+      <section id="page1">
+        <header>
+          <h2>
+            <strong>Step 1: </strong> Patient Information
+          </h2>
+          {{ form.non_field_errors }}
+        </header>
+        <section>
+          {% get_fieldset salutation,first_name,middle_initial,last_name,insurance_identifier,company,pcn_number,bin_number,billing_method,refill_method,rx_partner as fields from form %}
+          {% for field in fields %}
+          <p{% if field.field.required %} class="required"{% endif %}>
+            {{ field.label_tag }} {{ field }} {{ field.errors }}
+          </p>
+          {% endfor %}
+          <hr>
+          {% get_fieldset gender,date_of_birth as fields from form %}
+          {% for field in fields %}
+            <p{% if field.field.required %} class="required"{% endif %}>
+              {{ field.label_tag }} {{ field }} {{ field.errors }}
+            </p>
+          {% endfor %}
+        </section>
+        <footer class="clearfix">
+          <button type="button" class="next fr">Next &raquo;</button>
+        </footer>
+      </section>
+        
+      <section id="page2">
+        <header>
+          <h2>
+            <strong>Step 2: </strong> Preferred Contact
+          </h2>
+        </header>
+        <section>
+          <div id="emailWarning" class="message warning" style="display: none;">The default contact method for this patient is currently set to email. The email address entered will also be used as the default login name for this account. If this patient does not have an email address, be sure to change the contact method to <strong>phone</strong> instead.</div>
+          <div id="phoneWarning" class="message warning" style="display: none;">The default contact method for this patient is currently set to phone and therefore this field is now required.</div>
+          {% get_fieldset email,email_confirm,phone,preferred_contact_method as fields from form %}
+          {% for field in fields %}
+            <p{% if field.field.required %} class="required"{% endif %}>
+              {{ field.label_tag }} {{ field }} {{ field.errors }}
+            </p>
+          {% endfor %}
+        </section>
+        <footer class="clearfix">
+          <button type="button" class="prev fl">&laquo; Back</button>
+          <button type="button" class="next fr">Next &raquo;</button>
+        </footer>
+      </section>
+                  
+      <section id="page3">
+        <header>
+          <h2>
+            <strong>Step 3: </strong> Address &amp; Company
+          </h2>
+        </header>
+        <section>
+          {% get_fieldset address1,address2,city,state,zip as fields from form %}
+          {% for field in fields %}
+            <p{% if field.field.required %} class="required"{% endif %}>
+              {{ field.label_tag }} {{ field }} {{ field.errors }}
+            </p>
+          {% endfor %}
+          <hr>
+          {% get_fieldset access_groups,administrative_groups,helthcare_groups,total_groups as fields from form %}
+          {% for field in fields %}
+          {% if field %}
+            <p{% if field.field.required %} class="required"{% endif %}>
+              {{ field.label_tag }} {{ field }} {{ field.errors }}
+            </p>
+              {% endif %}
+            {% endfor %}
+          </section>
+          <footer class="clearfix">
+            <button type="button" class="prev fl">&laquo; Back</button>
+            <button type="submit" class="fr">Finish &raquo;</button>
+          </footer>
+        </section>
+      </div><!--items-->
+    </form><!--wizard-->
+  </div>
+{% endblock %}

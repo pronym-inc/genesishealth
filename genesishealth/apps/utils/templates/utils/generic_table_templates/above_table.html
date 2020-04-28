@@ -1,0 +1,32 @@
+{% if items %}
+<p>
+    {% for item in items %}
+    {% if item.is_button %}
+    <a href="{{ item.link }}" class="btnRight sbm sbm_red{% if item.button_class %} {{ item.button_class }}{% endif %}"{% if item.button_id %} id="{{ item.button_id }}"{% endif %}><i class="icon-plus"></i>{{ item.name }}</a>
+    {% endif %}
+    {% if item.is_raw %}
+    {{ item.content|safe }}
+    {% endif %}
+    {% if item.is_radio %}
+    <div class="togglecontainer">
+      <form>
+        <div id="devicestateradio">
+          {% for option in item.options %}
+          <input type="radio" class="noUniform" id="filter-{{ option.value }}" name="radio" /><label for="filter-{{ option.value }}">{{ option.display }}</label>
+          {% endfor %}
+        </div>
+      </form>
+    </div>
+    {% endif %}
+    {% if item.is_dropdown %}
+    <div class="batchDropdown">
+        <select class="dropdownAction" id="dda_{{ forloop.counter }}">
+            {% for option in item.options %}
+            <option value="{{ option.value }}"{% if option.no_redirect %} redirect="false"{% endif %}{% if option.direct_link %} direct_link="true"{% endif %}>{{ option.display }}</option>
+            {% endfor %}
+        </select><input type="submit" for="dda_{{ forloop.counter }}" value="Apply to Selected" class="dropdownSubmitter" />
+    </div>
+    {% endif %}
+    {% endfor %}
+</p>
+{% endif %}

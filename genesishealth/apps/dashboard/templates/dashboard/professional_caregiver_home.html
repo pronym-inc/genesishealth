@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+{% load genesis_tools %}
+
+{% block pageTitle %}MyGHR Home{% endblock %}
+
+{% block main_content %} 
+
+<section class="portlet grid_6 leading">
+	<header><h2>Patients</h2></header> 
+	<section>
+
+    <p>You have <a href="{% get_dashboard_url accounts:watch-list %}">{{ user.professional_profile.get_watch_list.count }}</a> Patients on your Watch List.</p>
+	</section>
+</section> 
+
+<div class="clear"></div>
+{% endblock %}

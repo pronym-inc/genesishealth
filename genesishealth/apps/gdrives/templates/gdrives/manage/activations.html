@@ -1,0 +1,85 @@
+{% extends "base.html" %}
+{% block pageTitle %}Admin - Manage Activations{% endblock %}
+
+{% block extrahead %}
+<script type="text/javascript" src="/static/js/jquery.dataTables.min.js"></script>
+<script type="text/javascript">
+window.ghrCallback = function() {
+    $('#activations-table').dataTable({
+        aoColumnDefs: [
+            {bSortable: false, bSearchable: false, aTargets: [5]},
+            {bSearchable: false, aTargets: [3]}
+        ]
+    });
+    function sendForm() {
+        var ids = [];
+        $('#activations-table input[type="checkbox"]:visible:checked').each(function() {
+            ids.push($(this).attr('id').replace(/id_device_/, ''));
+        });
+        if (ids.length == 0) {
+            alert("You must select at least one device.")
+            return;
+        }
+        $('#hidden_devices').val(ids.join(','));
+        $('#activationForm').submit();
+    }
+
+    $('#mark-as-active-button').click(function(e) {
+        e.preventDefault();
+        $('#hidden_action').val('to_active');
+        sendForm();
+    });
+
+    $('#mark-as-deactive-button').click(function(e) {
+        e.preventDefault();
+        $('#hidden_action').val('to_deactive');
+        sendForm();
+    });
+};
+</script>
+{% endblock %}
+
+{% block main_content %}
+        <form action="" method="post" id="activationForm">
+            {% csrf_token %}
+            {% if errors %}
+            <ul>
+            {% for e in errors %}
+                <li>{{ e }}</li>
+            {% endfor %}
+            </ul>
+            {% endif %}
+
+            <input type="hidden" id="hidden_devices" name="devices" value="" />
+            <input type="hidden" id="hidden_action" name="action" value="" />
+        </form>
+        <p>{% if view == "waiting-active" %}Showing waiting for active devices{% else %}Showing waiting for deactive devices{% endif %}</p>
+        <p>{% if view == "waiting-active" %}<a href="/dashboard/#/devices/manage/activations/?view=waiting-deactive"><button>Show Waiting for Deactive Devices</button></a>{% else %}<a href="/dashboard/#/devices/manage/activations/?view=waiting-active"><button>Show Waiting for Active Devices</button></a>{% endif %}</p>
+        <p>
+            {% if view == "waiting-active" %}<a href="#" id="mark-as-active-button"><button>Mark as Active</button></a>
+            {% else %}<a href="#" id="mark-as-deactive-button"><button>Mark as Deactive</button></a>{% endif %}
+        <table id="activations-table" class="tbDataTable">
+            <thead>
+                <tr>
+                    <th>MEID</th>
+                    <th>Serial Number</th>
+                    <th>Group</th>
+                    <th>Assigned to Patient?</th>
+                    <th>Activation Status</th>
+                    <th>Select</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for device in devices %}
+                <tr>
+                    <td class="first">{{ device.meid }}</td>
+                    <td>{{ device.device_id }}</td>
+                    <td>{% if device.professional %}{{ device.professional.get_profile.company }}{% else %}N/A{% endif %}</td>
+                    <td>{% if device.patient %}Yes{% else %}No{% endif %}</td>
+                    <td></td>
+                    <td><input type="checkbox" name="device_{{ device.id }}" id="id_device_{{ device.id }}" /></td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+{% endblock %}

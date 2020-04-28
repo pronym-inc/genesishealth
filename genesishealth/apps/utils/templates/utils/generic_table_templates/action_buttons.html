@@ -1,0 +1,4 @@
+{% load genesis_tools %}
+{% for button in buttons %}
+<a class="sb sb_dark ss_icon-only inline-block tipTip" href="{{ button.link }}" title="{{ button.name }}"{% if button.data_attributes %}{% for attr in button.data_attributes %} data-{{ attr.key }}="{{ attr.value }}"{% endfor %}{% endif %}><i class="gbutton {% get_action_icon_class button.link_name %}"></i></a>{% if not forloop.last %}{% endif %}
+{% endfor %}

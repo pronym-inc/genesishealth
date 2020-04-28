@@ -1,0 +1,254 @@
+{% extends "base.html" %}
+{% load genesis_tools %}
+
+{% block main_content %}
+
+<!-- Specific stylesheet for Logbook -->
+<link rel="stylesheet" media="screen" href="{{ STATIC_URL }}lib/datatables/css/myghrpad.css" />
+
+<style type="text/css">
+div#logbook8_wrapper {
+	display: none;
+}
+
+textarea.inError {
+  border-color: red;
+}
+</style>
+
+<!-- Specific JS for logbook -->
+
+
+<script type="text/javascript" src="{{ STATIC_URL }}lib/datatables/js/jquery.dataTables.js"></script> 
+<script type="text/javascript" src="{{ STATIC_URL }}js/extra.datatables.js"></script>
+
+<!-- Pagination / Sort / Search function call for logbook w/ 4 columns and logbook w/ 8 columns -->
+<script type="text/javascript"> 
+    function setLogbookAjaxStr(startDate, endDate) {
+        var base = '/reports/ajax/logbook/?patient={{ patient.id }}&start_date='+startDate+'&end_date='+endDate;
+        window.logbook4AjaxStr = base + '&display_type=logbook4';
+        window.logbook8AjaxStr = base + '&display_type=logbook8';
+        // Markup wound up ugly, so we have to do it this way.
+        $('#pdflogbook, #printlogbook').each(function() {
+          $(this).find('#id_print-start_date').val(startDate);
+          $(this).find('#id_print-end_date').val(endDate);
+        });
+        
+    };
+    setLogbookAjaxStr('{{ start_date|date:"Y-m-d" }}', '{{ end_date|date:"Y-m-d" }}');
+    window.logbookNotesLocation = '{% url "reports:ajax-logbook-get-notes-for-period" %}';
+    window.patient_id = {{ patient.id }};
+</script>
+
+<script type="text/javascript" src="/static/js/reports/logbook.js"></script>
+<script type="text/javascript" src="/static/js/reports/selectdays.js"></script>
+  
+<!-- Toggle button to show 8 column layout -->
+
+<script type="text/javascript" src="/static/lib/fullcalendar/jquery-ui-interactions.min.js"></script>
+<script>
+    $(document).ready(function() {
+        $('#additem-button').popover('#additem-div',{preventLeft: true, preventRight: true, preventTop: true});
+        $('#note-button4').popover('#note-div4',{preventLeft: true, preventRight: true, preventTop: true});
+        $('#note-button8').popover('#note-div8',{preventLeft: true, preventRight: true, preventTop: true});
+        $('#note-button4-empty').popover('#note-div4-empty',{preventLeft: true, preventRight: true, preventTop: true});
+        $('#note-button8-empty').popover('#note-div8-empty',{preventLeft: true, preventRight: true, preventTop: true});
+        $('.detailedentry').popover('#entrydetails-div',{preventLeft: true, preventRight: false, preventTop: false});
+   });
+</script>
+
+{% block extra_logbook_head %}{% endblock %}
+
+{% csrf_token %}
+
+<a href="{% if user == patient %}{% get_dashboard_url reports:index %}{% else %}{% get_dashboard_url reports:patient-index patient.id %}{% endif %}" class="sbm sbm_red"><i class="icon-arrow-left"></i>Back to Reports</a><br /><br />
+
+<div class="togglecontainer">
+<form>
+  <div id="customradio">
+    <input type="radio" class="noUniform" id="view4" name="radio" checked="checked" /><label for="view4">4 Column</label>
+    <input type="radio" class="noUniform" id="view8" name="radio" /><label for="view8">8 Column</label>
+  </div>
+</form>
+</div>
+
+
+<!--<div class="togglecontainer">
+    <div class="switch ios">
+        <input id="view4" class="noUniform" name="view2" type="radio" checked>
+        <label for="view4" onclick="">4 Column</label>
+
+        <input id="view8" class="noUniform" name="view2" type="radio">
+        <label for="view8" onclick="">8 Column</label>
+
+        <span class="slide-button"></span>
+     </div>
+</div> -->
+{% block add_section %}{% endblock %}
+
+<div id="entrydetails-div" class="popover" style="width:200px">
+    <header>Entry Details</header>
+    <section>
+      <div class="content" style="padding:20px;">
+        Insert entry details here.
+      </div>
+    </section>
+</div>
+
+<div id="printlogbook" style="display:none">
+  <div class="message info">
+        <h3>Print Logbook</h3>
+        <p>Customize your report below and then click send to printer.</p>
+    </div>
+    <p>
+      <form method="get" id="printForm" action="{% block printurl %}{% url "reports:print-logbook" %}{% endblock %}">
+        <fieldset>
+        <p>
+          {{ forms.print.start_date }}{{ forms.print.end_date }}{{ forms.print.patient }}
+          <label for="id_print-display_type">Display type:</label> {{ forms.print.display_type }}
+        </p>
+        <input type="submit" id="printReport" value="Send To Printer" />
+        </fieldset>
+      </form>
+  </p>
+</div>
+
+<div id="pdflogbook" style="display:none">
+  <div class="message info">
+        <h3>Download Logbook PDF</h3>
+        <p>Customize your report below and then click download PDF.</p>
+    </div>
+    <p>
+      <form method="get" id="printForm" action="{% block pdfurl %}{% url "reports:pdf-logbook" %}{% endblock %}">
+        <fieldset>
+        <p>
+          {{ forms.print.start_date }}{{ forms.print.end_date }}{{ forms.print.patient }}
+          <label for="id_print-display_type">Display type:</label> {{ forms.print.display_type }}
+        </p>
+        <input type="submit" id="printReport" value="Download PDF" />
+        </fieldset>
+      </form>
+  </p>
+</div>
+
+
+<!-- 4 Column Logbook -->
+<table class="display logbook" id="logbook4"> 
+    <thead> 
+    <tr> 
+        <th rowspan="2">Date</th> 
+      <th colspan="1">Breakfast</th> 
+      <th colspan="1">Lunch</th> 
+      <th colspan="1">Dinner</th> 
+      <th colspan="1">Night</th>
+    </tr>
+    <tr>
+      <th colspan="1" class="small">5 AM - 11 AM</th>
+      <th colspan="1" class="small">11 AM - 2 PM</th>
+      <th colspan="1" class="small">2 PM - 10 PM</th>
+      <th colspan="1" class="small">10 PM - 5 AM</th>
+    </tr>
+  </thead> 
+  <tbody> 
+  </tbody>
+  
+</table> 
+    
+<table class="display logbook" id="logbook8" style="width:100%;"> 
+  <thead> 
+      <tr> 
+          <th rowspan="2">Date</th> 
+          <th colspan="1">Overnight</th> 
+          <th colspan="1">Early Morning</th> 
+          <th colspan="1">Late Morning</th> 
+          <th colspan="1">Early Afternoon</th>
+          <th colspan="1">Late Afternoon</th> 
+          <th colspan="1">Early Evening</th> 
+          <th colspan="1">Late Evening</th> 
+          <th colspan="1">Bedtime</th>
+      </tr>
+      <tr>
+          <th colspan="1" class="small">12 AM - 6 AM</th>
+          <th colspan="1" class="small">6 AM - 9 AM</th>
+          <th colspan="1" class="small">9 AM - 11 AM</th>
+          <th colspan="1" class="small">11 AM - 2 PM</th>
+          <th colspan="1" class="small">2 PM - 5 PM</th>
+          <th colspan="1" class="small">5 PM - 7 PM</th>
+          <th colspan="1" class="small">7 PM - 10 PM</th>
+          <th colspan="1" class="small">10 PM - 12 AM</th>
+      </tr>
+  </thead> 
+  <tbody> 
+  </tbody> 
+</table>
+
+<br clear="all" />
+
+<section class="portlet grid_4 leading">
+    <header><h2>Glucose Readings</h2></header>
+    <section>
+        <div class="legendwrap">
+            <ul class="legendlist">
+                <li><span class="legendimg"><img src="/static/images/onlinereports/before-ico.png" /></span><span class="legendtext">Before Meal</span></li>
+                <li><span class="legendimg"><img src="/static/images/onlinereports/after-ico.png" /></span><span class="legendtext">After Meal</span></li>
+                <li><span class="legendimg"><img src="/static/images/onlinereports/g-ico.png" /></span><span class="legendtext">General</span></li>
+                <li><span>Units in mg/dL</span></li>
+            </ul>
+        </div>
+        <div class="legendwrap">
+            <ul class="legendlist">
+                <li><span class="legendimg"><img src="/static/images/onlinereports/ontarget-ico.png" /></span><span class="legendtext">In Target</span></li>
+                <li><span class="legendimg"><img src="/static/images/onlinereports/o-down-ico.png" /></span><span class="legendtext">Below Target</span></li>
+                <li><span class="legendimg"><img src="/static/images/onlinereports/o-up-ico.png" /></span><span class="legendtext">Above Target</span></li>
+                <li><span class="legendimg"><img src="/static/images/onlinereports/911-ico.png" /></span><span class="legendtext">Hypo/Hyper Glycemic</span></li>
+            </ul>
+        </div><br clear="all" />
+        
+    </section>
+</section>
+
+<!--<section class="portlet grid_4 leading">
+    <header><h2>Other Recorded Values</h2></header>
+    <section>
+        <div class="legendwrap">
+            <ul class="legendlist">
+                <li><span class="legendimg"><img src="/static/images/onlinereports/meal-ico.png" /></span><span class="legendtext">Meal</span></li>
+                <li><span class="legendimg"><img src="/static/images/onlinereports/bp-ico.png" /></span><span class="legendtext">BP, (mmHg)</span></li>             
+                <li><span class="legendimg"><img src="/static/images/onlinereports/weight-ico.png" /></span><span class="legendtext">Weight, (lbs.)</span></li>
+                <li><span class="legendimg"><img src="/static/images/onlinereports/exercise-ico.png" /></span><span class="legendtext">Exercise (Minutes)</span></li>
+            </ul>
+        </div>
+        <div class="legendwrap">
+            <ul class="legendlist">
+                <li><span class="legendimg"><img src="/static/images/onlinereports/meds-ico.png" /></span><span class="legendtext">Meds, (mL)</span></li>
+                <li><span class="legendimg"><img src="/static/images/onlinereports/w-ico.png" /></span><span class="legendtext">Weekend</span></li>
+            </ul>
+        </div><br clear="all" />
+        
+    </section>
+</section>-->
+
+<section class="portlet grid_4 leading">
+    <header><h2>Patient Tools</h2></header>
+    <section>
+        <div class="message info">You can customize your printed report after clicking below.</div>
+        <div>
+            <p><a href="#printlogbook" class="fancybox sbm sbm_red"><i class="icon-print"></i> Print Logbook</a></p>
+            <p><a href="#pdflogbook" class="fancybox sbm sbm_red"><i class="icon-download-alt"></i> Download Logbook PDF</a></p>
+        </div>
+    </section>  
+</section>
+<div class="clear"></div>
+
+<div id="growlcontainer">
+    <div id="growl-container">
+        <h1>#{title}</h1>
+        <p>#{text}</p>
+    </div>
+            
+</div>
+
+
+                         
+{% block additional_charts %}{% endblock %}               
+{% endblock %}

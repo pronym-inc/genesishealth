@@ -1,0 +1,81 @@
+{% extends "base.html" %}
+
+{% block pageTitle %}Manage Login Information for {{ user.get_full_name }}{% endblock %}
+
+{% block extrahead %}
+<script type="text/javascript">
+function updateContactForm() {
+		if ($('#id_contact_method_0').attr('checked') == 'checked') {
+			$('#id_phone').val('');
+			$('#id_phone').parent('p').hide();
+			$('#id_confirm_phone').val('');
+			$('#id_confirm_phone').parent('p').hide();
+			$('#id_confirm_phone').parent('p').prev('ul').hide();
+			$('#current-phone').hide();
+			$('#current-email').show();
+			$('#id_email').parent('p').show();
+			$('#id_confirm_email').parent('p').show();
+		} else if ($('#id_contact_method_1').attr('checked') == 'checked') {
+			$('#id_email').val('');
+			$('#id_email').parent('p').hide();
+			$('#id_confirm_email').val('');
+			$('#id_confirm_email').parent('p').hide();
+			$('#id_confirm_email').parent('p').prev('ul').hide();
+			$('#current-email').hide();
+			$('#current-phone').show();
+			$('#id_phone').parent('p').show();
+			$('#id_confirm_phone').parent('p').show();
+		}
+	}
+	updateContactForm();
+	window.ghrCallback = function() {
+		if ($('#id_contact_method_0').length > 0) {
+			$('[id^="id_contact_method_"]').change(updateContactForm);
+		}
+	};
+</script>
+{% endblock %}
+
+{% block main_content %}
+
+{% if forms.username_email_form %}
+	<form class="form has-validation" style="margin-bottom: 15px" action="" method="post">{% csrf_token %}
+		
+		
+		{{ forms.username_email_form.as_p }}
+		<p><input type="submit" value="Submit"></p>
+	</form>
+{% endif %}
+
+{% if forms.username_form %}
+	<div style="font-weight:bold; font-size:18px; margin-bottom:15px; border: none">MyGHR Login Information</div>
+	<p style="margin-bottom:19px"><label>Your username is currently set to:</label>&nbsp;<span>{{ user.username }}</span></p>
+	<p style="margin-bottom:19px">To update it, please enter a new username below.</p>
+    <form class="form" style="margin-bottom: 15px" action="" method="post">{% csrf_token %}
+		
+		{{ forms.username_form.as_p }}
+		<p><input type="submit" value="Submit"></p>
+	</form>
+{% endif %}
+
+{% if forms.contact_form %}
+	<div style="font-weight:bold; font-size:18px; margin-bottom:15px; border: none">MyGHR Primary Contact / Account Recovery Information</div>
+	<p style="margin-bottom:19px" id="current-phone"><label>Your phone number is currently set to:</label>&nbsp;<span>{{ user.get_profile.phone }}</span></p>
+	<p style="margin-bottom:19px" id="current-email"><label>Your email address is currently set to:</label>&nbsp;<span>{{ user.email }}</span></p>
+    <form class="form" style="margin-bottom: 15px" action="" method="post">{% csrf_token %}
+		
+		{{ forms.contact_form.as_p }}
+		<p><input type="submit" value="Submit"></p>
+	</form>
+{% endif %}
+
+{% if forms.password_form %}
+	<div style="font-weight:bold; font-size:18px; margin-bottom:15px; border: none">Update Password</div>
+    <form class="form" action="" method="post">{% csrf_token %}
+		
+		{{ forms.password_form.as_p }}
+		<p><input type="submit" value="Submit"></p>
+	</form>
+{% endif %}
+
+{% endblock %}

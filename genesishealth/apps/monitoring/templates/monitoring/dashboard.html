@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+
+{% block pageTitle %}System Monitoring{% endblock %}
+
+{% block extrahead %}
+<script type="text/javascript">
+window.chartDataURLs = {
+    readingServers: "{% url "monitoring:reading_server_data" %}",
+    workerServers: "{% url "monitoring:worker_server_data" %}",
+    databaseServers: "{% url "monitoring:database_server_data" %}",
+    webServers: "{% url "monitoring:web_server_data" %}"
+};
+</script>
+<script type="text/javascript" src="/static/js/moment.min.js"></script>
+<script type="text/javascript" src="/static/js/moment-timezone.js"></script>
+<script type="text/javascript" src="/static/js/highcharts/highstock-all.js"></script>
+<script type="text/javascript" src="/static/js/monitoring/dashboard.js"></script>
+{% endblock %}
+
+{% block main_content %}
+<section class="portlet grid_6 leading">
+    <header><h2>Worker Server Performance</h2></header> 
+    <section>
+        <div id="workerChart"  style="min-height: 600px"></div>
+    </section>
+</section>
+<section class="portlet grid_6 leading">
+    <header><h2>Reading Server Performance</h2></header> 
+    <section>
+        <div id="readingChart" style="min-height: 600px"></div>
+    </section>
+</section>
+<section class="portlet grid_6 leading">
+    <header><h2>Database Server Performance</h2></header> 
+    <section>
+        <div id="databaseChart"></div>
+    </section>
+</section>
+<section class="portlet grid_6 leading">
+    <header><h2>Web Server Performance</h2></header> 
+    <section>
+        <div id="webChart"></div>
+    </section>
+</section>
+{% endblock %}

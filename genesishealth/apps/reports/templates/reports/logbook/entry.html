@@ -1,0 +1,10 @@
+<div id="messagedetails">
+    <div class="message info">
+        <h3>Entry Details</h3>
+    </div>
+    <form name="entryForm" action="{{ form_url }}" method="post" class="entryForm">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <input type="submit" name="submit" class="entryFormSubmit" value="Update" />
+    </form>
+</div>

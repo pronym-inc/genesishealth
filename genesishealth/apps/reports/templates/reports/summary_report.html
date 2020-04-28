@@ -1,0 +1,28 @@
+{% extends 'reports/logbook/base.html' %}
+
+{% block pageTitle %}Summary Report{% if request.user != patient %} for {{ patient.get_full_name }}{% endif %}{% endblock %}
+
+{% block extra_logbook_head %}
+<script type="text/javascript" src="/static/js/reports/th-report.js"></script>
+<script type="text/javascript" src="/static/js/reports/ta-report.js"></script>
+<script src="/static/js/highcharts/highcharts.js" type="text/javascript" charset="utf-8"></script>
+
+<script type="text/javascript">
+window.chart_patient_id = {{ patient.id }};
+</script>
+{% endblock %}
+
+{% block additional_charts %}
+<section class="portlet grid_6 leading graph" style="min-height:380px">
+    {% include "reports/report_quarter.html" with prefix="th-combined" days=form.combined_days.value chartClass="thChart" noControls=1 %}
+</section>
+
+<section class="portlet grid_6 leading graph" style="min-height:380px">
+    {% include "reports/report_quarter.html" with prefix="ta-combined" days=form.combined_days.value chartClass="taChart" noControls=1 %}
+</section>
+{% endblock %}
+
+{% block pdfurl %}{% url "reports:pdf-summary" %}{% endblock %}
+{% block printurl %}{% url "reports:print-summary" %}{% endblock %}
+
+

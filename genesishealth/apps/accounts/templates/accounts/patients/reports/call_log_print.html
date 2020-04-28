@@ -1,0 +1,73 @@
+{% extends "reports/print_base.html" %}
+
+{% block extra_head %}
+    <link rel="stylesheet" href="/static/css/ui.css"/>
+    <link rel="stylesheet" href="/static/css/grids.css"/>
+    <style type="text/css">
+
+        .spacer {
+            height: 25px;
+        }
+
+        .callLogTable {
+            border: solid black 1px;
+            width: 100%;
+        }
+
+        .callLogTable tbody tr td.indented {
+            padding-left: 20px;
+            width: 97%;
+        }
+
+        .callLogTable tbody tr.totalRow {
+            border: solid black 1px;
+        }
+        .pageBreak {
+            page-break-before: always;
+            height: 25px;
+        }
+        .hChart {
+            min-width: 310px;
+            max-width: 800px;
+            height: 400px;
+            margin: 0 auto;
+        }
+    </style>
+    <script src="/static/js/highcharts/highcharts-5_0_10.js" type="text/javascript"></script>
+    <script src="/static/pages/call_log_report.js" type="text/javascript"></script>
+    <script type="text/javascript">
+        var chartData = [], chartTitle, categories, series;
+        {% for chart in charts %}
+        chartTitle = "{{ chart.chart_title }}";
+        categories = [{% for category in chart.categories %}'{{ category }}',{% endfor %}];
+        series = [
+            {% for s in chart.series %}
+            {
+                name: "{{ s.name }}",
+                data: [{% for point in s.data %}{{ point }}, {% endfor %}]
+            },
+            {% endfor %}
+        ];
+        chartData.push({
+            elementID: "{{ chart.element_id }}",
+            chartTitle: chartTitle,
+            categories: categories,
+            series: series
+        });
+        {% endfor %}
+        $(function() {
+            createCharts(chartData, false);
+        });
+    </script>
+{% endblock %}
+
+{% block pageTitle %}Call Log Report{% endblock %}
+
+{% block patient_header %}{% endblock %}
+
+{% block main_content %}
+<div class="spacer"></div>
+{% include "accounts/patients/reports/call_log_include.html" with is_print="yes" %}
+{% endblock %}
+
+{% block footnote_container %}{% endblock %}

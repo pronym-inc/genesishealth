@@ -1,0 +1,77 @@
+{% extends "base.html" %}
+{% load genesis_tools %}
+{% block pageTitle %}Notes for {{ patient.get_reversed_name }}{% endblock %}
+
+{% block main_content %}
+<script type="text/javascript" src="/static/js/jquery.dataTables.min.js"></script>
+<script type="text/javascript">
+	$(document).ready(function() {
+    $('#patient_notesTable').dataTable( {
+        "sPaginationType": "full_numbers",
+        "aaSorting": [[1, 'desc']]
+    });
+		$(".fancybox").fancybox();
+	});
+</script>
+<script type="text/javascript">
+	$(document).ready(function() {
+		
+		$('.edit_note').click(function() {
+			var note = $(this).parent().parent().find(".td_note").text();
+			$('#id_content').text(note).show();
+      $('.updateNote').attr('action', '{% url "accounts:manage-patients-notes" patient.pk %}' + $(this).attr('data-noteId') + '/');
+			
+		});
+	});
+</script>
+	
+<style type="text/css">
+	ul.notes {padding-left:0px;}
+	textarea {width: 100%;}
+</style>
+
+<div id="patient_notes" class="clearfix">
+ 	<table class="display" id="patient_notesTable"> 
+    <thead> 
+        <tr> 
+            <th>Author</th> 
+            <th>Last Updated</th> 
+            <th>Note</th> 
+            <th>Actions</th> 
+            
+        </tr> 
+    </thead> 
+    <tbody> 
+      {% for note in notes %}
+        <tr> 
+            <td class="td_author">{{ note.author.get_reversed_name }}</td> 
+            <td class="td_date">{{ note.date_created }}</td> 
+            <td class="td_note">{{ note.content }}</td> 
+            <td>
+                {% if note.author == user %}<a class="edit_note sb sb_dark ss_icon-only inline-block tipTip" data-noteId="{{ note.pk }}" title="Edit Note"><i class="icon-pencil"></i></a>
+                {% endif %}
+            </td> 
+        </tr> 
+      {% endfor %}          
+    </tbody> 
+</table> 
+</div>
+
+<section class="portlet grid_6 leading"> 
+	<header><h2>Add a Note for This Patient</h2></header>
+		<section>
+    	<div class="message info">
+      	<p>After updating your content in the text area below, click the submit button to save your changes.</p>
+      </div>
+			<div>
+        <form class="updateNote" style="padding:20px" action="{% url 'accounts:manage-patients-notes-create' patient.pk %}" method="post">
+          {% csrf_token %}
+            <div>
+              {{ form.content }}
+              <p><input type="submit" value="Submit"></p>
+            </div>
+        </form>
+      </div>
+		</section>
+</section>
+{% endblock %}

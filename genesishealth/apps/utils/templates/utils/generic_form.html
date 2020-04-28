@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+
+{% block extrahead %}
+{{ extra_head|safe }}
+{% for ejs in extra_js %}
+<script type="text/javascript" src="{{ ejs }}" />
+{% endfor %}
+{{ form.media }}
+{% endblock %}
+
+{% block pageTitle %}{{ title }}{% endblock %}
+
+{% block main_content %}
+    {% if form_message %}
+        <p>{{ form_message }}</p>
+    {% endif %}
+    <form action="" method="post" class="form">{% csrf_token %}
+        {% if batch_id_str %}<input type="hidden" name="batch_ids" value="{{ batch_id_str }}" />{% endif %}
+        {{ form.as_p }}
+
+        <p><input type="submit" value="Submit">{% if delete_link %}<input type="submit" class="deleteButton" target="{{ delete_link }}" value="Delete" style="margin-left: 20px !important" />{% endif %}</p>
+    </form>
+{% endblock %}

@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+
+{% block extrahead %}
+
+    <script src="/static/js/highcharts/highcharts.js" type="text/javascript" charset="utf-8"></script>
+    <script src="/static/js/highcharts/exporting.js" type="text/javascript" charset="utf-8"></script>
+    <script src="/static/js/reports/compliance.js" type="text/javascript"></script>
+    
+    <link rel="stylesheet" href="{{ STATIC_URL }}css/smoothness/jquery-ui.css" type="text/css" media="screen" title="no title" charset="utf-8">
+    
+<style media="screen" type="text/css">
+
+.selected {
+	color:#003399 !important;
+	background-image: none !important;
+	background-color:#fff !important;
+	box-shadow:none !important;
+}
+
+</style>
+
+<script type="text/javascript">
+    window.chart_patient_id = {{ user.id }};
+</script>
+{% endblock %}
+{% block pageTitle %}Compliance Report for {{ user.get_full_name }}{% endblock %}
+{% block main_content %}
+    <div id="chart"></div>
+    <div id="print-chart" style="display:none"></div>
+{% endblock %}

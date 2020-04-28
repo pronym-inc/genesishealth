@@ -1,0 +1,16 @@
+{% extends "utils/generic_form.html" %}
+
+{% block extrahead %}
+{{ block.super }}
+{% endblock %}
+
+{% block main_content %}
+    {% if form_message %}
+    <p>{{ form_message }}</p>
+    {% endif %}
+    <form action="" method="post" class="form">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <p><input type="submit" value="Submit"></p>
+    </form>
+{% endblock %}

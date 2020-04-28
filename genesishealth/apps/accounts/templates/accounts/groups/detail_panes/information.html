@@ -1,0 +1,16 @@
+<div class="container_12">
+    <div class="grid_6">
+        <p><b>Group Type:</b><br>{{ group.get_group_type_display }}</p>
+        <p><b>Contact:</b><br>{{ group.contact.first_name }} {{ group.contact.last_name }}</p>
+    </div>
+    <div class="grid_6">
+        <p>
+        <b>Address:</b>
+        <br>{{ group.contact.address1 }}
+        {% if group.contact.address2 %}<br>{{ group.contact.address2 }}{% endif %}
+        <br>{{ group.contact.city }}, {{ group.contact.state }} {{ group.contact.zip }}
+        <br>{{ group.contact.phone }}
+        </p>
+    </div>
+</div>
+<div class="clear"></div>

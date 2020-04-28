@@ -1,0 +1,18 @@
+[
+    {
+        "pk": 1, 
+        "model": "api.apipartner", 
+        "fields": {
+            "outgoing_username": "", 
+            "forward_readings": false, 
+            "incoming_password": "", 
+            "short_name": "new partner", 
+            "outgoing_password": "", 
+            "use_verizon_output_format": false, 
+            "send_register_updates": false, 
+            "maximum_send_attempts": 5, 
+            "incoming_username": "", 
+            "name": "The new partner"
+        }
+    }
+]

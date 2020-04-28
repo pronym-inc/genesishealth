@@ -1,0 +1,32 @@
+<div class="container_12">
+    <div class="grid_6">
+        <p>
+            <b>Address:</b>
+            {% if patient.patient_profile.contact.address1 %}
+            <br>{{ patient.patient_profile.contact.address1 }}
+            {% if patient.patient_profile.contact.address2 %}<br>{{ patient.patient_profile.contact.address2 }}{% endif %}
+            <br>{{ patient.patient_profile.contact.city }}, {{ patient.patient_profile.contact.state }} {{ patient.patient_profile.contact.zip }}
+            {% else %}
+            <br>No address on record.</p>
+            {% endif %}
+            <br>{{ patient.patient_profile.contact.phone }}
+        </p>
+    </div>
+    <div class="grid_6">
+        <p>
+            <b>Group:</b>
+            <br>{{ patient.patient_profile.company }}
+        </p>
+        <p>
+            <b>Pharmacy:</b>
+            <br>{{ patient.patient_profile.rx_partner }}
+            <br>{{ patient.patient_profile.rx_partner.phone_number }}
+        </p>
+        <p>
+            <b>Nursing:</b>
+            <br>{{ patient.patient_profile.nursing_group }}
+            <br>{{ patient.patient_profile.nursing_group.phone_number }}
+        </p>
+    </div>
+</div>
+<div class="clear"></div>

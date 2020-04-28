@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+{% load genesis_tools %}
+
+{% block pageTitle %}{{ title }}{% endblock %}
+
+{% block extrahead %}
+<script type="text/javascript" src="/static/js/jquery.dataTables.min.js"></script>
+<script type="text/javascript" src="/static/js/extra.datatables.js"></script>
+{{ data_table_js|safe }}
+{{ additional_js|safe }}
+{{ additional_css|safe }}
+<style>
+#genesis-table td {
+    max-width: 220px;
+    overflow-wrap: break-word;
+}
+</style>
+{% endblock extrahead %}
+
+{% block main_content %}
+{% if batch_enabled %}<div id='csrfTokenDiv' class="hidden">{% csrf_token %}</div>{% endif %}
+    {{ above_table_content|safe }}
+
+<table id="genesis-table{% if table_name_postfix %}-{{table_name_postfix}}{% endif %}" class="display">
+    <thead>
+        <tr>
+             {% if batch_enabled %}<th><span>Select All</span><br /><input type="checkbox" class="batchSelectAll" /></th>{% endif %}
+             {% for column in columns %}
+             <th><strong>{{ column.name }}</strong></th>
+             {% endfor %}
+         </tr>
+     </thead>
+     <tbody>
+     {% for row in rows %}
+     <tr>
+        {% for cell in row %}
+         <td{% if cell.cell_class %} class="{{ cell.cell_class }}"{% endif %}{% if cell.full_content %} title="{{ cell.full_content }}"{% endif %}>{{ cell.content }}</td>
+         {% endfor %}
+     </tr>
+     {% endfor %}
+     </tbody>
+</table>
+{% endblock %}

@@ -1,0 +1,22 @@
+<div class="container_12">
+    <div class="grid_6">
+        <p>
+            {% if professional.professional_profile.contact.address1 %}
+            <b>Address:</b>
+            <br>{{ professional.professional_profile.contact.address1 }}
+            {% if professional.professional_profile.contact.address2 %}<br>{{ professional.professional_profile.contact.address2 }}{% endif %}
+            <br>{{ professional.professional_profile.contact.city }}, {{ professional.professional_profile.contact.state }} {{ professional.professional_profile.contact.zip }}
+            {% else %}
+            <br>No address on record.
+            {% endif %}
+            <br>{{ professional.patient_profile.contact.phone }}
+        </p>
+    </div>
+    <div class="grid_6">
+        <p>
+            <b>Group:</b>
+            <br>{{ professional.professional_profile.parent_group }}
+        </p>
+    </div>
+</div>
+<div class="clear"></div>

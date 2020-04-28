@@ -1,0 +1,19 @@
+<div class="container_12">
+    <div class="grid_6">
+        <b>Patient:</b> {{ device.get_patient.get_reversed_name }}
+    </div>
+    <div class="grid_6">
+        <b>Assigned:</b> {{ device.datetime_assigned|date:"m/d/y" }}
+        <br>
+        <b>Replaced:</b> {{ device.datetime_replaced|date:"m/d/y" }}
+    </div>
+    <b>Last three readings:</b>
+    <table style="border-width: 0px">
+        {% for reading in previous_readings %}
+        <tr>
+            <td>{{ reading.reading_datetime_utc|date:"M d, y h:i A" }}
+        </tr>
+        {% endfor %}
+    </table>
+</div>
+<div class="clear"></div>

@@ -1,0 +1,55 @@
+<html>
+    <head>
+        <script
+          src="https://code.jquery.com/jquery-3.3.1.min.js"
+          integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
+          crossorigin="anonymous"></script>
+        <script type="text/javascript" src="https://cdn.jsdelivr.net/jsbarcode/3.6.0/JsBarcode.all.min.js"></script>
+        <script type="text/javascript">
+            $(function() {
+                JsBarcode(".barcode").init();
+            });
+        </script>
+
+        <style>
+            body {
+                width: 612pt;
+                height: 757pt;
+            }
+            .label-table {
+                padding: 2pt 20pt 0pt 20pt;
+                border-spacing: 2pt;
+                page-break-after: always;
+            }
+            .label-table td {
+                width: 189pt;
+                height: 78pt;
+                border: 1px solid white;
+                text-align: center;
+                vertical-align: middle;
+            }
+        </style>
+    </head>
+    <body>
+        {% for barcode in barcodes %}
+        {% if forloop.counter0|divisibleby:30 %}
+        <table class="label-table">
+        {% endif %}
+        {% if forloop.counter0|divisibleby:3 %}
+            <tr>
+        {% endif %}
+                <td>
+                    <svg class="barcode"
+                    jsbarcode-value="{{ barcode }}"
+                    jsbarcode-height="50"
+                    jsbarcode-width="1"></svg>
+                </td>
+        {% if forloop.counter|divisibleby:3 or forloop.last %}
+            </tr>
+        {% endif %}
+        {% if forloop.counter|divisibleby:30 or forloop.last %}
+        </table>
+        {% endif %}
+        {% endfor %}
+    </body>
+</html>

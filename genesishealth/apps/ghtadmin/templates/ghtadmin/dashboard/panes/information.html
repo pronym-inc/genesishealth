@@ -1,0 +1,11 @@
+{% load tz %}
+
+<strong>Account Created</strong>: {{ user.date_joined|localtime|date:"N j, Y" }}
+<br>
+{% if last_login_dt %}
+<strong>Your last login was</strong>: {{ last_login_dt|localtime|date:"N j, Y" }}
+{% else %}
+This is your first login.
+{% endif %}
+<br>
+You have logged in {{ login_count }} time{% if login_count != 1 %}s{% endif %} in the last 30 days.

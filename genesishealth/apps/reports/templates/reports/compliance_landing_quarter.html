@@ -1,0 +1,63 @@
+{% load genesis_tools %}
+
+<header>
+    <h2>Testing Compliance Reports (past <select id="compliance_days_select">
+        <option value="1" {% if compliance.days == 1 %}selected="selected"{% endif %}>1</option>
+        <option value="7" {% if compliance.days == 7 %}selected="selected"{% endif %}>7</option>
+        <option value="14" {% if compliance.days == 14 %}selected="selected"{% endif %}>14</option>
+        <option value="30" {% if compliance.days == 30 %}selected="selected"{% endif %}>30</option>
+        <option value="60" {% if compliance.days == 60 %}selected="selected"{% endif %}>60</option>
+        <option value="90" {% if compliance.days == 90 %}selected="selected"{% endif %}>90</option>
+    </select> day{% if compliance.days != 1 %}s{% endif %})</h2> 
+</header>
+
+<section>
+    <table class="full"> 
+
+        <tbody> 
+
+            <tr> 
+
+                <td><a href="{% get_dashboard_url accounts:manage-patients %}">Total Patients</a></td> 
+
+                <td class="ar">{{ compliance.total }}</td> 
+
+                <td class="ar"></td>
+
+            </tr> 
+
+            <tr> 
+
+                <td><a href="{% get_dashboard_url reports:compliance-report %}?view=compliant&days={{ compliance.days }}">Patients in Compliance</a></td> 
+
+                <td class="ar">{{ compliance.num_in_compliance }}</td>
+
+                <td class="ar">{{ compliance.percent_in_compliance }}%</td> 
+
+            </tr> 
+
+            <tr> 
+
+                <td><a href="{% get_dashboard_url reports:compliance-report %}?view=non-compliant&days={{ compliance.days }}">Patients out of Compliance</a></td> 
+
+                <td class="ar">{{ compliance.num_out_of_compliance }}</td>
+
+                <td class="ar">{{ compliance.percent_out_of_compliance }}%</td> 
+
+            </tr> 
+
+            <tr>
+
+                <td><a href="{% get_dashboard_url reports:compliance-report %}?view=no-readings&days={{ compliance.days }}">Patients with no Readings</a></td>
+
+                <td class="ar">{{ compliance.num_no_readings }}</td>
+
+                <td class="ar">{{ compliance.percent_no_readings }}%</td>
+
+            </tr>
+
+        </tbody> 
+
+    </table>
+    
+</section>

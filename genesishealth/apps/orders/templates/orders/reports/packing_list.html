@@ -1,0 +1,47 @@
+<html>
+    <head>
+        <script>window.jQuery || document.write("<script src='https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js'>\x3C/script>")</script>
+        <script type="text/javascript">
+        $(window).load(function() {
+            setTimeout(function() { window.print() }, 1500);
+        });
+        </script>
+    </head>
+    <body style="width:95%; font-size: 13px">
+        <div>
+            <img src="/static/images/ght_logo.png">
+        </div>
+        <h2>Packing List</h2>
+        <div style="width: 100%">
+            <table style="border-width: 0px">
+                <tbody>
+                    <tr>
+                        <td><strong>Recipient</strong>: </td>
+                        <td id="recipient-name">{{ order.get_recipient_name }}</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Order #</strong>: </td>
+                        <td id="order-id">{{ order.id }}</td>
+                    </tr>
+                    {% if order.invoice_number %}
+                    <tr>
+                        <td><strong>Invoice Number</strong>: </td>
+                        <td id="invoice-number">{{ order.invoice_number }}</td>
+                    </tr>
+                    {% endif %}
+                </tbody>
+            </table>
+        </div>
+        <div style="border: 1px solid black; width: 100%">
+            <table id="entry-table">
+                {% for entry in order.entries.all %}
+                <tr>
+                    <td>{{ entry.product.name }}</td>
+                    <td colspan="8">................................................</td>
+                    <td>x{{ entry.quantity }}</td>
+                </tr>
+                {% endfor %}
+            </table>
+        </div>
+    </body>
+</html>

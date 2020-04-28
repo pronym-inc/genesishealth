@@ -1,0 +1,9 @@
+from .batch import *  # noqa
+from .cellular import *  # noqa
+from .complaint import *  # noqa
+from .detail import *  # noqa
+from .main import *  # noqa
+from .manufacturer_carton import *  # noqa
+from .nonconformity import *  # noqa
+from .table_views import *  # noqa
+from .warehouse_carton import *  # noqa

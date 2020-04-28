@@ -1,0 +1,30 @@
+{% extends "utils/generic_table_templates/base.html" %}
+
+{% block extrahead %}
+{{ form.media }}
+{% if existing_patient %}
+<script type="text/javascript">
+    window.existingUser = "{{ existing_patient }}";
+</script>
+{% endif %}
+{{ block.super }}
+{% endblock %}
+
+{% block main_content %}
+    <br><br><hr>
+    {{ block.super }}
+    <br><br>
+    <hr>
+    {% if form_message %}
+    <p>{{ form_message }}</p>
+    {% endif %}
+    <form action="" method="post" class="form">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <p class="required">
+            <label class="required">Patient: <em>*</em></label>
+            <input type="text" id="patient-display-name" disabled value="">
+        </p>
+        <p><input type="submit" value="Submit"></p>
+    </form>
+{% endblock %}

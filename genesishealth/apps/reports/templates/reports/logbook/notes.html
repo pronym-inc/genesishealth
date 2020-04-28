@@ -1,0 +1,11 @@
+<div id="messagedetails">
+    <div class="message info">
+        <h3>Notes</h3>
+    </div>
+    {% for note in notes %}
+    <p>
+        {{ note.content }}<br />
+        By: {{ note.author.get_reversed_name }}
+    </p>
+    {% endfor %}
+</div>

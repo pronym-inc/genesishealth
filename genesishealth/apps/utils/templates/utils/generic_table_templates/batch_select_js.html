@@ -1,0 +1,108 @@
+<script type="text/javascript">
+
+function createForm() {
+    if ($('form#batch_form').length) return;
+
+    function toggleCheckbox(checkbox) {
+        checkbox.prop('checked', !checkbox.prop('checked'));
+        $.uniform.update(checkbox);
+    }
+
+    function checkSelectAll() {
+        if ($('.batchSelectBox:checked').length === $('.batchSelectBox').length) {
+            if ($('.batchSelectAll').attr('checked') != 'checked')
+                toggleCheckbox($('.batchSelectAll'));
+        }
+        else {
+            if ($('.batchSelectAll').attr('checked') == 'checked')
+                toggleCheckbox($('.batchSelectAll'));   
+        }
+    }
+
+    var form = $('<form method="post" action="" class="form" style="border:none;" id="batch_form"><input type="hidden" name="batch_ids" id="batch_ids" /></form>');
+    $('#csrfTokenDiv input').prependTo(form);
+    form.prependTo($('div#wrapper'));
+
+    form.get(0).submitViaAjax = function(target, skipRedirect) {
+        var form = $('#batch_form');
+        form.attr('action', target);
+        var ids = [];
+        if ($('.batchSelectBox:checked').length == 0) {
+            alert('You must select at least one object in order to use this action.');
+            return;
+        }
+        $('.batchSelectBox:checked').each(function() {
+            ids.push(parseInt($(this).attr('name').replace(/^batch_/, '')));
+        });
+        form.find('#batch_ids').val(ids.join(','));
+        //if (!$(this).get(0).checkValidity()) { return false; }    
+        submitViaAjax($(this).attr('action'), $(this).serialize(), skipRedirect);
+    }   
+
+    $(window).on('hashchange', function() {
+        $('form#batch_form').remove();
+    });
+
+    $('.batchClick').click(function(e) {
+        e.preventDefault();
+        if ($(this).attr('direct_link') === "true") {
+            form.submit();
+        } else {
+            var skipRedirect = $(this).attr('redirect') === 'false';
+            form.get(0).submitViaAjax($(this).attr('href'), skipRedirect);
+        }
+    });
+
+    $('.batchSelectBox, .batchSelectAll').parents('td, th').click(function(e) {
+        if (e.target.type == 'checkbox') { return true; }
+        toggleCheckbox($(this).find('input:checkbox'));
+        if ($(this).is('td'))
+            checkSelectAll();
+        else
+            $('.batchSelectAll:visible').change();
+    });
+
+    $('.batchSelectBox').click(function(e) {
+        checkSelectAll();
+    });
+
+    $('.batchSelectAll').change(function(e) {
+        if ($(this).attr('checked') == 'checked') {
+            $('.batchSelectBox:checkbox:not(:checked):visible').each(function (e) {
+                toggleCheckbox($(this));
+            });
+        } else {
+            $('.batchSelectBox:checkbox:checked:visible').each(function (e) {
+                toggleCheckbox($(this));
+            })
+        }
+    });
+
+    $('.dropdownSubmitter').click(function(e) {
+        e.preventDefault();
+        var related_dropdown = $('#' + $(this).attr('for'));
+        var activeOption = related_dropdown.find('option:selected:first');
+        if (activeOption.attr('direct_link') === "true") {
+            var form_ = $('<form method="post"></form>');
+            form_.attr('action', activeOption.attr('value'));
+            var idArr = [];
+            var ids = $('<input type="hidden" name="batch_ids" />');
+            $('.batchSelectBox:checked').each(function() {
+                idArr.push(parseInt($(this).attr('name').replace(/^batch_/, '')));
+            });
+            ids.val(idArr.join(','));
+            form_.append(ids);
+            var csrf = $('<input type="hidden" name="csrfmiddlewaretoken" />');
+            csrf.val($('input[name="csrfmiddlewaretoken"]').val());
+            form_.append(csrf);
+            $(document).append(form_);
+            form_.submit();
+        } else {
+            var skipRedirect = $(this).attr('redirect') === 'false';
+            form.get(0).submitViaAjax(activeOption.val(), skipRedirect);
+        }
+    });
+}
+
+updateCallbackQueue.push(createForm);
+</script>

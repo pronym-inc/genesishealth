@@ -1,0 +1,9 @@
+Hello,
+
+{{ extra_message }}
+
+Your temporary download is ready on MyGHR: {{ url }}
+
+Thanks,
+
+Administration

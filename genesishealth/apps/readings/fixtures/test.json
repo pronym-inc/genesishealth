@@ -1,0 +1,109 @@
+[
+    {
+        "pk": 1,
+        "model": "readings.glucosereading",
+        "fields": {
+            "device": 1,
+            "glucose_value": 130,
+            "patient": 4,
+            "reading_datetime_utc": "2013-01-11T08:02:57+05:00",
+            "reading_datetime_offset": 5,
+            "measure_type": "before_meal"
+        }
+    },
+    {
+        "pk": 2,
+        "model": "readings.glucosereading",
+        "fields": {
+            "device": 1,
+            "glucose_value": 90,
+            "patient": 4,
+            "reading_datetime_utc": "2013-01-11T08:01:51+05:00",
+            "reading_datetime_offset": 5,
+            "measure_type": "after_meal"
+        }
+    },
+    {
+        "pk": 3,
+        "model": "readings.glucosereading",
+        "fields": {
+            "device": 3,
+            "glucose_value": 110,
+            "patient": 5,
+            "reading_datetime_utc": "2013-01-11T08:03:57+05:00",
+            "reading_datetime_offset": 5,
+            "measure_type": "before_meal"
+        }
+    },
+    {
+        "pk": 4,
+        "model": "readings.glucosereading",
+        "fields": {
+            "device": 4,
+            "glucose_value": 110,
+            "patient": 6,
+            "reading_datetime_utc": "2013-01-11T08:03:57+05:00",
+            "reading_datetime_offset": 5,
+            "measure_type": "before_meal"
+        }
+    },
+    {
+        "pk": 5, 
+        "model": "readings.glucosereading", 
+        "fields": {
+            "glucose_value": 172, 
+            "patient": 6, 
+            "in_use": false, 
+            "raw_data": "", 
+            "reading_datetime_utc": "2013-01-11T08:03:57+05:00",
+            "reading_datetime_offset": 5,
+            "alert_sent": false, 
+            "commit_attempts": 0, 
+            "committed": false, 
+            "device": null, 
+            "test_reading": false, 
+            "measure_type": "after_meal", 
+            "permanently_failed": false, 
+            "unique_id": ""
+        }
+    }, 
+    {
+        "pk": 6, 
+        "model": "readings.glucosereading", 
+        "fields": {
+            "glucose_value": 68, 
+            "patient": 4,
+            "in_use": false, 
+            "raw_data": "", 
+            "reading_datetime_utc": "2013-01-11T08:08:57+05:00",
+            "reading_datetime_offset": 5,
+            "alert_sent": false, 
+            "commit_attempts": 0, 
+            "committed": false, 
+            "device": null, 
+            "test_reading": false, 
+            "measure_type": "before_meal", 
+            "permanently_failed": false, 
+            "unique_id": ""
+        }
+    }, 
+    {
+        "pk": 7, 
+        "model": "readings.glucosereading", 
+        "fields": {
+            "glucose_value": 160, 
+            "patient": 4, 
+            "in_use": false, 
+            "reading_datetime_utc": "2013-01-11T22:03:57+05:00",
+            "reading_datetime_offset": 5,
+            "alert_sent": false, 
+            "commit_attempts": 0,
+            "committed": false, 
+            "device": null, 
+            "test_reading": false, 
+            "measure_type": "after_meal", 
+            "permanently_failed": false, 
+            "unique_id": ""
+        }
+    }
+]

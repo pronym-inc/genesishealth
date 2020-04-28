@@ -1,0 +1,14 @@
+<select id="{{ attrs.id }}_month" name="{{ name }}_month"{% if required %} required="required"{% endif %}>
+    <option value="" disabled="disabled" selected="selected">Month</option>
+    {% for month in months %}<option value="{{ month.0 }}"{% if value.month == month.0 %} selected="selected"{% endif %}>{{ month.1 }}</option>{% endfor %}
+</select>
+
+<select id="{{ attrs.id }}_day" name="{{ name }}_day"{% if required %} required="required"{% endif %}>
+    <option value="" disabled="disabled" selected="selected">Day</option>
+    {% for day in days %}<option value="{{ day.0 }}"{% if value.day == day.0 %} selected="selected"{% endif %}>{{ day.1 }}</option>{% endfor %}
+</select>
+
+<select id="{{ attrs.id }}_year" name="{{ name }}_year"{% if required %} required="required"{% endif %}>
+    <option value="" disabled="disabled" selected="selected">Year</option>
+    {% for year in years %}<option value="{{ year.0 }}"{% if value.year == year.0 %} selected="selected"{% endif %}>{{ year.1 }}</option>{% endfor %}
+</select>

@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+
+{% block pageTitle %}Meter Non-Conformity Report{% endblock %}
+
+{% block main_content %}
+<div class="container_12">
+    <p>
+        <a href="{% url "accounts:non-conformity-report-pdf" %}?{{ querystring }}" class="btnRight sbm sbm_red"><i class="icon-plus"></i>Generate PDF</a>
+    </p>
+</div>
+<br><br><br>
+{% include "gdrives/reports/non_conformity_include.html" %}
+{% endblock %}

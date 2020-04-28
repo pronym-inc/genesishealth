@@ -126,3 +126,4 @@ dmypy.json
 celerybeat.pid
 
 node_modules
+/lib/

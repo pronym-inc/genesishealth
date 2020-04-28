@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+
+{% block pageTitle %}Reading Log{% endblock %}
+
+{% block extrahead %}
+<script type="text/javascript" src="/static/js/jquery.dataTables.min.js"></script>
+<script type="text/javascript">
+window.ghrCallback = function() {
+    $('#log-table').dataTable({
+        aaSorting: [[0, 'desc']]
+    });
+}
+</script>
+{% endblock %}
+
+{% block main_content %}
+    <table id="log-table">
+        <thead>
+            <tr>
+                <th style="font-weight:bold;font-size:14px;padding:8px 18px 8px 10px; border:1px solid #d6d6d6; width: 130px"><strong>Date</strong></th>
+                <th style="font-weight:bold;font-size:14px;padding:8px 18px 8px 10px; border:1px solid #d6d6d6"><strong>Patient</strong></th>
+                <th style="font-weight:bold;font-size:14px;padding:8px 18px 8px 10px; border:1px solid #d6d6d6"><strong>Device (MEID)</strong></th>
+                <th style="font-weight:bold;font-size:14px;padding:8px 18px 8px 10px; border:1px solid #d6d6d6"><strong>Value</strong></th>
+                <th style="font-weight:bold;font-size:14px;padding:8px 18px 8px 10px; border:1px solid #d6d6d6"><strong>Success</strong></th>
+                <th style="font-weight:bold;font-size:14px;padding:8px 18px 8px 10px; border:1px solid #d6d6d6"><strong>Raw Data</strong></th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for le in log_entries %}
+            <tr>
+                <td style="border:1px solid #ccc; background:#EAE7E0 url(/static/images/backgrounds/brushed_alu.png) repeat-x">{{ le.date_created|date:"N j, Y g:i A" }}</td>
+                <td style="border:1px solid #ccc;background:#EAE7E0 url(/static/images/backgrounds/sand.jpg) repeat-x">{% if le.device and le.device.patient %}{{ le.device.patient.last_name }}, {{ le.device.get_patient.first_name }}{% else %}N/A{% endif %}</td>
+                <td style="border:1px solid #ccc;background:#EAE7E0 url(/static/images/backgrounds/sand.jpg) repeat-x">{{ le.meid }}</td>
+                <td style="border:1px solid #ccc;background:#EAE7E0 url(/static/images/backgrounds/sand.jpg) repeat-x">{{ le.glucose_value }}</td>
+                <td style="border:1px solid #ccc;background:#EAE7E0 url(/static/images/backgrounds/sand.jpg) repeat-x">{% if le.successful %}Yes{% else %}No{% endif %}</td>
+                <td style="border:1px solid #ccc;background:#EAE7E0 url(/static/images/backgrounds/sand.jpg) repeat-x" title="{{ le.raw_data }}">{{ le.raw_data|truncatewords:5 }}</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}

@@ -1,0 +1,206 @@
+{% extends "base.html" %}
+
+{% block pageTitle %}Add Alert{% endblock %}
+
+{% block extrahead %}
+<script type="text/javascript" src="/static/js/jquery.wizard.js"></script>
+<script>
+    updateCallbackQueue.push(function(div) {
+        $('.wizard').wizard();
+        function hideFormRow(id) {
+            $('#' + id).parent('p').hide();
+        }
+
+        function showFormRow(id) {
+            $('#' + id).parent('p').show();
+        }
+
+        function handlePatient() {
+            var patient_ids = $('#id_patients').val();
+            if (patient_ids !== null && patient_ids.length > 0) {
+                $.post('/alerts/ajax/patient_permissions/', {
+                    patients: patient_ids.join(','),
+                    permissions: 'view-alerts'
+                },
+                function(data) {
+                    // Clean out old ones
+                    $('#id_professionals').children('option').remove();
+                    for (var i = 0; i < data.length; i++) {
+                        $('#id_professionals').append('<option value="' + data[i].id + '">' + data[i].name + '</option>');
+                    }
+                }
+                );
+            } else {
+                $('#id_professionals').children('option').remove();
+            }
+        }
+
+        function handleRecipientType() {
+            if ($('#id_recipient_type').val() == 'professional_recipient') {
+                $('#step2Finish').html('Next Step &raquo;');
+                $('#step2Finish').removeClass('wizardSubmit');
+            } else {
+                $('#step2Finish').html('Finish &raquo;');
+                $('#step2Finish').addClass('wizardSubmit');
+            }
+        }
+
+        function handleTemplate() {
+            var template_id = $('#id_template').val();
+            if (template_id !== '') {
+                $.ajax('/alerts/ajax/template/' + template_id + '/', {
+                    contentType: 'json',
+                    success: function(data, textStatus, jqXHR) {
+                        $('#id_recipient_type').val(data.recipient_type);
+                        $('#id_type').val(data.type);
+                        for (var i = 0; i < data.contact_methods.length; i ++) {
+                            $('input:checkbox[id^="id_contact_methods_"][value="' + data.contact_methods[i] + '"]').attr('checked', 'checked');
+                        }
+                        $('#id_contact_methods').val(data.contact_methods);
+                        $('#id_message').val(data.message);
+                        $.uniform.update();
+                        handleRecipientType();
+                        handleStep2Validation();
+                    }
+                })
+            }
+        }
+
+        $('.wizardSubmit').live('click', function(e) {
+            e.preventDefault();
+            $('form.wizard').submit();
+        });
+
+        $('#id_recipient_type').change(handleRecipientType);
+        $('#id_template').change(handleTemplate);
+        $('#id_patients').change(handlePatient);
+
+        $('button.next').attr('disabled', 'disabled');
+        // Step 1 validation..
+        $('#page1 input:checkbox[id^="id_patients_"]').change(function() {
+            if ($('#page1 input:checkbox[id^="id_patients_"]:checked').length > 0) {
+                $('#page1 button.next').removeAttr('disabled');
+            } else {
+                $('#page1 button.next').attr('disabled', 'disabled');
+            }
+        });
+        // Step 2 validation..
+        function handleStep2Validation() {
+            var valid = true;
+            $('#page2 :required').each(function() {
+                if (!$(this).val())
+                    valid = false;
+            });
+            if ($('#page2 input:checkbox[id^="id_contact_methods_"]:checked').length == 0) {
+                valid = false;
+            }
+            if (valid) {
+                $('#page2 button.next').removeAttr('disabled');
+            } else {
+                $('#page2 button.next').attr('disabled', 'disabled');
+            }
+        }
+        $('#page2 :required').change(handleStep2Validation);
+        $('#page2 input:checkbox[id^="id_contact_methods_"]').change(handleStep2Validation);
+        // Step 3 validation
+        $('#page3 input:checkbox[id^="id_professionals_"]').change(function() {
+            if ($('#page3 input:checkbox[id^="id_professionals_"]:checked').length > 0) {
+                $('#page3 button.next').removeAttr('disabled');
+            } else {
+                $('#page3 button.next').attr('disabled', 'disabled');
+            }
+        });
+
+        handleRecipientType();
+    });
+</script>
+{% endblock %}
+
+{% block main_content %}
+                    <div class="grid_12">
+                        <!-- wizard -->
+                        <form action="" method="post" class="wizard form" novalidate>
+                            {% csrf_token %}
+                            <nav>
+                                <ul class="clearfix">
+                                    <li class="active"><strong>1.</strong> Choose Patients</li>
+                                    <li><strong>2.</strong> Define Alert</li>
+                                    <li><strong>3.</strong> Choose Professionals</li>
+                                </ul>
+                            </nav>
+
+                            <div class="items">
+
+                                <!-- page1 -->
+                                <section id="page1">
+
+                                    <header>
+                                        <h2>
+                                            <strong>Step 1: </strong> What patients do you want this alert to apply to? 
+                                            <em>Select from the list below:</em>
+                                        </h2>
+                                    </header>
+
+                                    <section>
+                                        <p>{{ form.patients }}</p>
+                                    </section>
+
+                                    <footer class="clearfix">
+                                        <button type="button" class="next fr">Next Step (2 of 3) &raquo;</button>
+                                    </footer>
+
+                                </section>
+
+                                <!-- page2 -->
+                                <section id="page2">
+
+                                    <header>
+                                        <h2>
+                                            <strong>Step 2: </strong> What alert do you want to apply? 
+                                            <em>Apply an existing template or create a custom alert:</em>
+                                        </h2>
+                                    </header>
+
+                                    <section>
+                                        <p>{{ form.template.label_tag }} {{ form.template }}</p>
+                                        <hr />
+                                        <p>{{ form.name.label_tag }} {{ form.name }}</p>
+                                        <p>{{ form.recipient_type.label_tag }} {{ form.recipient_type }}</p>
+                                        <p>{{ form.type.label_tag }} {{ form.type }}</p>
+                                        <p>{{ form.contact_methods.label_tag }} {{ form.contact_methods }}</p>
+                                        <p>{{ form.message.label_tag }} {{ form.message }}</p>
+                                    </section>
+
+                                    <footer class="clearfix">
+                                        <button type="button" class="prev fl">&laquo; Back</button>
+                                        <button type="button" id="step2Finish" class="next fr">Finish &raquo;</button>
+                                    </footer>
+
+                                </section>
+
+                                <!-- page3 -->
+                                <section id="page3">
+
+                                    <header>
+                                        <h2>
+                                            <strong>Step 3: </strong> What professionals should receive this alert?<em>Select from the list below:</em>
+                                        </h2>
+                                    </header>
+
+                                    <section>
+                                        <p>{{ form.professionals }}</p>
+                                    </section>
+
+                                    <footer class="clearfix">
+                                        <button type="button" class="prev fl">&laquo; Back</button>
+                                        <button type="button" class="next fr wizardSubmit">Finish &raquo;</button>
+                                    </footer>
+
+                                </section>
+
+                            </div><!--items-->
+
+                        </form><!--wizard-->
+
+                    </div>
+{% endblock %}

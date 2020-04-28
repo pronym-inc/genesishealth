@@ -1,0 +1,59 @@
+{% extends "base.html" %}
+{% load genesis_tools %}
+
+{% block pageTitle %}Manage Login for {{ target_user.get_reversed_name }}{% endblock %}
+
+{% block extrahead %}
+<script type="text/javascript">
+updateCallbackQueue.push(function(div) {
+    $('#reset-password-button').click(function(e) {
+        window.location = '{% get_dashboard_url accounts:reset-password-confirm target_user.id %}';
+    });
+    
+});
+</script>
+{% endblock %}
+
+{% block main_content %}
+{% if target_user.get_profile.security_question1 %}
+<h3>Security Questions</h3>
+<form class="form" name="verifySecurityQuestionsForm" id="verifySecurityQuestionsForm" method="post" action="">
+    {% csrf_token %}
+    {{ forms.check_security_question.as_p }}
+    <input type="submit" value="Verify" />
+</form><br />
+{% endif %}
+
+<h3>Change Username</h3>
+{% if target_user.username == target_user.email %}<p>Changing the email address here will change their username to the new email address.  Changing the username to a KEYWORD will only affect the username, not the email on this account.</p>{% endif %}
+<form class="form" name="changeUsernameForm" id="changeUsernameForm" method="post" action="">
+    {% csrf_token %}
+    {{ forms.change_username.as_p }}
+    <input type="submit" value="Update" />
+</form>
+<br />
+
+<h3>Change Password</h3>
+<form class="form" name="changePasswordForm" id="changePasswordForm" method="post" action="">
+    {% csrf_token %}
+    {{ forms.change_password.as_p }}
+    <input type="submit" value="Update" />
+</form>
+<br />
+
+{% if target_user.email %}
+<h3>Generate and Email Password</h3>
+<p>A password will be randomly generated and sent to the user at {{ target_user.email }}.</p>
+<button id="reset-password-button">Reset Password</button>
+<br /><br />
+{% endif %} 
+
+<h3>Set Standardized Password</h3>
+<p>By clicking the button below, the user's password will be temporarily set to {{ new_password }}</p>
+<form class="form" name="setTempPassword" id="setTempPassword" method="post" action="">
+    {% csrf_token %}
+    {{ forms.set_default_password_form.form_name }}
+    <input type="hidden" name="new_password" value="{{ new_password }}">
+    <input type="submit" value="Set Temporary Password">
+</form>
+{% endblock %}

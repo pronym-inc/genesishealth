@@ -1,0 +1,22 @@
+<h3>Select Products</h3>
+<div id="product-form">
+    {{ product_form.as_p }}
+</div>
+<input type="button" id="add-product" value="Add Product">
+<hr>
+<h3>Items in Order</h3>
+<div id="item-cart">
+    <div class="order-item-row container_12 hidden" data-product-id>
+        <div class="grid_3 product-name"></div>
+        <div class="grid_5"></div>
+        <div class="grid_3">
+            <input class="selected-inline-input" name="quantity" type="number" width="2" min="1" step="1">
+        </div>
+        <div class="grid_1 delete-button">
+            <a href="#" class="delete-link">X</a>
+        </div>
+    </div>
+    <div class="cart-content"></div>
+</div>
+<input type="hidden" name="{{ widget.name }}" id="id_{{ widget.name }}">
+<hr>

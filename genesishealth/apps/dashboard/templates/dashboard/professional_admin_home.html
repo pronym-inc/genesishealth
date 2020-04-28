@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+{% load genesis_tools %}
+
+{% block pageTitle %}MyGHR Home{% endblock %}
+
+{% block main_content %}                 
+<section class="portlet grid_6 leading">
+	<header><h2>Caregivers</h2></header> 
+	<section>
+        <p>You have <a href="{% get_dashboard_url accounts:manage-caregivers %}">{{ user.professional_profile.parent_group.get_professionals.count }} Caregivers</a> managing <a href="{% get_dashboard_url accounts:manage-patients %}">{{ user.professional_profile.get_patients.count }} Patients</a>.</p>
+    
+        <p>The following caregivers are currently logged in:</p>
+    
+        <p>{% for caregiver in logged_in_users %}{{ caregiver.get_full_name }}{% if not forloop.last %}, {% endif %}{% empty %}None{% endfor %}</p>
+    </section>
+</section> 
+
+<section class="portlet grid_6 leading">
+	<header><h2>Relationships</h2></header> 
+	<section>    
+        <p>You have <a href="{% get_dashboard_url accounts:manage-companies %}">{{ user.professional_profile.parent_group.companies.all.count }} Employers/Groups</a>.</p>
+    
+        <p>You have a total of <a href="{% get_dashboard_url accounts:manage-payors %}">{{ user.professional_profile.parent_group.payors.all.count }} Payors/TPAs</a>.</p>
+    </section>
+
+</section> 
+
+<div class="clear"></div>
+{% endblock %}

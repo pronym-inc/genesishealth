@@ -1,0 +1,26 @@
+[
+    {
+        "pk": 1,
+        "model": "health_information.healthprofessionaltargets",
+        "fields": {
+            "patient": 4,
+            "professional": 3
+        }
+    },
+    {
+        "pk": 2,
+        "model": "health_information.healthprofessionaltargets",
+        "fields": {
+            "patient": 5,
+            "professional": 3
+        }
+    },
+    {
+        "pk": 3,
+        "model": "health_information.healthprofessionaltargets",
+        "fields": {
+            "patient": 6,
+            "professional": 3
+        }
+    }
+]

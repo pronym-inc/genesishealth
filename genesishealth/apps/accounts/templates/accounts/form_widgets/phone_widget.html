@@ -1,0 +1,12 @@
+{% for num, value in value %}
+    <div id="id_{{ name }}_{{ num }}" class="phone_div">
+        <p>{% if value.pk %}<input type="hidden" name="{{ name }}_{{ num }}_pk" value="{{ value.pk }}">{% endif %}<label for="id_{{ name }}_{{ num }}_phone">Phone: </label> <input type="text" id="id_{{ name }}_{{ num }}_phone" class="phone" name="{{ name }}_{{ num }}_phone" value="{{ value.phone }}"> Is cell:  <input type="checkbox" name="{{ name }}_{{ num }}_is_cell"{% if value.is_cell %} checked="checked"{% endif %}> Is contact:  <input type="checkbox" name="{{ name }}_{{ num }}_is_contact"{% if value.is_contact %} checked="checked"{% endif %}> <button class="rm">Clear</button></p>
+    </div>
+{% endfor %}
+    <div id="hold_{{ name }}"></div>
+
+<div id="id_{{ name }}_NUM" class="phone_div" style="display:none">
+    <p{% if attrs.required %} class="required"{% endif %}><label for="id_{{ name }}_NUM_phone">Phone: </label> <input type="text" id="id_{{ name }}_NUM_phone" class="phone" name="{{ name }}_NUM_phone"> Is cell: <input type="checkbox" name="{{ name }}_NUM_is_cell"> Is contact:  <input type="checkbox" name="{{ name }}_NUM_is_contact"> <button class="rm">Clear</button></p>
+</div>
+
+<p><a href="#" class="phoneNumberAdd" rel="{{ count }}">+ Add another phone number</a></p>

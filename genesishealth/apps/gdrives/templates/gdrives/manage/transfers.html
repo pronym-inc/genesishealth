@@ -1,0 +1,97 @@
+{% extends "base.html" %}
+{% block pageTitle %}Admin - Manage Activations{% endblock %}
+
+{% block extrahead %}
+<script type="text/javascript" src="/static/js/jquery.dataTables.min.js"></script>
+<script type="text/javascript">
+window.ghrCallback = function() {
+    $('#transfers-table').dataTable({
+        aoColumnDefs: [
+            {bSortable: false, bSearchable: false, aTargets: [5]},
+            {bSearchable: false, aTargets: [3]}
+        ]
+    });
+    function sendForm() {
+        var ids = [];
+        $('#transfers-table input[type="checkbox"]:visible:checked').each(function() {
+            ids.push($(this).attr('id').replace(/id_device_/, ''));
+        });
+        if (ids.length == 0) {
+            alert("You must select at least one device.")
+            return;
+        }
+        $('#hidden_devices').val(ids.join(','));
+        $('#transferForm').submit();
+    }
+
+    $('#assign-button').click(function(e) {
+        e.preventDefault();
+        if ($('#groupSelect').val() == "") {
+            alert("You must select a group to assign the selected devices to.");
+            return;
+        }
+        $('#hidden_action').val('assign');
+        $('#hidden_group').val($('#groupSelect').val())
+        sendForm();
+    });
+
+    $('#unassign-button').click(function(e) {
+        e.preventDefault();
+        $('#hidden_action').val('unassign');
+        sendForm();
+    });
+};
+</script>
+{% endblock %}
+
+{% block main_content %}
+        <form action="" method="post" id="transferForm">
+            {% csrf_token %}
+            {% if errors %}
+            <ul>
+            {% for e in errors %}
+                <li>{{ e }}</li>
+            {% endfor %}
+            </ul>
+            {% endif %}
+
+            <input type="hidden" id="hidden_devices" name="devices" value="" />
+            <input type="hidden" id="hidden_action" name="action" value="" />
+            <input type="hidden" id="hidden_group" name="group" value="" />
+        </form>
+        <p>{% if view == "unassigned" %}Showing unassigned devices{% else %}Showing assigned devices{% endif %}</p>
+        <p>{% if view == "unassigned" %}<a href="/dashboard/#/devices/manage/transfers/?view=assigned"><button>Show Assigned Devices</a></button>{% else %}<button><a href="/dashboard/#/devices/manage/transfers/?view=unassigned">Show Unassigned Devices</a></button>{% endif %}</p>
+        <p>
+            {% if view == "unassigned" %}<a href="#" id="assign-button"><button>Assign Selected to Group</button></a>
+            <select id="groupSelect">
+                <option value="">-----------</option>
+                {% for professional in professionals %}
+                <option value="{{ professional.id }}">{{ professional.last_name }}, {{ professional.first_name }} ({{ professional.get_profile.company }})</option>
+                {% endfor %}
+            </select>
+            {% else %}<a href="#" id="unassign-button"><button>Unassign Selected</button></a>{% endif %}
+        <table id="transfers-table" class="tbDataTable">
+            <thead>
+                <tr>
+                    <th>MEID</th>
+                    <th>Serial Number</th>
+                    <th>Group</th>
+                    <th>Assigned to Patient?</th>
+                    <th>Activation Status</th>
+                    <th>Select</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for device in devices %}
+                <tr>
+                    <td class="first">{{ device.meid }}</td>
+                    <td>{{ device.device_id }}</td>
+                    <td>{% if device.professional %}{{ device.professional.get_profile.company }}{% else %}N/A{% endif %}</td>
+                    <td>{% if device.patient %}Yes{% else %}No{% endif %}</td>
+                    <td></td>
+                    <td><input type="checkbox" name="device_{{ device.id }}" id="id_device_{{ device.id }}" /></td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+{% endblock %}

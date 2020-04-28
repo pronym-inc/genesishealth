@@ -1,0 +1,58 @@
+{% extends "base.html" %}
+
+{% block pageTitle %}{{ title }}{% endblock %}
+
+{% block extrahead %}
+<script type="text/javascript">
+var subcatMap = JSON.parse('{{ serialized_cat_data|safe }}');
+updateCallbackQueue.push(function(div) {
+    var selectReplacementsP = div.find('#id_note-replacements').parent('p'),
+        addP = selectReplacementsP.next('p'),
+        resolutionP = div.find('#id_note-resolution').parent('p');
+    $('#id_communication-category').change(function(e) {
+        $('#id_communication-subcategory').find('option[value!=]').remove();
+        var $el = $(this);
+        $('#subcat_options').find('option').each(function() {
+            if ($(this).attr('data-categories').split(',').indexOf($el.val()) != -1) {
+                $(this).clone().appendTo($('#id_communication-subcategory'));
+            }
+        });
+    });
+    function toggleReplacements() {
+        if ($('#id_note-has_replacements').is(':checked')) {
+            selectReplacementsP.show();
+            addP.show();
+        } else {
+            selectReplacementsP.hide();
+            addP.hide();
+        }
+    }
+    function toggleResolution() {
+        if ($('#id_note-change_status_to option:selected:first').text() == 'Closed') {
+            resolutionP.show();
+        } else {
+            resolutionP.hide();
+        }
+    }
+    $('#id_note-has_replacements').change(toggleReplacements);
+    $('#id_note-change_status_to').change(toggleResolution);
+    toggleResolution();
+    toggleReplacements();
+});
+</script>
+{% endblock %}
+
+{% block main_content %}
+<div style="display:none" id="subcat_options">
+    {% for subcat in subcategories %}
+    <option value="{{ subcat.id }}" data-categories="{% for cat in subcat.category.all %}{{ cat.id }}{% if not forloop.last %},{% endif %}{% endfor %}">{{ subcat.name }}</option>
+    {% endfor %}
+</div>
+<form action="" method="post" class="form">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <hr>
+    {{ note_form.as_p }}
+    <p><input type="submit" value="Submit"></p>
+</form>
+{% endblock %}

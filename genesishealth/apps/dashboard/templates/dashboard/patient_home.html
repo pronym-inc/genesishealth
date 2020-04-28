@@ -1,0 +1,74 @@
+{% extends 'base.html' %}
+
+{% load genesis_tools %}
+
+{% block pageTitle %}MyGHR Home{% endblock %}
+
+{% block main_content %}                
+<section class="portlet grid_6 leading"> 
+	<header><h2>Login Activity</h2></header>
+    <section>
+        <div class="message info">{% if user.patient_profile.get_last_login %}Your last login was on {{ user.patient_profile.get_last_login.datetime|date }}.{% else %}<strong>This is your first login.  Welcome!</strong>{% endif %}</div>
+
+        <p><i style="border-right: none; padding-right: 0px" class="icon-signin"></i>You have logged in {{ number_of_logins_last_six_months }} time{% if number_of_logins_last_six_months != 1 %}s{% endif %} in the last six months.
+    </section>
+</section> 
+ 
+<section class="portlet grid_6 leading"> 
+    <header>
+        <h2>Last Three Readings</h2>
+    </header>
+
+    <section>
+        <table class="full"> 
+    		<tbody> 
+            	<tr>
+                    <td><strong>Value</strong></td>
+                    <td><strong>Date/Time</strong></td>
+                    <td><strong>Reading Type</strong></td>
+                </tr>
+                {% for reading in last_three_readings %}
+                <tr> 
+                    <td>{{ reading.glucose_value }}</td> 
+                    <td>{{ reading.reading_datetime }}</td>
+                    <td>{{ reading.readable_measure_type }}</td>
+                </tr>
+                {% empty %}
+                {% if reading_status == 'no_readings' %}
+                <tr>
+                    <td colspan="3">
+                    	<div class="message warning" style="margin-top: 20px">
+                    		<p>There are currently no readings for you in the system.  If you believe this is in error, please <a href="{% get_dashboard_url contact:contact-main %}">let us know</a>.</p>
+                        </div>
+                    </td>
+                </tr>
+                {% endif %}
+                {% endfor %}
+                {% if reading_status == 'outdated' %}
+                <tr>
+                	<td colspan="3">
+                    	<div class="message warning" style="margin-top: 20px">
+                    		<p>Your last reading was received over two weeks ago.  If you have been testing with your device during this time, there may be a problem with your device.  Please <a href="{% get_dashboard_url contact:contact-main %}">let us know</a>.</p>
+                        </div>
+                    </td>
+                </tr>
+                {% endif %}
+            </tbody> 
+		</table>
+    </section>
+    
+
+    
+</section> 
+
+<div class="clear"></div>
+<section class="portlet grid_6 leading"> 
+    <header>
+        <h2>14-Day Summary</h2>
+    </header>
+    <section>
+        {% include 'reports/aggregates.html' %}
+    </section>
+</section> 
+<div class="clear"></div>
+{% endblock %}

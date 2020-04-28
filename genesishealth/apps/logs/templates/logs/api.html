@@ -1,0 +1,16 @@
+{% extends "logs/base_audit.html" %}
+
+{% block pageTitle %}API Health Report{% endblock %}
+
+{% block audit_content %}
+    <p><a target="_blank" href="{% url 'logs:audit-api-print' %}?start_date={{ start_date|date:"m/d/y" }}&end_date={{ end_date|date:"m/d/y" }}">Print</a></p>
+    <p><a target="_blank" href="{% url 'logs:audit-api-pdf' %}?start_date={{ start_date|date:"m/d/y" }}&end_date={{ end_date|date:"m/d/y" }}">PDF</a></p>
+    {% for entry in data %}
+    <h2>{{ entry.name }}</h2>
+    <p>Expected: <strong>{{ entry.expected }}</strong></p>
+    <p>Sent: <strong>{{ entry.sent }}</strong></p>
+    <p>Success: <strong>{{ entry.success }}</strong></p>
+    <p>Failed: <strong>{{ entry.errors }}</strong></p>
+    {% endfor %}
+    <p><u><h4>Total</h4></u><strong>{{ total }}</strong></p>
+{% endblock %}

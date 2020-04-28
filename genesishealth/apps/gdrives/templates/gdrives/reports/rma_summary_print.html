@@ -1,0 +1,45 @@
+{% extends "reports/print_base.html" %}
+
+{% block extra_head %}
+    <link rel="stylesheet" href="/static/css/ui.css"/>
+    <link rel="stylesheet" href="/static/css/grids.css"/>
+    <style type="text/css">
+        section table {
+            width: 380px;
+        }
+        section {
+            margin: 10px;
+        }
+        .spacer {
+            height: 25px;
+        }
+    </style>
+    <script src="/static/js/highcharts/highcharts-5_0_10.js" type="text/javascript"></script>
+    <script src="/static/pages/rma_determination_report.js" type="text/javascript"></script>
+    <script type="text/javascript">
+        var chartTitle = "{{ chart_title }}";
+        var categories = [{% for category in categories %}'{{ category }}',{% endfor %}];
+        var series = [
+            {% for s in series %}
+            {
+                name: "{{ s.name }}",
+                data: [{% for point in s.data %}{{ point }}, {% endfor %}]
+            },
+            {% endfor %}
+        ];
+        $(function() {
+            createCharts(chartTitle, categories, series, false);
+        });
+    </script>
+{% endblock %}
+
+{% block pageTitle %}Return Meter Testing Determination Report{% endblock %}
+
+{% block patient_header %}{% endblock %}
+
+{% block main_content %}
+<div class="spacer"></div>
+{% include "gdrives/reports/rma_summary_include.html" %}
+{% endblock %}
+
+{% block footnote_container %}{% endblock %}

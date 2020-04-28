@@ -1,0 +1,47 @@
+<script type="text/javascript" src="/static/lib/uri.js"></script>
+<script type="text/javascript">
+updateCallbackQueue.push(function(div) {
+    {% if ajax %}
+    var uri = new URI(), fragURI = new URI(uri.fragment());
+    var baseAJAX = {% if ajax_url %}"{{ ajax_url }}"{% else %}fragURI.toString(){% endif %};
+    var tablePostfix = {% if table_name_postfix %}"{{ table_name_postfix }}"{% else %}null{% endif %};
+    fragURI.setQuery('ajax', 1);
+    if (tablePostfix) {
+      fragURI.setQuery('prefix', tablePostfix);
+    }
+    var ajaxURL = fragURI.toString();
+    {% endif %}
+    div.find('#genesis-table{% if table_name_postfix %}-{{ table_name_postfix }}{% endif %}').dataTable({
+       aoColumnDefs: [
+           {% if not_searchable %}{bSearchable: false, aTargets: [{{ not_searchable }}]}{% if not_sortable or not_searchable_or_sortable %},{% endif %}{% endif %}
+           {% if not_sortable %}{bSortable: false, aTargets: [{{ not_sortable }}]}{% if not_searchable_or_sortable %},{% endif %}{% endif %}
+           {% if not_searchable_or_sortable %}{bSortable: false, bSearchable: false, aTargets: [{{ not_searchable_or_sortable }}]}{% endif %}
+       ]{% if sort %},
+           aaSorting: {{ sort|safe }}
+        {% endif %}
+        {% if iDisplayLength %},
+            iDisplayLength: {{ iDisplayLength }}
+        {% endif %}
+        {% if ajax %},
+            sAjaxSource: ajaxURL,
+            bServerSide: true,
+            fnInitComplete: function() {
+              this.fnAdjustColumnSizing(true);
+              this.fnSetFilteringDelay();
+            }
+        {% endif %}
+    });
+    var doFocus = {% if focus_on_load %}true{% else %}false{% endif %};
+    if (doFocus) {
+      setTimeout(function() {
+          var intv = setInterval(function() {
+              var target = $('.dataTables_filter input[type=text]:visible');
+              if (target.length > 0) {
+                  target.focus();
+                  clearInterval(intv);
+              }
+          }, 200);
+      }, 300);
+    }
+});
+</script>

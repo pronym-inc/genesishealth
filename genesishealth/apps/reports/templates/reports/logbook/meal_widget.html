@@ -1,0 +1,9 @@
+<div style="clear:both" />
+<div id="id_{{ name }}_1" class="foodItem">
+    <p><label for="id_{{ name }}_1_name"><em>*</em>Food:</label><input type="text" id="id_{{ name }}_1_name" name="{{ name }}_1_name" class="foodSelector" required="required" placeholder="Start typing..."/><input type="hidden" class="hiddenObjectId" id="id_{{ name }}_1_object_id" name="{{ name }}_1_object_id" /></p>
+    <p><label for="id_{{ name }}_1_serving_type"><em>*</em>Serving:</label><select id="id_{{ name }}_1_serving_type" name="{{ name }}_1_serving_type" disabled="disabled" class="dependsOnName servingTypeSelect"></select></p>
+    <p><label for="id_{{ name }}_1_servings"><em>*</em>Num. of Servings:</label><input type="text" id="id_{{ name }}_1_servings" name="{{ name }}_1_servings" class="dependsOnName numServings"/></p>
+    <p><label for="id_{{ name }}_1_carboyhydrates">Carbohydrates</label><input type="text" id="id_{{ name }}_1_carbohydrates" name="{{ name }}_1_carbohydrates" class="carbField" /></p>
+    <p><label for="id_{{ name }}_1_calories">Calories</label><input type="text" id="id_{{ name }}_1_calories" name="{{ name }}_1_calories" class="calField" /></p>
+</div>
+<p><a href="#" class="foodItemAddAnother">+ Add another food item</a></p>

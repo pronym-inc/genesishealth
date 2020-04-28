@@ -1,0 +1,13 @@
+<div id="{% if selectDaysId %}{{ selectDaysId }}{% else %}selectDays{% endif %}Date" class="reportBox hidden">
+    <form class="form" style="width: 95%; padding: 0 21px; margin-top: 5px">
+        <table class="rawDateSelect">
+            <tr>
+                <td><label for="{% if selectDaysId %}{{ selectDaysId }}-{% endif %}startDate">Start Date</label></td>
+                <td class="inputCell"><input type="text" class="dateField" id="{% if selectDaysId %}{{ selectDaysId }}-{% endif %}startDate" value=""/></td>
+                <td><label for="{% if selectDaysId %}{{ selectDaysId }}-{% endif %}endDate">End Date</label></td>
+                <td class="inputCell"><input type="text" class="dateField" id="{% if selectDaysId %}{{ selectDaysId }}-{% endif %}endDate" value="" /></td>
+                <td><input id="{% if selectDaysId %}{{ selectDaysId }}{% else %}selectDays{% endif %}Submit" type="submit" value="Submit"></td>
+            </tr>
+        </table>
+    </form>
+</div>

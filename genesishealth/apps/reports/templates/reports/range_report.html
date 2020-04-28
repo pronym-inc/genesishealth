@@ -1,0 +1,151 @@
+{% extends "base.html" %}
+{% load genesis_tools %}
+{% block pageTitle %}{% if view == 'in-range' %}Patients in Range{% endif %}{% if view == 'below-range' %}Patients Below Range{% endif %}{% if view == 'above-range' %}Patients Above Range{% endif %}{% if view == 'all' %}Target Range Report{% endif %}{% endblock %}
+
+{% block extrahead %}
+<style media="screen" type="text/css">
+
+.selected {
+    color:#003399 !important;
+    background-image: none !important;
+    background-color:#fff !important;
+    box-shadow:none !important;
+}
+
+.dateButton {
+    background-color:#eee;
+    background-image: -o-linear-gradient(top, #fefefe, #c1c1c1);
+    background-image: -ms-linear-gradient(top, #fefefe, #c1c1c1);
+    background-image: -moz-linear-gradient(top, #fefefe, #c1c1c1);
+    background-image: -webkit-linear-gradient(top, #fefefe, #c1c1c1);
+    background-image: linear-gradient(top, #fefefe, #c1c1c1);
+    border:1px solid #aaa;
+    box-shadow:inset 0 1px 0 #fff, 0 1px 3px rgba(0, 0, 0, 0.15);
+    color:#111;
+    text-shadow: 0 1px 0 #fff;
+    padding:5px;
+}
+
+</style>
+
+<script type="text/javascript" src="/static/js/jquery.dataTables.min.js"></script>
+<script type="text/javascript">
+window.ghrCallback = function() {
+
+    var queryParts = location.href.replace(/.+?\?/,'').split('&');
+    var queryDict = {};
+    for (var i = 0; i < queryParts.length; i++) {
+        var qp = queryParts[i].split('=');
+        queryDict[qp[0]] = qp[1];
+    }
+
+    $('#compliance-table').dataTable({
+        aoColumnDefs: [
+            {bSearchable: false, aTargets: [3, 4, 5]},
+            {bSortable: false, aTargets: [2]},
+            {bSearchable: false, bSortable: false, aTargets: [6]}
+        ]
+    });
+
+    $("#id_start_date").datepicker({
+        maxDate: "+0d"
+    });
+    
+    $("#id_end_date").datepicker({
+        maxDate: "+0d"
+    });
+
+    $('#shortcut1').click(function(e) {
+        e.preventDefault();
+        window.location = "{% get_dashboard_url range-report %}?view={{ view }}&days=1";
+    });
+
+    $('#shortcut7').click(function(e) {
+        e.preventDefault();
+        window.location = "{% get_dashboard_url range-report %}?view={{ view }}&days=7";
+    });
+
+    $('#shortcut14').click(function(e) {
+        e.preventDefault();
+        window.location = "{% get_dashboard_url range-report %}?view={{ view }}&days=14";
+    });
+
+    $('#shortcut30').click(function(e) {
+        e.preventDefault();
+        window.location = "{% get_dashboard_url range-report %}?view={{ view }}&days=30";
+    });
+
+    $('#shortcut60').click(function(e) {
+        e.preventDefault();
+        window.location = "{% get_dashboard_url range-report %}?view={{ view }}&days=60";
+    });
+
+    $('#shortcut90').click(function(e) {
+        e.preventDefault();
+        window.location = "{% get_dashboard_url range-report %}?view={{ view }}&days=90";
+    });
+
+    if (queryDict['days'] !== undefined) { 
+        var ele = $('#shortcut' + queryDict['days']);
+        if (ele) {
+            ele.addClass('selected');
+        }
+    } else {
+        $('#shortcut7').addClass('selected');
+    }
+}
+</script>
+{% endblock %}
+
+{% block main_content %}
+
+    <div id="report-form">
+        <table width="100%" class="display" style="margin-bottom:15px">
+            <tr id="rangeShortcuts">
+                <td style="font-weight:bold;padding:3px 18px 3px 10px"><strong>Show Readings From:</strong></td>
+
+                <td style="padding:0px;">
+                    <a href="#" class="dateButton" id="shortcut1">Yesterday</a>
+
+                    <a href="#" class="dateButton" id="shortcut7">Last 7 Days</a>
+
+                    <a href="#" class="dateButton" id="shortcut14">Last 14 Days</a>
+
+                    <a href="#" class="dateButton" id="shortcut30">Last 30 Days</a>
+
+                    <a href="#" class="dateButton" id="shortcut60">Last 60 Days</a>
+
+                    <a href="#" class="dateButton" id="shortcut90">Last 90 Days</a>
+                </td>
+            </tr>
+        </table>
+    </div>
+    <table id="compliance-table" class="tbDataTable">
+        <thead>
+            <tr>
+                <th>Patient</th>
+                <th>Email Address</th>
+                <th>Phone Number</th>
+                <th>Average Glucose Value</th>
+                <th>Target Range</th>
+                <th>Last Reading</th>
+                <th>View Report</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for p in patient_data %}
+        {% with patient=p.patient %}
+            <tr>
+                <td class="first">{{ patient.get_reversed_name }}</td>
+                <td>{% if patient.email %}{{ patient.email }}{% else %}N/A{% endif %}</td>
+                <td>{% if patient.patient_profile.contact.phone %}{{ patient.patient_profile.contact.phone }}{% else %}N/A{% endif %}</td>
+                <td>{% if p.avg_glucose_level %}{{ p.avg_glucose_level|floatformat }}{% else %}N/A{% endif %}</td>
+                <td>{{ patient.healthinformation.premeal_glucose_goal_minimum }} - {{ patient.healthinformation.postmeal_glucose_goal_maximum }}</td>
+                <td>{{ patient.patient_profile.get_last_reading_date }}</td>
+                <td><a href="{% get_dashboard_url reports.patient-index patient.id %}"><button>View Reports</button></a></td>
+            </tr>
+        {% endwith %}
+        {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}

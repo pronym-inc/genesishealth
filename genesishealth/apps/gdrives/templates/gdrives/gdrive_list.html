@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+
+{% block pageTitle %}Meter Inventory{% endblock %}
+
+{% block main_content %}
+    <ul>
+        <li><a href="#/devices/?state=1" {% if 'state' in request.GET %}{% ifequal request.GET.state '1' %}style="font-weight:bold"{% endifequal %}{% endif %}>Unassigned</a></li>
+        <li><a href="#/devices/?state=2" {% if 'state' in request.GET %}{% ifequal request.GET.state '2' %}style="font-weight:bold"{% endifequal %}{% endif %}>Assigned and PENDING ACTIVATION</a></li>
+        <li><a href="#/devices/?state=3" {% if 'state' in request.GET %}{% ifequal request.GET.state '3' %}style="font-weight:bold"{% endifequal %}{% endif %}>Assigned and ACTIVE</a></li>
+        <li><a href="#/devices/" {% if not 'state' in request.GET %}style="font-weight:bold"{% endif %}>Show All</a></li>
+    </ul>
+
+    <table>
+        <tr>
+            <th>Patient</th>
+            <th>MEID</th>
+            <th>Serial #</th>
+            <th>Assign Date</th>
+            <th>Status</th>
+        </tr>
+
+        {% for gdrive in object_list %}
+            <tr>
+                <td>
+                {% if gdrive.patient %}
+                    <a href="#/accounts/edit/{{ gdrive.patient.id }}">{{ gdrive.patient.get_full_name }}</a>
+                {% else %}
+                    N/A
+                {% endif %}
+                </td>
+                <td>
+                    {{ gdrive.meid }}
+                </td>
+                <td>
+                    {{ gdrive.device_id }}
+                </td>
+                <td>
+                    {{ gdrive.display_assigned_date }}
+                </td>
+                <td>
+                </td>
+            </tr>
+        {% endfor %}
+    </table>
+{% endblock %}

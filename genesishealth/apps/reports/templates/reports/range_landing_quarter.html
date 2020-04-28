@@ -1,0 +1,62 @@
+{% load genesis_tools %}
+
+<header>
+    <h2>Target Range Reports (past <select id="range_days_select">
+        <option value="1" {% if range.days == 1 %}selected="selected"{% endif %}>1</option>
+        <option value="7" {% if range.days == 7 %}selected="selected"{% endif %}>7</option>
+        <option value="14" {% if range.days == 14 %}selected="selected"{% endif %}>14</option>
+        <option value="30" {% if range.days == 30 %}selected="selected"{% endif %}>30</option>
+        <option value="60" {% if range.days == 60 %}selected="selected"{% endif %}>60</option>
+        <option value="90" {% if range.days == 90 %}selected="selected"{% endif %}>90</option>
+    </select> day{% if range.days != 1 %}s{% endif %})</h2>
+</header>
+
+<section>
+    <table class="full"> 
+
+        <tbody> 
+            <tr> 
+
+                <td><a href="{% get_dashboard_url accounts:manage-patients %}">Total Patients</td> 
+
+                <td class="ar">{{ range.total }}</td> 
+
+                <td class="ar"></td>
+
+            </tr> 
+
+            <tr> 
+
+                <td><a href="{% get_dashboard_url reports:range-report %}?view=in-range&days={{ range.days }}">Patients in Range</a></td> 
+
+                <td class="ar">{{ range.num_in_range }}</td>
+
+                <td class="ar">{{ range.percent_in_range }}%</td> 
+
+            </tr> 
+
+            <tr> 
+
+                <td><a href="{% get_dashboard_url reports:range-report %}?view=below-range&days={{ range.days }}">Patients Below Range</a></td> 
+
+                <td class="ar">{{ range.num_below_range }}</td>
+
+                <td class="ar">{{ range.percent_below_range }}%</td> 
+
+            </tr> 
+
+            <tr> 
+
+                <td><a href="{% get_dashboard_url reports:range-report %}?view=above-range&days={{ range.days }}">Patients Above Range</a></td> 
+
+                <td class="ar">{{ range.num_above_range }}</td>
+
+                <td class="ar">{{ range.percent_above_range }}%</td> 
+
+            </tr> 
+
+        </tbody> 
+
+    </table>
+    
+</section>

@@ -1,0 +1,9 @@
+<td>
+    <input type="hidden" class="startTime" value="{{ start_time|date:"Y-m-d h:i A" }}" />
+    <input type="hidden" class="endTime" value="{{ end_time|date:"Y-m-d h:i A" }}" />
+    {% for entry in entries %}
+    <div class="entry-wrapper {% if entry.entry.notes.all %}hasNotes{% endif %}" entry-type="{{ entry.type }}" entry-id="{{ entry.entry.id }}">
+        <span class="{{ entry.icon }}">{{ entry.description|safe }}</span><span{% if entry.extra %} class="{{ entry.extra }}"{% endif %}>&nbsp;</span>
+    </div>
+    {% endfor %}
+</td>

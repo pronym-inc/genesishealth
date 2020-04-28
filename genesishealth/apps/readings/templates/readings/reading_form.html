@@ -1,0 +1,11 @@
+{% extends 'base.html' %}
+
+{% block pageTitle %}Add a Note{% endblock %}
+
+{% block main_content %}
+<p>Please provide a deeper explanation on this specific glucose reading.</p>
+<form action="" method="post">{% csrf_token %}
+    {{ form.as_p }}
+    <p><input type="submit" value="Submit" /></p>
+</form>
+{% endblock %}

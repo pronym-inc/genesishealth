@@ -1,0 +1,129 @@
+from django.conf.urls import url
+
+from genesishealth.apps.reports.views import main as main_views
+from genesishealth.apps.reports.views import ajax as ajax_views
+
+
+urlpatterns = [
+    url(r'^test_history/$',
+        main_views.AggregateReport.as_view(),
+        name="test-history"),
+    url(r'^test_history/print/$',
+        main_views.AggregateReport.as_view(
+            template_name='reports/test_history_print.html'),
+        name="test-history-print"),
+    url(r'^test_history/pdf/$',
+        main_views.AggregateReport.as_view(
+            output_format='pdf'),
+        name="test-history-pdf"),
+    url(r'^test_history/(?P<patient_id>\d+)/$',
+        main_views.AggregateReport.as_view(),
+        name="test-history-for-patient"),
+    url(r'^test_history/(?P<patient_id>\d+)/print/$',
+        main_views.AggregateReport.as_view(
+            template_name='reports/test_history_print.html'),
+        name="test-history-print-for-patient"),
+    url(r'^test_history/(?P<patient_id>\d+)/pdf/$',
+        main_views.AggregateReport.as_view(
+            output_format='pdf'),
+        name="test-history-pdf-for-patient"),
+    url(r'^logbook_with_summary/$',
+        main_views.logbook_with_summary,
+        name="logbook"),
+    url(r'^logbook_with_summary/(?P<patient_id>\d+)/$',
+        main_views.logbook_with_summary,
+        name="logbook-for-patient"),
+    url(r'^logbook_with_summary/print/$',
+        main_views.LogbookReport.as_view(),
+        name="print-logbook"),
+    url(r'^logbook_with_summary/pdf/$',
+        main_views.LogbookReport.as_view(output_format='pdf'),
+        name="pdf-logbook"),
+    url(r'^trending/average/$',
+        main_views.AggregateReport.as_view(
+            template_name='reports/trend_average.html'),
+        name="trending"),
+    url(r'^trending/average/print/$',
+        main_views.AggregateReport.as_view(
+            template_name='reports/trend_average_print.html'),
+        name="trending-print"),
+    url(r'^trending/average/pdf/$',
+        main_views.AggregateReport.as_view(
+            output_format='pdf'),
+        name="trending-pdf"),
+    url(r'^trending/average/(?P<patient_id>\d+)/$',
+        main_views.AggregateReport.as_view(
+            template_name='reports/trend_average.html'),
+        name="trending-for-patient"),
+    url(r'^trending/average/(?P<patient_id>\d+)/print/$',
+        main_views.AggregateReport.as_view(
+            template_name='reports/trend_average_print.html'),
+        name="trending-print-for-patient"),
+    url(r'^trending/average/(?P<patient_id>\d+)/pdf/$',
+        main_views.AggregateReport.as_view(
+            output_format='pdf'),
+        name="trending-pdf-for-patient"),
+    url(r'^summary/$',
+        main_views.summary_report,
+        name="summary-report"),
+    url(r'^summary/(?P<patient_id>\d+)/$',
+        main_views.summary_report,
+        name="summary-report-for-patient"),
+    url(r'^summary/print/$',
+        main_views.LogbookReport.as_view(
+            template_name='reports/logbook/print/summary.html'),
+        name="print-summary"),
+    url(r'^summary/pdf/$',
+        main_views.LogbookReport.as_view(
+            template_name='reports/logbook/print/summary.html',
+            output_format='pdf'),
+        name="pdf-summary"),
+    url(r'^$',
+        main_views.index,
+        name='index'),
+    url(r'^patient/$',
+        main_views.professional_index,
+        name='professional-patient-reports'),
+    url(r'^(?P<patient_id>\d+)/$',
+        main_views.index,
+        name='patient-index'),
+    url(r'compliance/$',
+        main_views.compliance,
+        name='compliance-report'),
+    url(r'compliance/(?P<user_id>\d+)/$',
+        main_views.compliance_report,
+        name='compliance-report-detail'),
+    url(r'range/$',
+        main_views.range_report,
+        name='range-report'),
+    url(r'downloads/$',
+        main_views.temp_download_index,
+        name='temp-download-index'),
+    url(r'temp_download/(?P<download_id>\d+)/$',
+        main_views.temp_download,
+        name='temp-download')
+]
+
+urlpatterns += [
+    url(r'^ajax/logbook/$',
+        ajax_views.logbook,
+        name='ajax-logbook'),
+    url(r'^ajax/logbook_entry/(?P<entry_id>\d+?)/$',
+        ajax_views.logbook_entry,
+        name='ajax-logbook-entry'),
+    url(r'^ajax/logbook_entry_update/(?P<entry_id>\d+?)/$',  # noqa
+        ajax_views.logbook_entry_update,
+        name='ajax-logbook-entry-update'),
+    url(r'^ajax/logbook_get_notes_for_period/$',
+        ajax_views.logbook_get_notes_for_period,
+        name='ajax-logbook-get-notes-for-period'),
+    url(r'^compliance/data/(?P<user_id>\d+)/$',
+        ajax_views.compliance_data,
+        name='compliance-report-detail-data'),
+    url(r'^test_history/data/(?P<patient_id>\d+)/$',
+        ajax_views.test_history_data,
+        name='test-history-data'),
+    url(r'^trending/average/data/(?P<patient_id>\d+)/$',
+        ajax_views.trend_report_average_data,
+        name='trending-data'),
+]

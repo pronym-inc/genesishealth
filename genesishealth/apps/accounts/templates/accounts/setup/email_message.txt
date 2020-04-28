@@ -1,0 +1,17 @@
+Hello,
+
+A user has requested an account on the Genesis Health website.  Please find his or her information below:
+
+Name: {{ name }}
+Email: {{ email }}
+Device ID: {{ meid }}
+Insurance Agent Email: {{ agent_email }}
+Comments: {{ comments }}
+
+Please visit the following link to create a new patient account.  You may need to log in.
+
+http://{{ siteURL }}/accounts/new/
+
+Thank you,
+
+Genesis Health Technologies

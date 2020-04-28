@@ -1,0 +1,10 @@
+{% extends 'base.html' %}
+{% block pageTitle %}{{ message.subject }}{% endblock %}
+
+{% block main_content %}
+<p><label>From:</label> {{ message.sender }}</p>
+<p><label>To:</label> {{ message.recipient_list }}</p>
+<p><label>Subject:</label> {{ message.subject }}</p>
+<p><label>Sent On:</label> {{ message.sent_at }}</p>
+<p><label>Message:</label> {{ message.content }}</p>
+{% endblock %}

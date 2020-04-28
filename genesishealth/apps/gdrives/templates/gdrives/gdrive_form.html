@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+
+{% block pageTitle %}View Device{% endblock %}
+
+{% block main_content %}
+      <p>
+        <label>MEID: </label> {{ gdrive.meid }}
+      </p>
+      <p>
+        <label>Serial #:</label> {{ gdrive.device_id }}
+      </p>
+      <p>
+        <label>Device Type:</label> {{ gdrive.device_type }}
+      </p>
+{% endblock %}

@@ -1,0 +1,100 @@
+<h2>Call Log Report for {{ start_date|date:"M j, Y" }} - {{ end_date|date:"M j, Y" }}</h2>
+<table class="callLogTable" id="calls-by-category">
+    <tbody>
+        <tr>
+            <td>Calls by Category</td>
+            <td></td>
+        </tr>
+        {% for category_name, count in by_category_count %}
+        <tr>
+            <td class="indented">{{ category_name }}</td>
+            <td>{{ count }}</td>
+        </tr>
+        {% endfor %}
+        <tr class="totalRow">
+            <td class="indented"><strong>Total Calls</strong></td>
+            <td>{{ total_count }}</td>
+        </tr>
+    </tbody>
+</table>
+<br><br>
+<table class="callLogTable" id="calls-by-quality-category">
+    <tbody>
+        <tr>
+            <td>Calls by Quality Category</td>
+            <td></td>
+        </tr>
+        {% for category_name, count in by_qi_cat %}
+        <tr>
+            <td class="indented">{{ category_name }}</td>
+            <td>{{ count }}</td>
+        </tr>
+        {% endfor %}
+        <tr class="totalRow">
+            <td class="indented"><strong>Total Calls</strong></td>
+            <td>{{ total_count }}</td>
+        </tr>
+    </tbody>
+</table>
+<br><br>
+<table class="callLogTable" id="calls-by-month">
+    <tbody>
+        <tr>
+            <td>Calls by Month</td>
+            <td></td>
+        </tr>
+        {% for category_name, count in by_month %}
+        <tr>
+            <td class="indented">{{ category_name }}</td>
+            <td>{{ count }}</td>
+        </tr>
+        {% endfor %}
+        <tr class="totalRow">
+            <td class="indented"><strong>Total Calls</strong></td>
+            <td>{{ total_count }}</td>
+        </tr>
+    </tbody>
+</table>
+<br><br>
+<table class="callLogTable" id="business-partners-by-calls">
+    <tbody>
+        <tr>
+            <td>Top 5 Business Partners by Calls</td>
+            <td></td>
+        </tr>
+        {% for category_name, count in by_group %}
+        <tr>
+            <td class="indented">{{ category_name }}</td>
+            <td>{{ count }}</td>
+        </tr>
+        {% endfor %}
+        <tr class="totalRow">
+            <td class="indented"><strong>Total Calls</strong></td>
+            <td>{{ total_group_count }}</td>
+        </tr>
+    </tbody>
+</table>
+<br><br>
+<table class="callLogTable" id="replacement-products">
+    <tbody>
+        <tr>
+            <td>Replacements</td>
+            <td></td>
+        </tr>
+        {% for category_name, count in by_replacement %}
+        <tr>
+            <td class="indented">{{ category_name }}</td>
+            <td>{{ count }}</td>
+        </tr>
+        {% endfor %}
+        <tr class="totalRow">
+            <td class="indented"><strong>Total Requests</strong></td>
+            <td>{{ total_group_count }}</td>
+        </tr>
+    </tbody>
+</table>
+{% for chart in charts %}
+{% if is_print %}<div class="pageBreak"></div>{% endif %}
+<div id="{{ chart.element_id }}" class="hChart"></div>
+<br><br>
+{% endfor %}

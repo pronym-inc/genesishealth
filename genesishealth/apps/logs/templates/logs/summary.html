@@ -1,0 +1,43 @@
+{% extends "logs/base_audit.html" %}
+{% load genesis_tools %}
+
+{% block pageTitle %}GHRS Summary Report{% endblock %}
+
+{% block audit_content %}
+    <p><a target="_blank" href="{% url "logs:audit-summary-print" %}?start_date={{ start_date|date:"m/d/y" }}&end_date={{ end_date|date:"m/d/y" }}">Print</a></p>
+    <p><a target="_blank" href="{% url "logs:audit-summary-pdf" %}?start_date={{ start_date|date:"m/d/y" }}&end_date={{ end_date|date:"m/d/y" }}">PDF</a></p>
+    <h2>Valid Reading Details</h2>
+    <h3>Successfully Recorded Readings</h3>
+    <p>Real Patients: <strong>{{ data.valid }}</strong></p>
+    <p>System Generated: <strong>{{ data.system_generated }}</strong></p>
+    <p><u>Subtotal</u>: <strong>{{ data.valid_patient_subtotal }}</strong></p>
+    <h3>No patient assigned to device</h3>
+    <p>Production Environment: <strong>{{ data.no_patient }}</strong></p>
+    <h3>Unknown Device</h3>
+    <p>Production Environment: <strong>{{ data.unknown_device }}</strong></p>
+    <h3>Invalid Test Type</h3>
+    <p>Production Environment: <strong>{{ data.invalid_measure }}</strong></p>
+    <p><u><h4>Subtotal</h4></u><strong>{{ data.valid_subtotal }}</strong></p>
+
+    <hr>
+    <br>
+    <h2>Invalid Reading Details</h2>
+    <p>Random Noise: <strong>{{ data.invalid }}</strong></p>
+    <p>Duplicate readings: <strong>{{ data.duplicate }}</strong></p>
+    <p><u>Subtotal</u>: <strong>{{ data.invalid_subtotal }}</strong></p>
+
+    <hr>
+    <br>
+    <h2>Failed Reading Details</h2>
+    <p>Failed to process: <strong>{{ data.processing_failed }}</strong></p>
+    <p>Unresolved: <strong>{{ data.unresolved }}</strong></p>
+    <p><u>Subtotal</u>: <strong>{{ data.failed_subtotal }}</strong></p>
+
+    <hr>
+    <br>
+    <h2>Glucose Readings Received by GHRS</h2>
+    <p>Valid Readings: <strong>{{ data.valid_subtotal }}</strong></p>
+    <p>Invalid Readings: <strong>{{ data.invalid_subtotal }}</strong></p>
+    <p>Failed Readings: <strong>{{ data.failed_subtotal }}</strong></p>
+    <p><u>Total</u>: <strong>{{ data.total }}</strong></p>
+{% endblock %}

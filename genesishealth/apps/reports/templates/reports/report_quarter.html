@@ -1,0 +1,19 @@
+{% if not noControls %}
+<div id="{{ prefix }}-report" class="reportBox">
+        <table id="{{ prefix }}-dateSelect" class="rawDateSelect hidden">
+            <tr id="{{ prefix }}-dateSelectRow">
+                <td><label for="{{ prefix }}-startDate">Start Date</label></td>
+                <td class="inputCell"><input type="text" id="{{ prefix }}-startDate" value="{{ start_date }}"/></td>
+                <td><label for="{{ prefix }}-endDate">End Date</label></td>
+                <td class="inputCell"><input type="text" id="{{ prefix }}-endDate" value="{{ end_date }}" /></td>
+                <td><input id="{{ prefix }}-dateSubmit" type="submit" value="Submit"></td>
+            </tr>
+        </table>
+</div>
+{% endif %}
+{% if empty %}
+<div align="center"><p>There were no {{ description }} readings for the specified period.</p></div>
+{% else %}
+<div id="{{ prefix }}" class="{{ chartClass }}"></div>
+<div id="{{ prefix }}-print" class="hidden"></div>
+{% endif %}

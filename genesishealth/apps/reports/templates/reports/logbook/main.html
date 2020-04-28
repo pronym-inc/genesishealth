@@ -1,0 +1,12 @@
+{% extends 'reports/logbook/base.html' %}
+
+{% load genesis_tools %}
+
+{% block pageTitle %}MyGHR Logbook{% if request.user != patient %} for {{ patient.get_full_name }}{% endif %}{% endblock %}
+
+{% block add_section %}
+<div class="inlineblock" id="logbookDateDiv">
+    Show results for: {% include "reports/selectdays_select.html" with day1=False %}
+</div>
+{% include "reports/selectdays_customform.html" %}
+{% endblock %}

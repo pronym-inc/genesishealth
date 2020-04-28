@@ -1,0 +1,77 @@
+{% extends "utils/generic_table_templates/base.html" %}
+
+{% block extrahead %}
+{{ block.super }}
+<script type="text/javascript">
+updateCallbackQueue.push(function(div) {
+    div.find('form#addDevice').submit(function(e) {
+        e.preventDefault();
+        var form = $('form#addDevice'),
+            csrf = form.find('input[name=csrfmiddlewaretoken]').val(),
+            inp = form.find('input[name=device]'),
+            meid = inp.val(),
+            data = {device: meid},
+            action = form.attr('action');
+        inp.val("");
+        $('#MEIDNotFound, #cartonFull, #duplicate').hide();
+        function csrfSafeMethod(method) {
+            // these HTTP methods do not require CSRF protection
+            return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
+        }
+        $.ajaxSetup({
+            beforeSend: function(xhr, settings) {
+                if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
+                    xhr.setRequestHeader("X-CSRFToken", csrf);
+                }
+            }
+        });
+        $.ajax({
+            type: 'post',
+            dataType: 'json',
+            data: data,
+            url: action,
+            statusCode: {
+                200: function() {
+                    $('#genesis-table').DataTable().fnDraw();
+                },
+                400: function(err) {
+                    if (err.responseText == 'Invalid MEID') {
+                        $('#MEIDNotFound').show();
+                    } else if (err.responseText == 'Duplicate MEID') {
+                        $('#duplicate').show();
+                    } else if (err.responseText == 'Carton Full') {
+                        $('#cartonFull').show();
+                    }
+                }
+            }
+        });
+        return false;
+    });
+});
+</script>
+{% endblock %}
+
+{% block main_content %}
+<div id="MEIDNotFound" style="display:none">
+    <p>MEID Not Found!</p>
+</div>
+<div id="cartonFull" style="display:none">
+    <p>Carton is full!</p>
+</div>
+<div id="duplicate" style="display:none">
+    <p>MEID already in carton!</p>
+</div>
+<form action="{% url "gdrives:add-warehouse-carton" %}" method="post" class="form" id="addDevice">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <p><input type="submit" value="Submit"></p>
+</form>
+{{ block.super }}
+<br>
+<br>
+<h3>Complete Carton</h3>
+<form action="{% url "gdrives:finish-warehouse-carton" %}" method="post" class="form">
+    {{ finish_form.as_p }}
+    <p><input type="submit" value="Submit"></p>
+</form>
+{% endblock %}

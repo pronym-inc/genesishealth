@@ -1,0 +1,42 @@
+{% extends "utils/generic_form.html" %}
+
+{% block main_content %}
+<div class="container_12" style="font-size:14px; background-color: lightgrey">
+    <table style="width: 100%">
+        <tbody>
+            <tr>
+                <td><strong>Posted</strong>: {{ complaint.datetime_added|date:"N, j Y g:i A" }}</td>
+                <td><strong>Added By</strong>: {{ complaint.added_by.get_full_name }}</td>
+            </tr>
+            <tr>
+                <td colspan="2"><strong>Complaint(s):</strong>: {{ complaint.get_problem_str }}</td>
+            </tr>
+            <tr>
+                <td colspan="2"><strong>Description</strong>: {{ complaint.description }}</td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+<br>
+{% if updates %}<h3>Updates:</h3>{% endif %}
+<div class="container_12" style="clear:both">
+{% for update in updates %}
+    <div class="container_12">
+        <div class="grid_6">
+            <p><b>Updated by: </b>{{ update.updated_by.get_reversed_name }}</p>
+            <p><b>Validated: </b>{% if update.is_validated %}YES{% else %}NO{% endif %}</p>
+            <p><b>Found problems: </b>{{ update.get_found_problem_str }}</p>
+        </div>
+        <div class="grid_6">
+            <p><b>Updated on: </b>{{ update.datetime_added|date:"N j, Y g:i A" }}</p>
+            <p><b>RMA Return Date: </b>{{ update.rma_return_date }}</p>
+        </div>
+        <div class="grid_12">
+            <p>Message: {{ update.rma_notes }}</p>
+        </div>
+    </div>
+<br><br><hr style="width: 100%">
+{% endfor %}
+</div><div style="height: 20px"></div>
+{{ block.super }}
+{% endblock %}

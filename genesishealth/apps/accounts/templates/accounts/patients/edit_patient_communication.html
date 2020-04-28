@@ -1,0 +1,88 @@
+{% extends "base.html" %}
+
+{% block pageTitle %}{{ title }}{% endblock %}
+
+{% block extrahead %}
+<script type="text/javascript">
+updateCallbackQueue.push(function(div) {
+    var selectReplacementsP = div.find('#id_note-replacements').parent('p'),
+        addP = selectReplacementsP.next('p'),
+        resolutionP = div.find('#id_note-resolution').parent('p');
+    function toggleReplacements() {
+        if ($('#id_note-has_replacements').is(':checked')) {
+            selectReplacementsP.show();
+            addP.show(); 
+        } else {
+            selectReplacementsP.hide();
+            addP.hide();
+        }
+    }
+    function toggleResolution() {
+        if ($('#id_note-change_status_to option:selected:first').text() == 'Closed') {
+            resolutionP.show();
+        } else {
+            resolutionP.hide();
+        }
+    }
+    $('#id_note-change_status_to').change(toggleResolution);
+    $('#id_note-has_replacements').change(toggleReplacements);
+    toggleReplacements();
+    toggleResolution();
+});
+</script>
+{% endblock %}
+
+{% block main_content %}
+<div class="container_12" style="font-size:14px; background-color: lightgrey">
+    <table style="width: 100%">
+        <tbody>
+            <tr>
+                <td><strong>Current Status</strong>: {{ communication.status }}</td>
+                <td><strong>Reference No.</strong>: {{ communication.pk }}</td>
+            </tr>
+            <tr>
+                <td><strong>Posted:</strong>: {{ communication.datetime_added|date:"N, j Y g:i A" }}</td>
+                <td><strong>Added By</strong>: {{ communication.added_by.get_reversed_name }}</td>
+            </tr>
+            <tr>
+                <td><strong>Category</strong>: {{ communication.category.name }}</td>
+                <td><strong>Subcategory</strong>: {{ communication.subcategory.name }}</td>
+            </tr>
+            <tr>
+                <td><strong>Subject</strong>: {{ communication.subject }}</td>
+                <td><strong>Description</strong>: {{ communication.description }}</td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+
+<div class="container_12" style="clear:both">
+    <form action="" method="post" class="form">
+        {% csrf_token %}
+        <h2>Previous Entries</h2>
+        {% for note in previous_notes %}
+        <div class="container_12">
+            <div class="grid_6">
+                <p><b>Updated by: </b>{{ note.added_by.get_reversed_name }}</p>
+                <p><b>New Status: </b>{{ note.change_status_to.name }}</p>
+            </div>
+            <div class="grid_6">
+                <p><b>Updated on: </b>{{ note.datetime_added|date:"N j, Y g:i A" }}</p>
+                {% with replacement_str=note.get_replacement_string %}
+                <p><b>Replacements: </b>{% if replacement_str %}{{ replacement_str }}{% else %}None{% endif %}</p>
+                {% if note.replacements.count %}<p><b>Requested Warranty Authorization: </b> {% if note.is_rma %}Yes{% else %}No{% endif %}</p>{% endif %}
+                {% endwith %}
+            </div>
+            <div class="grid_12">
+                <p>Message: {{ note.content }}</p>
+            </div>
+        </div>
+        {% if not forloop.last %}<br><hr><br><hr>{% endif %}
+        {% endfor %}
+        <h2>Add Entry</h2>
+        {{ form.as_p }}
+        <p><input type="submit" value="Submit"></p>
+    </form>
+</div>
+{% endblock %}
+

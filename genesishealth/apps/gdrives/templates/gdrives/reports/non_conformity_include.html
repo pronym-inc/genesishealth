@@ -1,0 +1,80 @@
+<h1>Genesis Blood Glucose Meter Non-Conformity Report</h1>
+<br>
+<h3>Glucose Meter Information</h3>
+<table style="border: 1px solid black; width: 100%">
+    <tbody>
+        <tr>
+            <td>MEID:</td>
+            <td>{{ device.meid }}</td>
+        </tr>
+        <tr>
+            <td>Serial No:</td>
+            <td>{{ device.device_id }}</td>
+        </tr>
+        <tr>
+            <td>Lot Number:</td>
+            <td>{{ device.manufacturer_carton.lot_number }}</td>
+        </tr>
+        <tr>
+            <td>Manufacturer Date:</td>
+            <td>{{ device.manufacturer_carton.date_shipped }}</td>
+        </tr>
+        <tr>
+            <td>Carton Number:</td>
+            <td>{{ device.manufacturer_carton.number }}</td>
+        </tr>
+        <tr>
+            <td>Non-Conformity Date:</td>
+            <td>{{ non_conformity.datetime_added }}</td>
+        </tr>
+        <tr>
+            <td>Non-Conformities:</td>
+            <td>{{ non_conformity.get_problem_str }}</td>
+        </tr>
+        <tr>
+            <td>Details:</td>
+            <td>{{ non_conformity.description }}</td>
+        </tr>
+        <tr>
+            <td>Recorded By:</td>
+            <td>{{ non_conformity.added_by.get_full_name }}</td>
+        </tr>
+    </tbody>
+</table>
+<br>
+<div style="border: 1px solid black; width: 100%; background-color: #aaaaaa">
+    The current status for this device is: <strong>{{ device.segregation_disposition.name }}</strong>
+</div>
+<br>
+<hr>
+{% for record in records %}
+<table style="width: 100%">
+    <tbody>
+        <tr>
+            <td><strong>{% if record.is_inspection %}Inspection{% else %}Update{% endif %}</strong></td>
+            <td></td>
+            <td>Disposition: {{ record.disposition }}</td>
+        </tr>
+        <tr style="color: #666666">
+            <td>Posted: {{ record.posted_datetime }}</td>
+            <td>Name: {{ record.author.get_reversed_name }}</td>
+            {% if record.is_ready_for_inspection != 'SKIP' %}<td>Ready for Inspection: {% if record.is_ready_for_inspection %}YES{% else %}NO{% endif %}</td>{% endif %}
+        </tr>
+    </tbody>
+</table>
+{% if record.details %}<p>{{ record.details }}</p>{% endif %}
+<hr>
+{% endfor %}
+
+<table style="width: 100%">
+    <tbody>
+        <tr>
+            <td colspan="3">
+                Signature: __________________________________________
+            </td>
+            <td colspan="3">
+                Date: _______________
+            </td>
+        </tr>
+    </tbody>
+</table>

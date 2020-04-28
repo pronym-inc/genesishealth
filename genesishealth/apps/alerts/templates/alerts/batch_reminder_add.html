@@ -1,0 +1,95 @@
+{% extends "base.html" %}
+
+{% block pageTitle %}Add Reminder{% endblock %}
+
+{% block extrahead %}
+<script type="text/javascript" src="/static/js/jquery.wizard.js"></script>
+{% for ejs in extra_js %}
+    <script type="text/javascript" src="{{ ejs }}" />
+{% endfor %}
+<script>
+    updateCallbackQueue.push(function(div) {
+        $('.wizard').wizard();
+        function hideFormRow(id) {
+            $('#' + id).parent('p').hide();
+        }
+
+        function showFormRow(id) {
+            $('#' + id).parent('p').show();
+        }
+
+        $('.wizardSubmit').live('click', function(e) {
+            e.preventDefault();
+            $('form.wizard').submit();
+        });
+
+        $('button.next').attr('disabled', 'disabled');
+        // Step 1 validation..
+        $('#page1 input:checkbox[id^="id_patients_"]').change(function() {
+            if ($('#page1 input:checkbox[id^="id_patients_"]:checked').length > 0) {
+                $('#page1 button.next').removeAttr('disabled');
+            } else {
+                $('#page1 button.next').attr('disabled', 'disabled');
+            }
+        });
+        // Step 1 validation..
+        function handleStep2Validation() {
+            var valid = true;
+            $('#page1 :required').each(function() {
+                if (!$(this).val())
+                    valid = false;
+            });
+            if ($('#page1 input:checkbox[id^="id_contact_methods_"]:checked').length == 0) {
+                valid = false;
+            }
+            if (valid) {
+                $('#page1 button.next').removeAttr('disabled');
+            } else {
+                $('#page1 button.next').attr('disabled', 'disabled');
+            }
+        }
+        $('#page1 :required').change(handleStep2Validation);
+        $('#page1 input:checkbox[id^="id_contact_methods_"]').change(handleStep2Validation);
+    });
+</script>
+{% endblock %}
+
+{% block main_content %}
+                    <div class="grid_12">
+                        <!-- wizard -->
+                        <form action="" method="post" class="wizard form" novalidate>
+                            <input type="hidden" name="batch_ids" value="{{ batch_id_str }}" />
+                            {% csrf_token %}
+                            <nav>
+                                <ul class="clearfix">
+                                    <li class="active"><strong>1.</strong> Define Reminder</li>
+                                </ul>
+                            </nav>
+
+                            <div class="items">
+
+                                <!-- page1 -->
+                                <section id="page1">
+
+                                    <section>
+                                        <p>{{ form.contact_methods.label_tag }} {{ form.contact_methods }}</p>
+                                        <p>{{ form.interval.label_tag }} {{ form.interval }}</p>
+                                        <p>{{ form.delivery_datetime.label_tag }} {{ form.delivery_datetime }}</p>
+                                        <p>{{ form.delivery_time.label_tag }} {{ form.delivery_time }}</p>
+                                        <p>{{ form.delivery_day_of_week.label_tag }} {{ form.delivery_day_of_week }}</p>
+                                        <p>{{ form.delivery_day_of_month.label_tag }} {{ form.delivery_day_of_month }}</p>
+                                        <p>{{ form.message.label_tag }} {{ form.message }}</p>
+                                    </section>
+
+                                    <footer class="clearfix">
+                                        <button type="button" class="prev fl">&laquo; Back</button>
+                                        <button type="button" id="step2Finish" class="next fr wizardSubmit">Finish &raquo;</button>
+                                    </footer>
+
+                                </section>
+                            </div><!--items-->
+
+                        </form><!--wizard-->
+
+                    </div>
+{% endblock %}

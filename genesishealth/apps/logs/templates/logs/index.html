@@ -1,0 +1,72 @@
+{% extends "base.html" %}
+{% load genesis_tools %}
+
+{% block pageTitle %}Download Logs{% endblock %}
+
+{% block extrahead %}
+<style type="text/css">
+     ul.tempnav {
+         width: 300px;
+         margin-top: 25px;
+     }
+     ul.tempnav li a {
+         display: block;
+     }
+     ul.tempnav li img {
+         vertical-align: middle;
+     }
+     ul.tempnav li {
+         position: relative;
+         border-left:1px solid #ccc;
+         border-right:1px solid #ccc;
+         border-bottom: 1px solid #ccc;
+         display: block;
+         -o-transition-duration: 0.2s;
+         -ms-transition-duration: 0.2s;
+         -moz-transition-duration: 0.2s;
+         -khtml-transition-duration: 0.2s;
+         -webkit-transition-duration: 0.2s;
+         transition-duration: 0.2s;
+     }
+     
+     ul.tempnav li:hover {
+         background-color:#f1f1f1;
+         
+     }
+     ul.tempnav li span {
+         -o-transition-duration: 0.2s;
+        -ms-transition-duration: 0.2s;
+        -moz-transition-duration: 0.2s;
+        -khtml-transition-duration: 0.2s;
+        -webkit-transition-duration: 0.2s;
+        transition-duration: 0.2s;
+     }
+     ul.tempnav li:hover span {
+         padding-left:5px;
+     }
+     
+    </style>
+{% endblock %}
+ 
+{% block main_content %}
+    <ul class="tempnav">
+        <li style="border-top:1px solid #ccc;">
+            <a href="{% get_dashboard_url logs:download_gdrive_logs %}"title="GDrive Logs">
+                <img src="/static/images/navicons/153.png" alt=""><span>GDrive Logs</span>
+            </a>
+            <img class="innerloader" id="menulevelloader" src="/static/images/ajax-loader-menu.gif" style="display: none;">
+        </li>
+        <li style="border-top:1px solid #ccc;">
+            <a href="{% get_dashboard_url logs:download_gdrive_transmission_logs %}"title="GDrive Transmission Logs">
+                <img src="/static/images/navicons/153.png" alt=""><span>GDrive Transmission Logs</span>
+            </a>
+            <img class="innerloader" id="menulevelloader" src="/static/images/ajax-loader-menu.gif" style="display: none;">
+        </li>
+        <li style="border-top:1px solid #ccc;">
+            <a href="{% get_dashboard_url logs:download_api_logs %}"title="API Logs">
+                <img src="/static/images/navicons/153.png" alt=""><span>API Logs</span>
+            </a>
+            <img class="innerloader" id="menulevelloader" src="/static/images/ajax-loader-menu.gif" style="display: none;">
+        </li>
+    </ul>
+{% endblock %}

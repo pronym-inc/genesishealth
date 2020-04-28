@@ -1,0 +1,108 @@
+{% extends "base.html" %}
+
+{% block pageTitle %}Manage Login Information for {{ user.get_full_name }}{% endblock %}
+
+{% block extrahead %}
+<script type="text/javascript">
+function updateContactForm() {
+		if ($('#id_contact_method_0').attr('checked') == 'checked') {
+			$('#id_phone').val('');
+			$('#id_phone').parent('p').hide();
+			$('#id_confirm_phone').val('');
+			$('#id_confirm_phone').parent('p').hide();
+			$('#id_confirm_phone').parent('p').prev('ul').hide();
+			$('#current-phone').hide();
+			$('#current-email').show();
+			$('#id_email').parent('p').show();
+			$('#id_confirm_email').parent('p').show();
+		} else if ($('#id_contact_method_1').attr('checked') == 'checked') {
+			$('#id_email').val('');
+			$('#id_email').parent('p').hide();
+			$('#id_confirm_email').val('');
+			$('#id_confirm_email').parent('p').hide();
+			$('#id_confirm_email').parent('p').prev('ul').hide();
+			$('#current-email').hide();
+			$('#current-phone').show();
+			$('#id_phone').parent('p').show();
+			$('#id_confirm_phone').parent('p').show();
+		}
+	}
+	updateContactForm();
+	window.ghrCallback = function() {
+		if ($('#id_contact_method_0').length > 0) {
+			$('[id^="id_contact_method_"]').change(updateContactForm);
+		}
+	};
+</script>
+{% endblock %}
+
+{% block main_content %}
+
+<section>
+    <header>
+        <h2>Security Questions</h2>
+    </header>
+    <section class="clearfix">
+        {% if user.get_profile.get_readable_security_questions.0.question %}
+            <p>{{ user.get_profile.get_readable_security_questions.0.question }}</p>
+            <p>{{ user.get_profile.get_readable_security_questions.0.answer }}</p>
+        {% endif %}
+        
+        {% if user.get_profile.get_readable_security_questions.0.question %}
+            <p>{{ user.get_profile.get_readable_security_questions.1.question }}</p>
+            <p>{{ user.get_profile.get_readable_security_questions.1.answer }}</p>
+        {% endif %}
+        
+        {% if user.get_profile.get_readable_security_questions.0.question %}
+            <p>{{ user.get_profile.get_readable_security_questions.2.question }}</p>
+            <p>{{ user.get_profile.get_readable_security_questions.2.answer }}</p>
+        {% endif %}
+    </section>
+</section>
+	
+	
+{% if forms.username_email_form %}
+	<div class="message info">
+        <h3>MyGHR Login Information</h3> 
+        <p>Your username is currently set to your email: {{ user.email }}</p>
+        <p>To update it, please enter a new email below.</p>
+	</div>
+	<form class="form has-validation" style="margin-bottom:15px" action="" method="post">{% csrf_token %}
+		
+		{{ forms.username_email_form.as_p }}
+		<p><input type="submit" value="Submit"></p>
+	</form>
+{% endif %}
+
+{% if forms.username_form %}
+	<div class="message info">
+        <h3>MyGHR Login Information</h3> 
+        <p>This user's username is currently set to: {{ user.username }}</p>
+        <p>To update it, please enter a new username below.</p>
+	</div>
+	<form class="form has-validation" style="margin-bottom:15px" action="" method="post">{% csrf_token %}
+		{{ forms.username_form.as_p }}
+		<p><input type="submit" value="Submit"></p>
+	</form>
+{% endif %}
+
+{% if forms.contact_form %}
+	<form class="form has-validation" style="margin-bottom:15px" action="" method="post">{% csrf_token %}
+		<div style="font-weight:bold; font-size:18px; margin-bottom:15px; border: none">MyGHR Primary Contact / Account Recovery Information</div>
+		<p style="margin-bottom:19px" id="current-phone"><label>This user's phone number is currently set to:</label>&nbsp;<span>{{ user.get_profile.phone }}</span></p>
+		<p style="margin-bottom:19px" id="current-email"><label>This user's email address is currently set to:</label>&nbsp;<span>{{ user.email }}</span></p>
+		{{ forms.contact_form.as_p }}
+		<p><input type="submit" value="Submit"></p>
+	</form>
+{% endif %}
+
+{% if forms.admin_password_form %}
+	<h2>Update Password</h2>
+    <form class="form has-validation" style="margin-bottom:15px" action="" method="post">{% csrf_token %}
+		{{ forms.admin_password_form.as_p }}
+		<p><input type="submit" value="Submit"></p>
+	</form>
+{% endif %}
+
+
+{% endblock %}

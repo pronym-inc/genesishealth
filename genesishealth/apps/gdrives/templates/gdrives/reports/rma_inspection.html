@@ -1,0 +1,127 @@
+<html>
+    <body style="width:95%; font-size: 13px">
+        <div>
+            <img src="/static/images/ght_logo.png">
+        </div>
+        <h2>Genesis Blood Glucose Meter RMA Return Inspection Report</h2>
+        <h4>Patient Information</h4>
+        <div style="border: 1px solid black; width: 100%">
+            {% with patient=complaint.device.get_patient contact=complaint.device.get_patient.patient_profile.contact %}
+            <table>
+                <tr>
+                    <td>Patient Name:</td>
+                    <td>{{ patient.get_full_name }}</td>
+                </tr>
+                <tr>
+                    <td>Address 1:</td>
+                    <td>{{ contact.address1 }}</td>
+                </tr>
+                <tr>
+                    <td>Address 2:</td>
+                    <td>{{ contact.address2 }}</td>
+                </tr>
+                <tr>
+                    <td>City, State, ZIP:</td>
+                    <td>{{ contact.city }}, {{ contact.state }} {{ contact.zip }}</td>
+                </tr>
+                <tr>
+                    <td>Phone:</td>
+                    <td>{{ contact.phone }}</td>
+                </tr>
+                <tr>
+                    <td>Email:</td>
+                    <td>{{ patient.email }}</td>
+                </tr>
+                <tr>
+                    <td>Business Partner:</td>
+                    <td>{{ patient.patient_profile.group.name }}</td>
+                </tr>
+                <tr>
+                    <td>Group:</td>
+                    <td>{{ patient.patient_profile.company.name }}</td>
+                </tr>
+            </table>
+            {% endwith %}
+        </div>
+        <br>
+        <h4>Glucose Meter Information</h4>
+        <div style="border: 1px solid black; width: 100%">
+            {% with device=complaint.device %}
+            <table>
+                <tr>
+                    <td>MEID:</td>
+                    <td>{{ device.meid }}</td>
+                </tr>
+                <tr>
+                    <td>Serial No:</td>
+                    <td>{{ device.device_id }}</td>
+                </tr>
+                <tr>
+                    <td>Lot Number:</td>
+                    <td>{{ device.manufacturer_carton.number }}</td>
+                </tr>
+                <tr>
+                    <td>Manufacturer Date:</td>
+                    <td>{{ device.manufacturer_carton.date_shipped|date:"m/d/Y" }}</td>
+                </tr>
+                <tr>
+                    <td>Assigned Date:</td>
+                    <td>{{ device.datetime_assigned|date:"m/d/Y" }}</td>
+                </tr>
+                <tr>
+                    <td>Date Replaced:</td>
+                    <td>{{ device.datetime_replaced|date:"m/d/Y" }}</td>
+                </tr>
+            </table>
+            {% endwith %}
+        </div>
+        <br>
+        <h4>Complaint Information</h4>
+        <div style="border: 1px solid black; width: 100%">
+            <table>
+                <tr>
+                    <td>Complaint Date:</td>
+                    <td>{{ complaint.datetime_added|date:"m/d/Y" }}</td>
+                </tr>
+                <tr>
+                    <td>Complaint(s):</td>
+                    <td>{{ complaint.get_problem_str }}</td>
+                </tr>
+                <tr>
+                    <td>Complaint Details:</td>
+                    <td>{{ complaint.description }}</td>
+                </tr>
+                <tr>
+                    <td>Recorded By:</td>
+                    <td>{{ complaint.added_by.get_full_name }}</td>
+                </tr>
+            </table>
+        </div>
+        <br>
+        <h4>RMA Inspection Information</h4>
+        <div style="border: 1px solid black; width: 100%">
+            <table>
+                <tr>
+                    <td>Date Returned:</td>
+                    <td>{{ complaint.rma_return_date|date:"m/d/Y" }}</td>
+                </tr>
+                <tr>
+                    <td>Non-Conformities:</td>
+                    <td>{{ complaint.get_found_problem_str }}</td>
+                </tr>
+                <tr>
+                    <td>Inspector Notes:</td>
+                    <td>{{ complaint.rma_notes }}</td>
+                </tr>
+                <tr>
+                    <td>Complaint Confirmed:</td>
+                    <td>{% if complaint.is_validated %}Yes{% else %}No{% endif %}</td>
+                </tr>
+                <tr>
+                    <td>Inspected By:</td>
+                    <td>{{ complaint.validated_by.get_full_name }}</td>
+                </tr>
+            </table>
+        </div>
+    </body>
+</html>

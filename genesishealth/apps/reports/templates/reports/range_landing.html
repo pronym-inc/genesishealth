@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+{% load genesis_tools %}
+
+{% block pageTitle %}MyGHR Home{% endblock %}
+
+{% block main_content %} 
+<script type="text/javascript">
+    $('#range_days_select').change(function() {
+        $('#range_days').val($(this).val());
+        $('#daySelector').submit();
+    });
+</script>
+<form name="daySelector" id="daySelector" action="" method="post">
+    {% csrf_token %}
+    <input type="hidden" id="range_days" name="range_days" value="{{ range.days }}" />
+</form>
+                
+<section class="portlet grid_6 leading"> 
+
+    {% include 'reports/range_landing_quarter.html' %}
+
+</section> 
+
+<div class="clear"></div>
+
+<br />
+<div><a href="{% get_dashboard_url reports:range-report %}">View Full Report</a></div>
+{% endblock %}

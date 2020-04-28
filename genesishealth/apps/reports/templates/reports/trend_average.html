@@ -1,0 +1,143 @@
+{% extends "base.html" %}
+{% load genesis_tools %}
+
+{% block extrahead %}
+    <script src="/static/js/highcharts/highcharts.js" type="text/javascript" charset="utf-8"></script>
+    <script src="/static/js/highcharts/exporting.js" type="text/javascript" charset="utf-8"></script>
+    <script src="/static/js/reports/ta-report.js" type="text/javascript"></script>
+    
+    <link rel="stylesheet" href="{{ STATIC_URL }}css/smoothness/jquery-ui.css" type="text/css" media="screen" title="no title" charset="utf-8">
+
+<style media="screen" type="text/css">
+
+.selected {
+	color:#003399 !important;
+	background-image: none !important;
+	background-color:#fff !important;
+	box-shadow:none !important;
+}
+
+</style>
+    
+<script type="text/javascript">
+    var tCallback;
+    if (window.ghrCallback) {
+        tCallback = window.ghrCallback;
+    }
+
+    window.chart_patient_id = {{ patient.id }};
+
+    updateCallbackQueue.push(function(div) {
+            var dates = {
+                0: '{{ dates.0 }}',
+                1: '{{ dates.1 }}',
+                7: '{{ dates.7 }}',
+                14: '{{ dates.14 }}',
+                30: '{{ dates.30 }}',
+                60: '{{ dates.60 }}',
+                90: '{{ dates.90 }}'
+            };
+
+    
+            div.find('[id$="daysSelect"]').change(function(e) {
+                var val = $(this).val();
+                if (val == 'custom') {
+                    div.find('#dateSelect').show(); // Show date range
+                } else {
+                    val = parseInt(val);
+                    div.find('#dateSelect').hide(); // Hide date range if they're using a preset
+                    div.find('#startDate').val(dates[val]);
+                    div.find('#id_start_date').val(dates[val]);
+                    div.find('#id_days').val(val);
+                    div.find('#trendAverageDateForm').submit();
+                }
+                return false;
+            });
+    
+            div.find('[id$="dateSubmit"]').click(function(e) {
+                e.preventDefault();
+                var startDate = div.find('#startDate').val();
+                var endDate = div.find('#endDate').val();
+                if (startDate && endDate) {
+                    div.find('#id_days').val('custom');
+                    div.find('#id_start_date').val(startDate);
+                    div.find('#id_end_date').val(endDate);
+                    div.find('#trendAverageDateForm').submit();
+                }
+            });
+    
+            div.find('[id$="daysSelect"]').each(function() {
+                if ($(this).val() == 'custom') {
+                    div.find('#dateSelect').show();
+                }
+            });
+
+            div.find('#downloadReport').click(function(event) {
+                event.preventDefault();
+                var queryStr = getReportQueryStr();
+                {% if user == patient %}
+                    var url = '{% url "reports:trending-pdf" %}?';
+                {% else %}
+                    var url = '{% url "reports:trending-pdf-for-patient" patient.id %}?';
+                {% endif %}
+                window.location = url + queryStr;
+            });
+        });
+</script>
+
+{% endblock %}
+
+{% block pageTitle %}Target Range Outcome{% if request.user != patient %} for {{ patient.get_full_name }}{% endif %}{% endblock %}
+
+{% block main_content %}
+<a href="{% if user == patient %}{% get_dashboard_url reports:index %}{% else %}{% get_dashboard_url reports:patient-index patient.id %}{% endif %}" class="sbm sbm_red"><i class="icon-arrow-left"></i>Back to Reports</a><br />
+
+<a id="downloadReport" href="" class="btnRight sbm sbm_red"><i class="icon-download-alt"></i>Download PDF Report</a>
+
+<form id="trendAverageDateForm" action="" class="form" style="border:none;" method="post">
+{% csrf_token %}
+{{ form.as_p }}
+</form>
+
+<header>
+    <h2>Show results for: <select id="daysSelect">
+        <option value="1" {% if days == '1' %}selected="selected"{% endif %}>Past day</option>
+        <option value="7" {% if days == '7' %}selected="selected"{% endif %}>Past 7 days</option>
+        <option value="14" {% if days == '14' %}selected="selected"{% endif %}>Past 14 days</option>
+        <option value="30" {% if days == '30' %}selected="selected"{% endif %}>Past 30 days</option>
+        <option value="60" {% if days == '60' %}selected="selected"{% endif %}>Past 60 days</option>
+        <option value="90" {% if days == '90' %}selected="selected"{% endif %}>Past 90 days</option>
+        <option value="custom" {% if days == 'custom' %}selected="selected"{% endif %}>Custom Range</option>
+    </select>
+    </h2>
+    <div id="report" class="reportBox">
+     <form class="form">
+        <table id="dateSelect" class="rawDateSelect hidden">
+            <tr id="dateSelectRow">
+                <td><label for="startDate">Start Date</label></td>
+                <td class="inputCell"><input type="text" class="dateField" id="startDate" value="{{ start_date|date:"m/d/Y" }}"/></td>
+                <td><label for="endDate">End Date</label></td>
+                <td class="inputCell"><input type="text" class="dateField" id="endDate" value="{{ end_date|date:"m/d/Y" }}" /></td>
+                <td><input id="dateSubmit" type="submit" value="Submit"></td>
+            </tr>
+        </table>
+     </form>
+    </div>
+</header>
+
+<section class="portlet grid_6 leading graph"> 
+    {% include "reports/report_quarter.html" with prefix="premeal" days=form.premeal_days.value start_date=form.premeal_start_date.value end_date=form.premeal_end_date.value empty=premeal_empty chartClass="taChart" description="premeal" %}
+</section>
+
+<section class="portlet grid_6 leading graph">
+    {% include "reports/report_quarter.html" with prefix="postmeal" days=form.postmeal_days.value start_date=form.postmeal_start_date.value end_date=form.postmeal_end_date.value empty=postmeal_empty chartClass="taChart" description="postmeal" %}
+</section><div style="clear:both;"></div>
+
+<section class="portlet grid_6 leading graph">
+    {% include "reports/report_quarter.html" with prefix="combined" days=form.combined_days.value start_date=form.combined_start_date.value end_date=form.combined_end_date.value empty=combined_empty chartClass="taChart" %}
+</section>
+
+<section class="portlet grid_6 leading graph"> 
+    {% include "reports/summary_quarter.html" with prefix="summary" days=form.summary_days.value start_date=form.summary_start_date.value end_date=form.summary_end_date.value empty=summary_empty %}
+</section>   
+{% endblock %}

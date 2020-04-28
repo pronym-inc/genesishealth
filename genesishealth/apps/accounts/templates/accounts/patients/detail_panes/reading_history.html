@@ -1,0 +1,9 @@
+<p>Readings Last 180 Days: {% if readings_last_180 %}{{ readings_last_180|floatformat }}{% else %}0{% endif %}</p>
+{% for reading in recent_readings %}
+<div class="grid_6">
+{{ reading.reading_datetime|date:"M. j, Y h:i A" }}
+</div>
+<div class="grid_6">
+{{ reading.get_measure_type_display }}
+</div>
+{% endfor %}

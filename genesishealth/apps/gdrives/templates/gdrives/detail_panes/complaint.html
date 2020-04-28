@@ -1,0 +1,6 @@
+{% if last_complaint %}
+<p><b>Complaint Date: </b>{{ last_complaint.datetime_added|date:"N j, Y" }}</p>
+<p><b>Complaint Type: </b>{{ last_complaint.get_problem_str }}</p>
+<p><b>RMA Return: </b>{% if last_complaint.rma_return_date %}{{ last_complaint.rma_return_date|date:"N j, Y" }}{% else %}Not returned{% endif %}
+<p><b>Complaint Validated: </b>{% if last_complaint.is_validated %}Yes{% else %}No{% endif %}</p>
+{% endif %}

@@ -1,0 +1,43 @@
+<script type="text/javascript">
+window.ghrCallback = function() {
+    function hideFormRow(id) {
+        $('#' + id).parent('p').hide();
+    }
+
+    function showFormRow(id) {
+        $('#' + id).parent('p').show();
+    }
+
+    function handlePatient() {
+        var patient_ids = $('#id_patients').val();
+        if (patient_ids !== null && patient_ids.length > 0) {
+            $.post('/alerts/ajax/patient_permissions/', {
+                patients: patient_ids.join(','),
+                permissions: 'view-alerts'
+            },
+            function(data) {
+                // Clean out old ones
+                $('#id_professionals').children('option').remove();
+                for (var i = 0; i < data.length; i++) {
+                    $('#id_professionals').append('<option value="' + data[i].id + '">' + data[i].name + '</option>');
+                }
+            }
+            );
+        } else {
+            $('#id_professionals').children('option').remove();
+        }
+    }
+
+    function handleRecipientType() {
+        if ($('#id_recipient_type').val() == 'patient_recipient')
+            hideFormRow('id_professionals');
+        else
+            showFormRow('id_professionals');
+    }
+
+    $('#id_recipient_type').change(handleRecipientType);
+    $('#id_patients').change(handlePatient);
+
+    handleRecipientType();    
+}
+</script>

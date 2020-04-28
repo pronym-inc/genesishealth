@@ -1,0 +1,80 @@
+{% extends 'reports/logbook/print/base.html' %}
+
+{% block extra_head %}
+<script src="/static/js/highcharts/highcharts.js" type="text/javascript" charset="utf-8"></script>
+<script type="text/javascript" src="/static/js/reports/print-report.js"></script>
+<script type="text/javascript">
+window.chart_patient_id = {{ patient.id }};
+window.isPDFExport = true;
+</script>
+{% endblock %}
+
+{% block extra %}
+<table class="summaryfooter" id="summaryfooterprint">
+<caption class="printcaption">{{ number_of_days }}-Day Summary Statistics:</caption>
+    <tbody>
+        <tr>
+            <td>Glucose Average:</td>
+            <td>{{ aggregate_statistics.glucose_average|floatformat }}</td>
+            <td>Avg Readings/Day:</td>
+            <td>{{ aggregate_statistics.average_readings_per_day|floatformat }}</td>
+            <td># of Hypo/Hyper Readings:</td>
+            <td>{{ aggregate_statistics.hypo_count }} / {{ aggregate_statistics.hyper_count }}</td>
+            <td>Estimated A1C:</td>
+            <td>{% if aggregate_statistics.estimated_a1c %}{{ aggregate_statistics.estimated_a1c|floatformat }}{% endif %}</td>
+        </tr>
+        <tr>
+            <td>% Within Range:</td>
+            <td>{{ aggregate_statistics.percent_in_range|floatformat }}%</td>
+            <td>Standard Deviation:</td>
+            <td>{% if aggregate_statistics.standard_deviation %}{{ aggregate_statistics.standard_deviation|floatformat }}{% else %}N/A{% endif %}</td>
+            <td># of Glucose Readings:</td>
+            <td>{{ aggregate_statistics.number_of_readings }}</td>
+            <td></td>
+            <td></td>
+        </tr>
+    </tbody>
+</table>
+
+<div class="otherreportsprint">
+    <div class="testhistoryprint">
+        <h2 class="otherreportsh2">Test History</h2>
+        <div id="th-combined" class="thChart" chart-date-start="{{ start_date|date:"m/d/Y" }}" chart-date-end="{{ end_date|date:"m/d/Y" }}"></div>
+    </div>
+    <div class="targetrangeprint">
+        <h2 class="otherreportsh2">Target Range</h2>
+        <table class="targetrangeprinttable">
+            <tbody>
+                <tr>
+                    <td></td>
+                    <td style="text-align:center">This Period<br/>{{ start_date|date:"m/d/Y" }} - {{ end_date|date:"m/d/Y" }}</td>
+                    <td style="text-align:center">Prev Period<br/>{{ previous_start_date|date:"m/d/Y" }} - {{ previous_end_date|date:"m/d/Y" }}</td>
+                </tr>
+                <tr>
+                    <td style="border-right: 1px solid #999">Glucose Average</td>
+                    <td style="border-right: 1px solid #999; text-align:center">{{ target_info.this_period.glucose_average|floatformat }}</td>
+                    <td style="text-align: center">{{ target_info.previous_period.glucose_average|floatformat }}</td>
+                </tr>
+                <tr>
+                    <td style="border-right: 1px solid #999">Compliance %</td>
+                    <td style="border-right: 1px solid #999; text-align:center">{{ target_info.this_period.compliance_percent|floatformat }}%</td>
+                    <td style="text-align: center">{{ target_info.previous_period.compliance_percent|floatformat }}%</td>
+                </tr>
+                <tr>
+                    <td style="border-right: 1px solid #999"># of Hypo/Hyper</td>
+                    <td style="border-right: 1px solid #999; text-align:center">{{ target_info.this_period.hypo_count }}/{{ target_info.this_period.hyper_count }}</td>
+                    <td style="text-align: center">{{ target_info.previous_period.hypo_count }}/{{ target_info.previous_period.hyper_count }}</td>
+                </tr>
+            </tbody>
+        </table>
+        <div id="this-combined" class="taChart" chart-title="This Period" chart-date-start="{{ start_date|date:"m/d/Y" }}" chart-date-end="{{ end_date|date:"m/d/Y" }}"></div>
+        <div id="prev-combined" class="taChart" chart-title="Previous Period" chart-date-start="{{ previous_start_date|date:"m/d/Y" }}" chart-date-end="{{ previous_end_date|date:"m/d/Y" }}"></div>
+    </div>
+</div>
+<br clear="all" />
+{% endblock %}
+
+{% block footnotes %}
+<li>The lines that connect blood sugar readsings in this graph do not reflect actual glucose levels.</li>
+<li>When a given meal alot for a given day contains more than one results, only the two most recent results are shown. The statistics, however, include all results.</li>
+{% endblock %}

@@ -1,0 +1,84 @@
+{% extends "base.html" %}
+{% load genesis_tools %}
+
+{% block pageTitle %}Reports{% if target %} for {{ target.get_full_name }}{% endif %}{% endblock %}
+
+{% block extrahead %}
+<style type="text/css">
+     ul.tempnav {
+         width: 300px;
+         margin-top: 25px;
+     }
+     ul.tempnav li a {
+         display: block;
+     }
+     ul.tempnav li img {
+         vertical-align: middle;
+     }
+     ul.tempnav li {
+         position: relative;
+         border-left:1px solid #ccc;
+         border-right:1px solid #ccc;
+         border-bottom: 1px solid #ccc;
+         display: block;
+         -o-transition-duration: 0.2s;
+         -ms-transition-duration: 0.2s;
+         -moz-transition-duration: 0.2s;
+         -khtml-transition-duration: 0.2s;
+         -webkit-transition-duration: 0.2s;
+         transition-duration: 0.2s;
+     }
+     
+     ul.tempnav li:hover {
+         background-color:#f1f1f1;
+         
+     }
+     ul.tempnav li span {
+         -o-transition-duration: 0.2s;
+        -ms-transition-duration: 0.2s;
+        -moz-transition-duration: 0.2s;
+        -khtml-transition-duration: 0.2s;
+        -webkit-transition-duration: 0.2s;
+        transition-duration: 0.2s;
+     }
+     ul.tempnav li:hover span {
+         padding-left:5px;
+     }
+     
+    </style>
+{% endblock %}
+ 
+{% block main_content %}
+
+    <div class="message info">
+        <h3>Navigate Reports</h3>
+        <p>To navigate between reports, select the report of interest below. On that page, you'll have the option to return to this page to select a different report type.</p>
+    </div>
+
+    <ul class="tempnav">
+        <li style="border-top:1px solid #ccc;">
+            <a href="{% if target %}{% get_dashboard_url reports:summary-report-for-patient target.id %}{% else %}{% get_dashboard_url reports:summary-report %}{% endif %}" class="summarylink" title="Summary Report">
+                <img src="/static/images/navicons/153.png" alt=""><span>Summary Report</span>
+            </a>
+            <img class="innerloader" id="menulevelloader" src="/static/images/ajax-loader-menu.gif" style="display: none;">
+        </li>
+        <li>
+            <a href="{% if target %}{% get_dashboard_url reports:logbook-for-patient target.id %}{% else %}{% get_dashboard_url reports:logbook %}{% endif %}" title="Logbook">
+                <img src="/static/images/navicons/160.png" alt=""><span>Logbook</span>
+            </a>
+            <img class="innerloader" id="menulevelloader" src="/static/images/ajax-loader-menu.gif" style="display: none;">
+        </li>
+        <li>
+            <a href="{% if target %}{% get_dashboard_url reports:test-history-for-patient target.id %}{% else %}{% get_dashboard_url reports:test-history %}{% endif %}" title="Test History">
+                <img src="/static/images/navicons/83.png" alt=""><span>Test History</span>
+            </a>
+            <img class="innerloader" id="menulevelloader" src="/static/images/ajax-loader-menu.gif" style="display: none;">
+        </li>
+        <li>
+            <a href="{% if target %}{% get_dashboard_url reports:trending-for-patient target.id %}{% else %}{% get_dashboard_url reports:trending %}{% endif %}" title="Target Range Outcome">
+                <img src="/static/images/navicons/77.png" alt=""><span>Target Range Outcome</span>
+            </a>
+            <img class="innerloader" id="menulevelloader" src="/static/images/ajax-loader-menu.gif" style="display: none;">
+        </li>
+    </ul>
+{% endblock %}

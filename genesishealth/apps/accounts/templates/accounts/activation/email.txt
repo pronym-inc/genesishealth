@@ -1,0 +1,9 @@
+Hello,
+
+Please visit the following link to activate your Genesis Health Technologies account:
+
+{{ activation_link }}
+
+Thank you,
+
+Genesis Health Technologies

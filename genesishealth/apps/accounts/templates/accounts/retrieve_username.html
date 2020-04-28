@@ -1,0 +1,48 @@
+{% extends "base.html" %}
+
+{% block pageTitle %}{{ title }}{% endblock %}
+
+{% block main_content %}
+
+{% if username %}
+    <div class="message info">
+        <p>Your username is {{ username }}</p>
+        <p><a href="{% url 'dashboard:index' %}" title="Login" class="button icon-with-text">
+            <img src="/static/images/navicons-small/129.png" alt=""/> Login
+        </a></p>
+    </div>
+{% else %}
+    <form action="" method="post" class="form has-validation">
+        {% if hidden_data %}
+            <div style="display:none">
+                {% for key, value in hidden_data.iteritems %}
+                    <input type="hidden" name="{{ key }}" value="{{ value }}">
+                {% endfor %}
+            </div>
+        {% endif %}
+        {% csrf_token %}
+	    {{ form.as_p }}
+        <p><input type="submit" value="Submit"></p>
+    </form>
+    
+    <div id="findMEID" class="popover">
+      <header>Locating the MEID</header>
+      <section>
+        <div class="content" style="padding: 5px;">
+        	<div class="message info">
+          	<p>Your unique MEID can be located on the back of your Genesis meter.</p>
+      		</div>
+          <img src="/static/images/Meter_MEID.png" />
+        </div>
+      </section>
+  	</div>
+    
+    <script type="text/javascript">
+			$(document).ready(function() {
+				$('.helptext a').popover('#findMEID');
+			});
+		</script>
+    
+{% endif %}
+
+{% endblock %}

@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+{% load genesis_tools %}
+
+{% block pageTitle %}{{ title }}{% endblock %}
+
+{% block extrahead %}
+<script type="text/javascript" src="/static/js/jquery.dataTables.min.js"></script>
+<script type="text/javascript" src="/static/js/extra.datatables.js"></script>
+{{ additional_js|safe }}
+{{ additional_css|safe }}
+{% endblock %}
+
+{% block main_content %}
+    {{ above_table_content|safe }}
+    <br><br>
+    {% for table in tables %}
+        <div id="{{ table.postfix_name }}-table" class="multiTableWrap">
+        {% if table.header %}<h2>{{ table.header }}</h2>{% endif %}
+        {{ table.html|safe }}
+        </div>
+        {% if not forloop.last %}<div style="clear: both"></div>{% endif %}
+    {% endfor %}
+{% endblock %}

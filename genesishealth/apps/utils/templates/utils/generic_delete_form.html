@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+
+{% block extrahead %}{{ extra_head|safe }}{% endblock %}
+
+{% block pageTitle %}{{ title }}{% endblock %}
+
+{% block main_content %}
+    <form action="" method="post" class="form">{% csrf_token %}
+        {% if extra_delete_warning %}
+        <p style="font-size:15px"><strong>{{ extra_delete_warning }}</strong></p>
+        {% endif %}
+        {% if batch_id_str %}<input type="hidden" name="batch_ids" value="{{ batch_id_str }}" />{% endif %}
+        <p>Are you sure you want to delete the following items?</p>
+        <ul>
+            {% for obj in objects %}
+            <li>{{ obj }}</li>
+            {% endfor %}
+        </ul>
+        <p><input type="submit" value="Submit" name="confirm" class="include" /><input type="submit" value="Cancel" name="confirm" style="margin-left:15px !important" class="include" /></p>
+    </form>
+{% endblock %}

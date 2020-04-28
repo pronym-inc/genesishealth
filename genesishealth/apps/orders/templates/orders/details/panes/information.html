@@ -1,0 +1,21 @@
+<div class="container_12">
+    <div class="grid_6">
+        <b>Order Added:</b> {{ order.datetime_added|date:"m/d/y" }}
+        <br>
+        <b>Order Added By:</b> {{ order.added_by.get_reversed_name }}
+        <br>
+        <b>Category:</b> {{ order.get_order_category_display }}
+        <br>
+        <b>Origin:</b> {{ order.get_order_origin_display }}
+    </div>
+    <div class="grid_6">
+        <b>Order Status:</b> {{ order.get_order_status_display }}
+        <br>
+        {% if order.order_status == order.ORDER_STATUS_PROBLEM %}
+        <b>Order Problem:</b> {{ order.get_problem.category.name }}
+        <br>
+        <b>Order Description:</b> {{ order.get_problem.description }}
+        {% endif %}
+    </div>
+</div>
+<div class="clear"></div>

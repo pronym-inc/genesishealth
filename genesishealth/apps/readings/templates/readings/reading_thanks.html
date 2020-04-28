@@ -1,0 +1,5 @@
+{% extends 'base.html' %}
+
+{% block pageTitle %}Thank You{% endblock %}
+
+{% block main_content %}Your note has been added.  <a href="#/reports/logbook_with_summary/{% if patient_id %}{{ patient_id }}/{% endif %}">Return to logbook.</a>{% endblock %}

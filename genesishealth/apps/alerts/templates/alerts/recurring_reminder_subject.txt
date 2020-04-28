@@ -1,0 +1,1 @@
+MyGHR Reminder for {{ patient.get_full_name }}

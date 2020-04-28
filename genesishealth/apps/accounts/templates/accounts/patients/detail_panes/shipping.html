@@ -1,0 +1,19 @@
+<p>
+    <strong>Account Status</strong>: {{ patient.patient_profile.get_account_status_display }}
+    <br>
+    {% with ar=patient.patient_profile.get_activation_record %}
+    <strong>Account Last Changed</strong>:{% if ar %}{{ ar.effective_date|date:"N j, Y" }}{% else %}{{ patient.date_joined|date:"N j, Y" }}{% endif %}
+    <br>
+    {% if ar and ar.reason %}
+    <strong>Change Reason</strong>: {{ ar.reason.reason }}
+    <br>
+    {% endif %}
+    {% endwith %}
+    <strong>Refill Type</strong>: {{ patient.patient_profile.get_refill_method_display }}
+    {% if patient.patient_profile.refill_method == 'utilization' %}
+    <br>
+    <strong>Next Refill Date (Estimated)</strong>: {{ patient.patient_profile.get_anticipated_refill_date|date:"N j, Y"}}
+    <br>
+    <strong>Refill Amount, in Boxes (Estimated)</strong>: {{ patient.patient_profile.get_strip_refill_amount_for_subscription_period }}
+    {% endif %}
+</p>

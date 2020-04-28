@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+
+{% block pageTitle %}Contact Us or Report a Problem{% endblock %}
+
+{% block main_content %}
+    <form action="" method="post">{% csrf_token %}
+        {{ form.as_p }}
+        <p><input type="submit" value="Submit"></p>
+    </form>
+
+{% endblock %}
+

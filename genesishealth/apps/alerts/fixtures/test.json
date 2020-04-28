@@ -1,0 +1,54 @@
+[
+    {
+        "pk": 1,
+        "model": "alerts.patientalert",
+        "fields": {
+            "name": "Test Alert1",
+            "phone_number": "555-555-5555",
+            "patient": 4,
+            "email": "test@test.com",
+            "created_by": 4
+        }
+    },
+    {
+        "pk": 1,
+        "model": "alerts.professionalalert",
+        "fields": {
+            "send_by_text": true,
+            "professionals": [
+                3
+            ],
+            "patient": 4,
+            "send_by_email": true,
+            "send_by_app": true,
+            "created_by": 3,
+            "recipient_type": "professional_recipient",
+            "message": "test"
+        }
+    },
+    {
+        "pk": 1,
+        "model": "alerts.alerttemplate",
+        "fields": {
+            "send_by_text": true,
+            "send_by_message": true,
+            "group": 1,
+            "name": "alert temp",
+            "send_by_email": true,
+            "send_by_app": true,
+            "recipient_type": "professional_recipient",
+            "message": "test",
+            "type": "reading_received"
+        }
+    },
+    {
+        "pk": 1,
+        "model": "alerts.reminder",
+        "fields": {
+            "contact_methods": "email,text",
+            "professional": 3,
+            "message": "This is a test message.",
+            "patient": 4
+        }
+    }
+]

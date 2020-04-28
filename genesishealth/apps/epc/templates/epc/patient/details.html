@@ -1,0 +1,104 @@
+{% extends "utils/generic_form.html" %}
+
+{% block pageTitle %}{{ title }}{% endblock %}
+
+{% block extrahead %}
+{{ block.super }}
+<script type="text/javascript">
+</script>
+<style>
+.detail-table { width: 100%; }
+
+.detail-table th, .detail-table td {
+    border: 1px black solid;
+    text-align: center;
+}
+</style>
+{% endblock %}
+
+{% block main_content %}
+<div class="container_12">
+    <table class="detail-table">
+        <tbody>
+            <tr>
+                <td>Order No</td>
+                <td>Order Date</td>
+                <td>Meters</td>
+                <td>Strips</td>
+                <td>Lancets</td>
+                <td>Control Solution</td>
+                <td>Lancing Device</td>
+                <td>Pamphlet Id</td>
+            </tr>
+            <tr>
+                <td>{{ order.order_number }}</td>
+                <td>{{ order.order_date }}</td>
+                <td>{{ order.meter_request }}</td>
+                <td>{{ order.strips_request }}</td>
+                <td>{{ order.lancet_request }}</td>
+                <td>{{ order.control_solution_request }}</td>
+                <td>{{ order.lancing_device_request }}</td>
+                <td>{{ order.pamphlet_id_request }}</td>
+            </tr>
+            <tr>
+                <td>MEID</td>
+                <td>Tracking Number</td>
+                <td>Meters<br> Shipped</td>
+                <td>Strips<br> Shipped</td>
+                <td>Lancets<br> Shipped</td>
+                <td>Control Solution<br> Shipped</td>
+                <td>Lancing Device<br> Shipped</td>
+                <td>Pamphlet Id<br> Shipped</td>
+            </tr>
+            <tr>
+                <td>{{ order.meid }}</td>
+                <td>{{ order.tracking_number }}</td>
+                <td>{{ order.meter_shipped }}</td>
+                <td>{{ order.strips_shipped }}</td>
+                <td>{{ order.lancets_shipped }}</td>
+                <td>{{ order.control_solution_shipped }}</td>
+                <td>{{ order.lancing_device_shipped }}</td>
+                <td>{{ order.pamphlet_id_shipped }}</td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+<br>
+<hr>
+<br>
+{% if order.notes.count %}
+<h2>Notes</h2>
+{% endif %}
+{% for note in order.notes.all %}
+<div class="note-container">
+    <div class="container_12">
+        <div class="grid_6">
+            <p><strong>Update On:</strong> {{ note.added_datetime|date:"N j, Y g:i A" }}</p>
+        </div>
+        <div class="grid_6">
+            <p><strong>Update By:</strong> {% if note.added_by %}{{ note.added_by.get_reversed_name }}{% else %}API{% endif %}</p>
+        </div>
+    </div>
+    <div class="clear:both"></div>
+    {% if note.order_change and note.order_change.transaction and note.order_change.transaction.log_entry %}
+    {% with transaction=note.order_change.transaction %}
+    <div class="container_12">  
+        <div class="grid_12">   
+            <p><strong>Response Sent:</strong> {{ transaction.log_entry.response_sent }}</p>    
+        </div>  
+    </div>
+    {% endwith %}
+    {% endif %}
+    <div class="container_12">
+        <div class="grid_12">
+            <p><strong>Message:</strong> {{ note.message|linebreaks }}</p>
+            <hr>
+        </div>
+    </div>
+</div>
+{% endfor %}
+<br>
+<br>
+<h2>Add Comment</h2>
+{{ block.super }}
+{% endblock %}

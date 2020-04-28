@@ -1,0 +1,30 @@
+<div class="container_12">
+    <div class="grid_6">
+        <b>MEID:</b> {{ device.meid }}
+        <br>
+        <b>Lot No.:</b> {{ device.manufacturer_carton.lot_number }}
+        <br>
+        <b>Manufactured Date:</b> {{ device.manufacturer_carton.date_shipped|date:"m/d/y" }}
+        <br>
+        <b>Firmware Version:</b> {{ device.manufacturer_carton.firmware_version.name }}
+    </div>
+    <div class="grid_6">
+        <b>Serial No:</b> {{ device.device_id }}
+        <br>
+        <b>Phone: </b> {{ device.phone_number }}
+        <br>
+        <b>Activated On: </b>{{ device.datetime_network_status_activated|date:"m/d/y" }}
+        <br>
+        <b>IP Address: </b>{{ device.ip_address }}
+        <br>
+        <b>Last Change: </b>{{ device.datetime_network_status_changed|date:"m/d/y" }}
+    </div>
+</div>
+<div class="clear"></div>
+<br>
+<div class="container_12">
+    <div class="grid_6">
+        <b>Network Status:</b> {{ device.get_network_status_display }} {% if device.datetime_network_status_changed %}({{ device.datetime_network_status_changed|date:"m/d/y" }}){% endif %}
+    </div>
+</div>
+<div class="clear"></div>

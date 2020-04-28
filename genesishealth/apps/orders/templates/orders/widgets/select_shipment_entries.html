@@ -1,0 +1,25 @@
+<div id="entry-form">
+    {{ entry_form.as_p }}
+</div>
+<input type="button" id="add-entry" value="Add Entry">
+<hr>
+<h3>Items in Shipment</h3>
+<div id="item-cart">
+    <div class="container_12 order-item-row hidden">
+        <div class="grid_3" data-ship-field="name"></div>
+        <div class="grid_4" data-ship-field="inventory_identifier"></div>
+        <div class="grid_4" data-ship-field="quantity"></div>
+        <div class="grid_1" data-ship-field="delete-button">
+            <a href="3" class="delete-link">X</a>
+        </div>
+    </div>
+    <div class="container_12">
+        <div class="grid_3"><strong>Name</strong></div>
+        <div class="grid_4"><strong>Serial #</strong></div>
+        <div class="grid_4"><strong>Quantity</strong></div>
+    </div>
+    <div class="cart-content"></div>
+</div>
+<input type="hidden" name="{{ widget.name }}" id="id_{{ widget.name }}">
+<br>
+<hr>

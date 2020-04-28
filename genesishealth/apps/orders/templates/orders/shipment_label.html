@@ -1,0 +1,19 @@
+{% extends "utils/generic_table_templates/base.html" %}
+
+{% block extrahead %}
+{{ block.super }}
+<script type="text/javascript">
+$(document).on("ghtupdate", function(e, $div) {
+    console.log($div);
+    setTimeout(
+        function() { $div.find('#label-link').click(); },
+        1000);
+});
+</script>
+{% endblock %}
+
+{% block main_content %}
+<div style="display:none">
+    <a href="{{ shipment.shipping_label_url }}" target="_blank" id="label-link">&nbsp;</a>
+</div>
+{% endblock %}

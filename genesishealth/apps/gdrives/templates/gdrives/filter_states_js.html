@@ -1,0 +1,21 @@
+<script>
+    $(document).ready(function(){
+        $("#filter-assigned").change(function(){
+            $(".multiTableWrap").hide();
+            $("#assigned-table").show();
+        });
+        $("#filter-unassigned").change(function(){
+            $(".multiTableWrap").hide();
+            $("#unassigned-table").show();
+        });
+        $("#filter-demo").change(function(){
+            $(".multiTableWrap").hide();
+            $("#demo-table").show();
+        });
+        $("#filter-partner").change(function(){
+            $(".multiTableWrap").hide();
+            $("#partner-table").show();
+        });
+        $("#filter-assigned").attr("checked", true).trigger('change');
+    });
+</script>

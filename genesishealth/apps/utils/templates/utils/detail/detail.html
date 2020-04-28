@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+{% load genesis_tools %}
+
+{% block pageTitle %}{{ page_title }}{% endblock %}
+
+{% block main_content %}
+<div class="grid_12">
+{% for item in buttons %}
+<a href="{{ item.link }}" class="btnRight sbm sbm_red{% if item.button_class %} {{ item.button_class }}{% endif %}"{% if item.button_id %} id="{{ item.button_id }}"{% endif %}><i class="icon-plus"></i>{{ item.name }}</a>
+{% endfor %}
+</div>
+{% for pane in panes %}
+{% if not forloop.counter|divisibleby:2 %}<div class="grid_12">{% endif %}
+<section class="portlet grid_6 leading">
+    <header><h2>{{ pane.title }}</h2></header> 
+    <section style="min-height: 110px">{{ pane.content|safe }}</section>
+</section>
+{% if forloop.counter|divisibleby:2 %}</div>{% endif %}
+{% endfor %}
+{% endblock %}

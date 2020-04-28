@@ -1,0 +1,34 @@
+<div class="container_12 clearfix leading">
+    <div class="grid_12">
+        <div class="message warning">
+        <h3>Warning:</h3>
+        <p>{% if user.email %}Your email is currently set to {{ user.email }}.{% if user.email == user.username %}  Since your username is currently set to your login, updating your email will also cause your username to be updated.{% endif %}{% else %}You do not currently have an email associated with your account.{% endif %}</p>
+    </div>
+  </div>
+  
+  <div class="grid_12">
+    
+    <form action="" method="post" class="form" novalidate="novalidate" id="updateEmailForm">
+      {% csrf_token %}
+        
+      {{ form.as_p }}
+
+      <p><input type="submit" value="Submit"></p>
+    </form>
+
+    </div>
+  </div>
+  
+<script type="text/javascript">
+    updateCallbackQueue.push(function(div) {
+        $('#id_email').bind('focus | blur', function(){$('#email_warning').toggle();});
+        {% if user.email == user.username %}
+        $('#updateEmailForm').submit(function(e) {
+            var result = confirm('Since your username is currently set to your login, updating your email will also cause your username to be updated.');
+            if (!result) {
+              return false;
+            }
+        });
+        {% endif %}
+    })
+</script>

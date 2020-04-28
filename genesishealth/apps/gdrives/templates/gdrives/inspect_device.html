@@ -1,0 +1,45 @@
+{% extends "utils/generic_form.html" %}
+
+{% block extrahead %}
+{{ block.super }}
+<script type="text/javascript">
+function hideAvailableFields() {
+    $('#id_acknowledgement').parents('p').hide();
+}
+
+function hideRepairableFields() {
+    $('#id_non_conformity_types').parents('p').hide();
+    $('#id_non_conformity_types').parents('p').next('p').hide();
+    $('#id_non_conformity_description').parents('p').hide();
+    $('#id_tray_number').parents('p').hide();
+}
+
+function showAvailableFields() {
+    $('#id_acknowledgement').parents('p').show();
+}
+
+function showRepairableFields() {
+    $('#id_non_conformity_types').parents('p').show();
+    $('#id_non_conformity_types').parents('p').next('p').show();
+    $('#id_non_conformity_description').parents('p').show();
+    $('#id_tray_number').parents('p').show();
+}
+
+function updateFields() {
+    if ($('#id_disposition').val() === '') {
+        showAvailableFields();
+        hideRepairableFields();
+    } else {
+        hideAvailableFields();
+        showRepairableFields();
+    }
+}
+
+updateCallbackQueue.push(function(div) {
+    div.find('#id_disposition').change(function(e) {
+        updateFields();
+    });
+    updateFields();
+});
+</script>
+{% endblock %}

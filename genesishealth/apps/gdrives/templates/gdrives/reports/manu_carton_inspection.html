@@ -1,0 +1,31 @@
+<html>
+    <body style="width:95%; font-size: 13px">
+        <div>
+            <img src="/static/images/ght_logo.png">
+        </div>
+        <h4>Genesis Blood Glucose Meter Inspection</h4>
+        <table style="width:95%">
+            {% for device in devices %}
+                {% cycle '<tr>' '' '' '' %}
+                <td>{{ device.meid }}:</td><td style="padding: 0 5px 0 0">{% if device.was_ever_repairable %}<strong><em>FAIL</em></strong>{% else %}Pass{% endif %}</td>
+                {% cycle '' '' '' '<tr>' %}
+            {% endfor %}
+        </table>
+        <p>I attest that all glucose meters listed above were tested by me according to Genesis Meter Acceptance Testing Procedures. All non-conforming meter have been identified and specific non-conformities have been recorded.</p>
+        <table style="width:95%">
+            <tr>
+                <td>Inspected By: {{ carton.approved_by.first_name }} {{ carton.approved_by.last_name }}</td>
+                <td>Signature: ____________________________</td>
+                <td>Inspected: {{ carton.approved_datetime|date:"m/d/Y" }}</td>
+            </tr>
+        </table>
+        <br>
+        <table style="width:95%">
+            <tr>
+                <td>Lot Number: <strong>{{ carton.lot_number }}</strong></td>
+                <td>Carton Number: <strong>{{ carton.number }}</strong></td>
+                <td>Print Date: <strong>{% now "m/d/Y h:i:s" %}</strong></td>
+            </tr>
+        </table>
+    </body>
+</html>

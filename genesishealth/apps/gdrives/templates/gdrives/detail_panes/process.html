@@ -1,0 +1,21 @@
+<div class="container_12">
+    <div class="grid_12">
+        {% with non_conform_record=device.get_non_conform_record %}
+        {% if non_conform_record %}
+        <b>Non-conformity:</b> {{ non_conform_record.datetime_added }}: {{ non_conform_record.get_problem_str }}<br>
+        {% endif %}
+        {% endwith %}
+        {% with rework_record=device.get_rework_record %}
+        {% if rework_record %}
+        <b>Reworked:</b> {{ rework_record.datetime_reworked|date:"m/d/y" }}: {{ rework_record.details }}<br>
+        {% endif %}
+        {% endwith %}
+        {% with inspect_record=device.get_inspect_record %}
+        {% if inspect_record %}
+        <b>Inspected:</b> {{ inspect_record.datetime_inspected|date:"m/d/y" }} (by {{ inspect_record.inspected_by.get_initials }})<br>
+        {% endif %}
+        {% endwith %}
+        <b>Status:</b> {{ device.get_status_display }}
+    </div>
+</div>
+<div class="clear"></div>

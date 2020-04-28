@@ -1,0 +1,366 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+<head>
+<meta charset="UTF-8">
+
+<title>Report for {{ patient.get_reversed_name }}</title>
+
+<style type="text/css">
+	@media all {
+		* {font-family:sans-serif;}
+		h1 {font-size: 18px; text-align: center;}
+		h2 {font-size: 16px; text-align: center;}
+		li {font-size:10px;text-align:left;}
+		table {font-size: 12px; page-break-inside: avoid;}
+		table thead {display: table-header-group; }
+		table tbody {display: table-row-group; }
+		table tfoot {display: table-footer-group; }
+		div.footnotesprint {width: 900px;margin:0px auto;}
+		.footnotes {font-size: 14px;text-align: left !important; border-bottom: 1px solid #ccc;}
+		.otherreportsh2 {
+			font-size: 14px;
+			text-align: center;
+			border-bottom: 1px solid #CCC;
+			background-color: #ccc;
+			display: block;
+			margin: 0px;
+			padding: 5px;
+		}
+		.printcaption {text-align: left;font-weight: bold;}
+		div.printlogo {width: 900px;margin:0px auto;}
+		table.summaryheader {
+			margin:0px auto;
+			clear:both;
+			width: 753px;
+			padding:0px;
+			margin-top:15px;
+			margin-bottom:5px;
+			border: 1px solid #ccc;
+		}
+		table.printalertstable {
+			margin:0px auto;
+			clear:both;
+			width: 900px;
+			padding: 0px;
+			margin-top:0px;
+			margin-bottom:20px;
+			border:1px dashed #999;
+		}
+		table.printalertstable img {
+			vertical-align:bottom;
+			padding-right: 2px;
+		}
+		table.summaryfooter {
+			margin:0px auto;
+			clear:both;
+			width: 900px;
+			padding:0px;
+			margin-top: 10px;
+			margin-bottom:10px;
+			border: 1px solid #ccc;
+			border-collapse: collapse;
+			/*page-break-inside: auto;*/
+		}
+		table.summaryfooter tr {
+			border-bottom: 1px dotted #ccc;
+			/*page-break-inside: avoid;
+			page-break-after: auto;*/
+		}
+		table.summaryfooter tr td {
+			padding: 1px;
+			text-align: left;
+			width: 20px;
+		}
+		.tdcenter {text-align: center;}
+		table.printdisplay {
+			margin: 0px auto;
+			clear:both;
+			border: 1px solid #CCC;
+			border-collapse: collapse;
+			width: 900px;
+		}
+		table.legendprintdisplay {
+			margin: 0px auto;
+			clear:both;
+			border: 1px solid #ccc;
+			border-collapse: collapse;
+			width: 900px;
+		}
+		table.headerwrappertable {
+			margin: 0px auto;
+			clear:both;
+			width: 900px;
+		}
+		table.targetrangeprinttable {
+			border-collapse: collapse;
+			border-spacing: 0px;
+			width: 100%;
+		}
+		table.targetrangeprinttable tr {border-bottom: 1px solid #999;}
+		table.targetrangeprinttable tr td {padding: 2px;}
+		table.printdisplay th {
+			border-right: 1px solid #ccc;
+			border-bottom: 1px solid #ccc;
+			padding: 3px 18px 3px 10px;
+		}
+		
+		th.small {
+			font-size:9px;
+			font-weight:normal;
+		}
+		table.printdisplay tr td {
+			border-right:1px solid #ccc;
+			padding: 2px;
+			position: relative;
+			width: 100px;
+		}
+		table.printdisplay tr td.summaryrowstext {font-weight: bold;}
+		table.printdisplay tr.odd {background-color: #f1f1f1;border-bottom: 1px solid #ccc;}
+		table.printdisplay tr.even {background-color: #fff;border-bottom: 1px solid #ccc;}
+		.first {border-top:3px solid #ccc;}
+		table.printdisplay tr.weekendrows {border-top: 2px dotted #999 !important;border-bottom: 2px dotted #999 !important;}
+		table.printdisplay tr td.datecolumn {width: 50px;}
+		div.tablelegend {
+			text-align: left;
+			width: 900px;
+			margin: auto;
+			margin-top: 10px;
+		}
+		div.otherreportsprint {
+			width: 900px;
+			margin: 0px auto;
+			margin-bottom: 30px;
+			clear: both;
+			/*page-break-before: always;*/
+		}
+		div.testhistoryprint {min-height: 240px;border: 1px solid #999;width: 49%;float: left;}
+		div.targetrangeprint {min-height: 240px;border: 1px solid #999;width: 49%;float: right;}
+		.floatright {position: absolute;right: 8px;margin-top: 2px;}
+		div.entry-wrapper {border-radius: 4px;float: left;}
+		div.entry-wrapper img {padding-right:2px;vertical-align:bottom;}
+		td.norightborder {border-right:0px !important;}
+		div.taChart { 
+			width:49%;
+			float: left;
+		}
+
+        span.r-apple, span.food-ico, span.ex-ico, span.meds-ico, span.bp-ico, span.weight-ico, span.after-ico, span.normal-read  {
+            background-repeat: no-repeat;
+            background-position: left;
+            padding-left: 20px;
+            font-size: 12px;
+            font-weight: bold;
+            text-align: left;
+            float: left;
+            clear: left;
+            display:block;
+        }
+
+
+        span.r-apple {background-image: url('/static/images/r-apple.png');}
+        span.food-ico {background-image: url('/static/images/food-ico.png');}
+        span.ex-ico {background-image: url('/static/images/ex-ico.png');}
+        span.meds-ico {background-image: url('/static/images/meds-ico.png');}
+        span.bp-ico {background-image: url('/static/images/bp-ico.png');}
+        span.weight-ico {background-image: url('/static/images/weight-ico.png');}
+        span.after-ico {background-image: url('/static/images/after-ico.png');}
+        span.normal-read {background-image: url('/static/images/onlinereports/g-ico.png');}
+
+        span.o-exclam {background-image: url('/static/images/o-exclam.png');}
+        span.o-up-ico {background-image: url('/static/images/o-up-ico.png');}
+        span.o-down-ico {background-image: url('/static/images/o-down-ico.png');}
+        span.target-ico {background-image: url('/static/images/target-ico.png');}
+
+        span.o-exclam, span.o-up-ico, span.o-down-ico, span.target-ico {
+            display:block;
+            text-align:right;
+            background-repeat:no-repeat;
+            background-position:right;
+        }
+        div.entry-wrapper {
+            border: 1px solid #ccc;
+            background: #fff;
+            padding-left: 2px;
+            padding-right: 2px;
+            border-radius: 3px;
+            margin-bottom: 1px;
+            transition: all 0.25s ease-in-out;
+            -webkit-transition: all 0.25s ease-in-out;
+            -moz-transition: all 0.25s ease-in-out;
+            cursor:pointer;
+        }
+        * {-webkit-print-color-adjust:exact;}
+	}
+	
+</style>
+<script>window.jQuery || document.write("<script src='https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js'>\x3C/script>")</script>
+
+{% block extra_head %}{% endblock %}
+
+<script type="text/javascript">
+$(window).load(function() {
+    setTimeout(function() { window.print() }, 1500);
+});
+</script>
+</head>
+
+<body>
+
+<table class="headerwrappertable">
+    <tbody>
+        <tr>
+            <td>
+                <table class="summaryheader" id="summaryheaderprint">
+                    <tbody>
+                        <tr>
+                            <td>Patient: {{ patient.get_full_name }}</td>
+                            <td>Report Date: {{ current_date|date:"m/d/Y" }}</td>
+                            <td>Before Meal Target: {{ patient.healthinformation.premeal_glucose_goal_minimum }} - {{ patient.healthinformation.premeal_glucose_goal_maximum }}</td>
+                        </tr>
+                        <tr>
+                            <td>Age/Gender: {{ patient.patient_profile.get_age }}/{{ patient.patient_profile.readable_gender }}</td>
+                            <td>Printed By: {{ user.get_full_name }}</td>
+                            <td>After Meal Target: {{ patient.healthinformation.postmeal_glucose_goal_minimum }} - {{ patient.healthinformation.postmeal_glucose_goal_maximum }}</td>
+                        </tr>
+                        <tr>
+                            <td>Date Range: {{ start_date|date:"m/d/Y" }} - {{ end_date|date:"m/d/Y" }}</td>
+                            <td>Compliance Target (# of Tests/Day): {{ patient.healthinformation.compliance_goal }}</td>
+                            <td>Hypo/Hyper Range: {{ patient.healthinformation.safe_zone_minimum }} / {{ patient.healthinformation.safe_zone_maximum }}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </td>
+            <td>
+                <img src="/static/img/GHT_Logo1.png" style="height: 60px; margin-top: 8px" />
+            </td>
+        </tr>
+    </tbody>
+</table>
+
+<table class="printalertstable">
+    <tbody>
+        <tr>
+            <td><img src="/static/images/printablereports/911-ico.png" />Out of compliance target (1.8 tests/day)</td>
+            <td><img src="/static/images/printablereports/911-ico.png" />High Standard Deviation</td>
+            <td><img src="/static/images/printablereports/911-ico.png" />Out of compliance target (1.8 tests/day)</td>
+        </tr>
+        <tr>
+            <td><img src="/static/images/printablereports/911-ico.png" />20% of readings were hyperglycemic</td>
+            <td><img src="/static/images/printablereports/911-ico.png" />15% of readings were hypoglycemic</td>
+            <td><img src="/static/images/printablereports/911-ico.png" />20% of readings were hyperglycemic</td>
+        </tr>
+    </tbody>
+</table>
+
+<!-- 4 Column Logbook -->
+<table class="printdisplay" id="logbook4">
+    <thead> 
+        <tr> 
+            <th rowspan="2" style="width: 110px">Date</th>
+            {% for period in periods %}
+            <th colspan="1">{{ period.name }}</th> 
+            {% endfor %}
+        </tr>
+        <tr>
+            {% for period in periods %}
+            <th colspan="1" class="small">{{ period.start_time|time:"g A" }} - {{ period.end_time|time:"g A" }}</th>
+            {% endfor %}
+        </tr>
+    </thead> 
+    <tbody>
+        {% for day in days %}
+        <tr class="{% if day.weekend %}weekendrows{% else %}{% cycle 'odd' 'even' %}{% endif %}">
+            <td class="datecolumn">{{ day.day|date }} {% if day.weekend %}<img src="/static/images/printablereports/w-ico.png" style="vertical-align:bottom" />{% endif %}</td> 
+            {% for period in day.periods %}
+                {{ period.render_as_html|safe }}
+            {% endfor %}
+        </tr>
+        {% endfor %}
+        
+        <!-- Begin bottom summary rows -->
+        <tr class="summaryrows first even"> 
+            <td class="summaryrowstext datecolumn">Glucose Average</td> 
+            {% for stat in calculated_stats.glucose_average %}
+            <td colspan="1" class="tdcenter">{% if stat %}{{ stat|floatformat }}{% else %}N/A{% endif %}</td>
+            {% endfor %}            
+        </tr>
+        <tr class="summaryrows odd"> 
+            <td class="summaryrowstext datecolumn">In Target</td> 
+            {% for stat in calculated_stats.percent_in_target %}
+            <td colspan="1" class="tdcenter">{{ stat|floatformat }}%</td>
+            {% endfor %}
+        </tr>
+        <tr class="summaryrows even"> 
+            <td class="summaryrowstext datecolumn">SD</td> 
+            {% for stat in calculated_stats.standard_deviation %}
+            <td colspan="1" class="tdcenter">{% if stat %}{{ stat|floatformat }}{% else %}N/A{% endif %}</td>
+            {% endfor %}
+        </tr>
+        <tr class="summaryrows last odd"> 
+            <td class="summaryrowstext datecolumn"># of Gluc Readings</td> 
+            {% for stat in calculated_stats.number_of_readings %}
+            <td colspan="1" class="tdcenter">{{ stat }}</td>
+            {% endfor %}
+        </tr>
+    </tbody>
+</table> 
+
+<table class="legendprintdisplay" style="margin-top: 10px"><caption style="text-align: left; font-weight: bold"><span style="margin-right: 305px">Glucose Readings:</span><span>Other Recorded Values:</span></caption>
+    <tbody>
+        <tr>
+            <td><img src="/static/images/printablereports/before-ico.png" /></td>
+            <td>Before Meal</td>
+            <td><img src="/static/images/printablereports/ontarget-ico.png" /></td>
+            <td>In Target</td>
+            <td></td>
+            <td></td>
+            <!--<td><img src="/static/images/printablereports/meal-ico.png" /></td>
+            <td>Meal</td> -->
+            <!--<td><img src="/static/images/printablereports/meds-ico.png" /></td>
+            <td>Meds, units in mL</td> -->
+        </tr>
+        <tr>
+            <td><img src="/static/images/printablereports/after-ico.png" /></td>
+            <td>After Meal</td>
+            <td><img src="/static/images/printablereports/o-down-ico.png" /></td>
+            <td>Below Target</td>
+            <!--<td><img src="/static/images/printablereports/bp-ico.png" /></td>
+            <td>BP, units in mmHg</td> -->
+            <td><img src="/static/images/printablereports/w-ico.png" /></td>
+            <td>Weekend</td>
+        </tr>
+        <tr>
+            <td><img src="/static/images/printablereports/g-ico.png" /></td>
+            <td>General</td>
+            <td><img src="/static/images/printablereports/o-up-ico.png" /></td>
+            <td>Above Target</td>
+            <!--<td><img src="/static/images/printablereports/weight-ico.png" /></td>
+            <td>Weight, units in lbs.</td> -->
+            <td></td>
+            <td></td>
+        </tr>
+        <tr>
+            <td></td>
+            <td>Units in mg/dL</td>
+            <td><img src="/static/images/printablereports/911-ico.png" /></td>
+            <td>Hypo/Hyper Glycemic</td>
+            <!--<td><img src="/static/images/printablereports/exercise-ico.png" /></td>
+            <td>Exercise (Units = Minutes)</td> -->
+            <td></td>
+            <td><strong>LEGEND</strong></td>
+        </tr>
+    </tbody>
+</table>
+
+{% block extra %}{% endblock %}
+
+
+<div class="footnotesprint">
+<h2 class="footnotes">Footnotes</h2>
+    <ol>
+        {% block footnotes %}{% endblock %}
+    </ol>
+</div>  
+
+</body>
+</html>

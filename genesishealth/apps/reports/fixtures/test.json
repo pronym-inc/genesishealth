@@ -1,0 +1,13 @@
+[
+    {
+        "pk": 1,
+        "model": "reports.reportschedule",
+        "fields": {
+            "report_types": "compliance,range",
+            "professional": 3,
+            "delivery_time": "03:00",
+            "interval": "daily",
+            "date_created": "2013-01-11T04:53:34+05:00"
+        }
+    }
+]

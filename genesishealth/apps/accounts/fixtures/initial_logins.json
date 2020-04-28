@@ -1,0 +1,19 @@
+[
+    {
+        "pk": 1,
+        "model": "auth.user",
+        "fields": {
+            "username": "ghr_admin",
+            "first_name": "Admin",
+            "last_name": "User",
+            "is_active": true,
+            "is_superuser": true,
+            "is_staff": true,
+            "last_login": "2013-01-11T08:02:57+05:00",
+            "user_permissions": [],
+            "password": "sha1$8b312$ef1d68b422371b285faab0e05aff686a72c30cd9",
+            "email": "keithleydevelopment+admin@gmail.com",
+            "date_joined": "2013-01-11T08:02:57+05:00"
+        }
+    }
+]

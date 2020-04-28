@@ -1,0 +1,32 @@
+{% extends "utils/generic_table_templates/base.html" %}
+
+{% block main_content %}
+    {% if form_message %}
+    <p>{{ form_message }}</p>
+    {% endif %}
+
+    <form action="" method="post" class="form">
+        {% csrf_token %}
+        <h2>Previous Entries</h2>
+        {% for note in previous_notes %}
+        <div class="container_12">
+            <div class="grid_6">
+                <p><b>Updated by: </b>{{ note.reworked_by.get_reversed_name }}</p>
+                <p><b>New Disposition: </b>{% if note.new_disposition %}{{ note.new_disposition.name }}{% else %}Available{% endif %}</p>
+            </div>
+            <div class="grid_6">
+                <p><b>Updated on: </b>{{ note.datetime_reworked|date:"N j, Y g:i A" }}</p>
+            </div>
+            <div class="grid_12">
+                <p>Message: {{ note.details }}</p>
+            </div>
+        </div>
+        {% if not forloop.last %}<br><hr><br><hr>{% endif %}
+        {% endfor %}
+        {% if batch_id_str %}<input type="hidden" name="batch_ids" value="{{ batch_id_str }}" />{% endif %}
+        {{ form.as_p }}
+
+        <p><input type="submit" value="Submit">{% if delete_link %}<input type="submit" class="deleteButton" target="{{ delete_link }}" value="Delete" style="margin-left: 20px !important" />{% endif %}</p>
+    </form>
+    {{ block.super }}
+{% endblock %}

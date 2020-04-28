@@ -1,0 +1,9 @@
+Hello {{ reminder.professional.get_full_name }},
+
+A reminder you configured for {{ reminder.patient.get_full_name }} has triggered:
+
+{{ reminder.message }}
+
+Thanks,
+
+MyGHR Administration

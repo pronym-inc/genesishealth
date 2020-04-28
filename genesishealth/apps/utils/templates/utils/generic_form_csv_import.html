@@ -1,0 +1,6 @@
+{% extends "utils/generic_form.html" %}
+
+{% block main_content %}
+    {% if show_template_link %}<a href="{{ request.path }}?getTemplate=1">Download Import Template</a>{% endif %}
+    {{ block.super }}
+{% endblock %}

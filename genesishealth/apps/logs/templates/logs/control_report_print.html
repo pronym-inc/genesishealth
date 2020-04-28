@@ -1,0 +1,32 @@
+{% extends "logs/base_audit_print.html" %}
+
+{% block pageTitle %}Control Solution Report{% endblock %}
+
+{% block extrahead %}
+{{ block.super }}
+<style>
+table.solution-report td {
+    padding: 10px;
+    border: 1px solid;
+}
+</style>
+{% endblock %}
+
+{% block audit_content %}
+    <table class="solution-report">
+        <thead>
+            <tr>
+                <td>MEID</td>
+                <td>Count</td>
+            </tr>
+        </thead>
+        <tbody>
+            {% for entry in data %}
+            <tr>
+                <td>{{ entry.device__meid }}</td>
+                <td>{{ entry.count }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}

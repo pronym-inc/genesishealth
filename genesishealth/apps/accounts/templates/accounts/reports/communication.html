@@ -1,0 +1,115 @@
+<html>
+    <head>
+        <style>
+            .headerP {
+                margin: 0;
+            }
+        </style>
+    </head>
+    <body style="width:100%">
+        <table style="width:100%">
+            <tr>
+                <td style="width:75%">
+                    <table style="width:100%">
+                        <tr>
+                            <td colspan="2">
+                                <h2>Customer Complaint Record</h2>
+                            </td>
+                            <td>&nbsp;</td>
+                            <td>
+                                <h3>Reference No.: &nbsp;{{ communication.id }}</h3>
+                            </td>
+                        </tr>
+                        <tr>
+                            {% with patient=communication.patient contact=communication.patient.patient_profile.contact %}
+                            <td colspan="100%">
+                                <table style="width:100%; border: 1px solid black">
+                                    <tr>
+                                        <td>Patient Name:</td>
+                                        <td>{{ contact.get_full_name }}</td>
+                                        <td colspan="3">&nbsp;</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Address:</td>
+                                        <td>{{ contact.address1 }}</td>
+                                        <td>&nbsp;</td>
+                                        <td>Phone:</td>
+                                        <td>{{ contact.phone }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>&nbsp;</td>
+                                        <td>{{ contact.address2 }}</td>
+                                        <td>&nbsp;</td>
+                                        <td>Email:</td>
+                                        <td>{{ patient.email }}</td>
+                                    </tr>
+                                </table>
+                            </td>
+                            {% endwith %}
+                        </tr>
+                        <tr>
+                            <td colspan="100%">
+                                <table style="width:100%; border: 1px solid black">
+                                    <tr>
+                                        <td>Start Date:</td>
+                                        <td>{{ communication.datetime_added|date:"m/d/Y" }}</td>
+                                        <td>&nbsp;</td>
+                                        <td>Printed By:</td>
+                                        <td>{{ requester.get_full_name }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Last Entry:</td>
+                                        <td>{{ communication.last_entry_datetime|date:"m/d/Y" }}</td>
+                                        <td>&nbsp;</td>
+                                        <td>Print Date:</td>
+                                        <td>{% now "m/d/Y" %}</td>
+                                    </tr>
+                                </table>
+                            </td>
+                        </tr>
+                    </table>
+                </td>
+                <td style="background-image:url('/static/images/ght_logo.png'); background-repeat: no-repeat; background-size: contain">
+                    &nbsp;
+                </td>
+            </tr>
+        </table>
+        <div style="background-color: grey; width: 100%; text-align: center">
+            The current status for this communication thread is: {{ communication.status.name }}
+        </div>
+        <br>
+        <p class="headerP">Category: {{ communication.category.name }}</p>
+        <p class="headerP">Subcategory: {{ communication.subcategory.name }}</p>
+        <p class="headerP">Description: {{ communication.description }}</p>
+        <br>
+        <hr><hr>
+        {% for note in notes %}
+        <div>
+            <table style="width: 100%; font-size: 13px; color: grey">
+                <tr>
+                    <td><strong><span style="font-size: 16px; color: black">{% if forloop.counter0 > 0 %}Re: {% endif %}{{ communication.subject }}</span></strong></td>
+                    <td>&nbsp;</td>
+                    <td style="color: black; font-size: 14px">Status: {{ note.change_status_to.name }}</td>
+                </tr>
+                <tr>
+                    <td>
+                        Posted: {{ note.datetime_added|date:"m/d/Y | h:i A" }}
+                    </td>
+                    <td>
+                        Name: {{ note.added_by.get_full_name }}
+                    </td>
+                    <td>Quality Category: {{ note.get_quality_improvement_category_display }}</td>
+                </tr>
+            </table>
+            <p>{{ note.content }}</p>
+            {% for replacement in note.replacements.all %}
+            <p><span style="color: grey; margin-left: 10px">Replace Item:</span> {{ replacement.name }}</p>
+            {% endfor %}
+            {% if note.is_rma %}
+            <p><span style="color: grey; margin-left:10px">Requested Warranty Authorization (RA):</span> Yes</p>
+            {% endif %}
+        </div>
+        <hr>
+        {% endfor %}
+    </body>
+</html>
