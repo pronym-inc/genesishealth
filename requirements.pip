@@ -1,4 +1,5 @@
 celery==4.4.0
+celery[sqs]
 Django==3.0.5
 django-celery-beat==2.0.0
 django-compressor==2.4

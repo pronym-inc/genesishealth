@@ -142,7 +142,12 @@ USE_L10N = True
 
 USE_TZ = True
 
-CELERY_BROKER_URL = 'redis://localhost:6379/0'
+if secrets.get('use_sqs'):
+    USE_SQS = True
+    CELERY_BROKER_URL = "sqs://{0}:{1}"
+else:
+    USE_SQS = False
+    CELERY_BROKER_URL = 'redis://localhost:6379/0'
 
 # Logging
 LOG_PATH = os.path.join(VIRTUALENV_DIR, 'var/log/django/genesishealth.log')
