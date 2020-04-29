@@ -142,11 +142,12 @@ USE_L10N = True
 
 USE_TZ = True
 
-if secrets.get('use_sqs'):
-    USE_SQS = True
+USE_SQS = secrets.get('use_sqs', False)
+
+if USE_SQS:
     CELERY_BROKER_URL = "sqs://{0}:{1}"
 else:
-    USE_SQS = False
+    # If not using SQS, expect a local redis queue.
     CELERY_BROKER_URL = 'redis://localhost:6379/0'
 
 # Logging
