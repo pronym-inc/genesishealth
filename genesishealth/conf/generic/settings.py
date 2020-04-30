@@ -513,8 +513,6 @@ STAMPS_FROM_ADDRESS = {
     'State': 'KY'
 }
 
-CELERY_ACCEPT_CONTENT = ['pickle', 'json', 'msgpack', 'yaml']
-
 PASSWORD_CHANGE_INTERVAL = 90
 
 SKIP_DETECT_TIMEZONE = False
