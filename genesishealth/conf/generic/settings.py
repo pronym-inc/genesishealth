@@ -5,6 +5,8 @@ from datetime import date
 
 from django.conf.global_settings import STATICFILES_FINDERS
 
+from kombu.utils.url import safequote
+
 secrets_path = '/etc/secrets.json'
 secrets = json.load(open(secrets_path))
 
@@ -145,7 +147,10 @@ USE_TZ = True
 USE_SQS = secrets.get('use_sqs', False)
 
 if USE_SQS:
-    CELERY_BROKER_URL = "sqs://{0}:{1}"
+    CELERY_BROKER_URL = "sqs://{0}:{1}@".format(
+        safequote(secrets['aws_access_key']),
+        safequote(secrets['aws_secret_key'])
+    )
 else:
     # If not using SQS, expect a local redis queue.
     CELERY_BROKER_URL = 'redis://localhost:6379/0'
