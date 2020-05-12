@@ -5,7 +5,7 @@ DEBUG = False
 DEBUG_STATIC_FILES = False
 DEBUG_TRANSMISSION_LOG = False
 
-SITE_URL = 'myghr.genesishealthtechnologies.com'
+SITE_URL = 'aws-myghr.genesishealthtechnologies.com'
 ALLOWED_HOSTS = [
     'aws-myghr.genesishealthtechnologies.com',
     'myghr.genesishealthtechnologies.com',

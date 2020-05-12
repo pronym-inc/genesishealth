@@ -251,10 +251,10 @@ class GlucoseReading(ModelWithNotes):
             encrypted_value = encrypt(value)
             # The data has to be spaced out into bytes (two characters)
             r = range(0, len(encrypted_value), 2)
-            bytes = [encrypted_value[i:i + 2] for i in r]
+            bytes = [encrypted_value[i:i + 2].decode('ascii') for i in r]
             encrypted_data[key] = ' '.join(bytes)
         # Render reading data
-        return render_to_string('readings/raw_reading', encrypted_data)
+        return render_to_string('readings/raw_reading', encrypted_data).encode('ascii')
 
     @classmethod
     def send_raw_reading(cls, reading, reading_server=None):
