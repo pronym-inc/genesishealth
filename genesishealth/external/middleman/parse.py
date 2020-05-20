@@ -3,7 +3,7 @@ import io, subprocess, sys
 
 def decrypt(data, key):
     po = subprocess.Popen(
-        ['decrypt', data, key],
+        ['/webapps/genesishealth/bin/decrypt', data, key],
         stdout=subprocess.PIPE
     )
     res = po.communicate()
