@@ -57,7 +57,7 @@ class Command(BaseCommand):
 
     def send_to_client(self, connection, message):
         self.log('sending to client: %s' % message)
-        connection.send(message)
+        connection.send(message.encode('ascii'))
 
     def loop(self):
         while True:
