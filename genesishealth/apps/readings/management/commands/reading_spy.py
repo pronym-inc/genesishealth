@@ -63,7 +63,7 @@ class Command(BaseCommand):
         while True:
             # Check for new connections.
             conn, addr = self.serv.accept()
-            content = conn.recv(settings.GDRIVE_READING_DATA_LENGTH)
+            content = conn.recv(settings.GDRIVE_READING_DATA_LENGTH).decode('ascii')
             if len(content) > 0:
                 self.log("**************BEGINNING OF READING**************")
                 self.log('received content: %s' % content)
