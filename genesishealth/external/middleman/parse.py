@@ -7,7 +7,7 @@ def decrypt(data, key):
         stdout=subprocess.PIPE
     )
     res = po.communicate()
-    return po.returncode, res[0]
+    return po.returncode, res[0].decode('ascii')
 
 
 def parse(inp):
