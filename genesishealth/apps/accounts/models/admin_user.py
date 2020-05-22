@@ -1,22 +1,28 @@
+from typing import TYPE_CHECKING
+
 from django.db import models
+
+if TYPE_CHECKING:
+    from django.contrib.auth.models import User
 
 
 class AdminProfile(models.Model):
-    user = models.OneToOneField(
+    user: 'User' = models.OneToOneField(
         'auth.User', related_name='admin_profile',
         limit_choices_to={
             'patient_profile__isnull': True,
             'professional_profile__isnull': True},
         on_delete=models.CASCADE)
-    is_super_user = models.BooleanField(default=False)
+    is_super_user: bool = models.BooleanField(default=False)
     permissions = models.ManyToManyField(
-        'AdminPermission', related_name='admin_users',
+        'AdminPermission',
+        related_name='admin_users',
         blank=True)
     permission_groups = models.ManyToManyField(
         'AdminPermissionGroup', related_name='members',
         blank=True)
 
-    def __unicode__(self):
+    def __str__(self) -> str:
         return "{0}'s admin profile".format(self.user)
 
     def get_all_permissions(self):
@@ -28,7 +34,7 @@ class AdminProfile(models.Model):
                 permission_ids.add(permission.id)
         return AdminPermission.objects.filter(id__in=permission_ids)
 
-    def handle_login(self):
+    def handle_login(self) -> None:
         from genesishealth.apps.accounts.models.profile_base import LoginRecord
         LoginRecord(user=self.user).save()
 
@@ -52,7 +58,7 @@ class AdminProfile(models.Model):
 class AdminPermission(models.Model):
     name = models.CharField(max_length=255, unique=True)
 
-    def __unicode__(self):
+    def __str__(self) -> str:
         return "Permission: {0}".format(self.name)
 
 
@@ -61,5 +67,5 @@ class AdminPermissionGroup(models.Model):
     permissions = models.ManyToManyField(
         'AdminPermission', related_name='groups')
 
-    def __unicode__(self):
+    def __str__(self) -> str:
         return "Group: {0}".format(self.name)

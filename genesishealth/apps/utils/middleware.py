@@ -29,7 +29,7 @@ class SessionHistory(object):
             history = []
         self.history = history
 
-    def __unicode__(self):
+    def __str__(self) -> str:
         return repr(self.history)
 
     def add_request(self, request):

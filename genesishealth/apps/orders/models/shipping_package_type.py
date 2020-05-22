@@ -39,5 +39,5 @@ class ShippingPackageType(models.Model):
     name = models.CharField(max_length=255, unique=True, choices=TYPE_CHOICES)
     enabled = models.BooleanField(default=True)
 
-    def __unicode__(self):
+    def __str__(self) -> str:
         return self.name

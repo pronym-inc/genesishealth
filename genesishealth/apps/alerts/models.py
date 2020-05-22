@@ -50,7 +50,7 @@ class BaseAlert(models.Model):
     last_triggered = models.DateTimeField(null=True)
     created_by = models.ForeignKey(User, related_name='created_%(class)ss', on_delete=models.CASCADE)
 
-    def __unicode__(self):
+    def __str__(self) -> str:
         return u"%s" % self.name
 
     def render_subject(self, to_patient, **details):
@@ -189,7 +189,7 @@ class ProfessionalAlert(BaseAlert):
     send_by_app = models.BooleanField(default=False)
     template = models.ForeignKey('AlertTemplate', null=True, on_delete=models.CASCADE)
 
-    def __unicode__(self):
+    def __str__(self) -> str:
         return u"%s" % self.name
 
     def render_message(self, to_patient, **details):
@@ -338,7 +338,7 @@ class AlertTemplate(models.Model):
     class Meta:
         unique_together = ('name', 'group')
 
-    def __unicode__(self):
+    def __str__(self) -> str:
         return self.name
 
 

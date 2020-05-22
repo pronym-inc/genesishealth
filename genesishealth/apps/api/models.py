@@ -133,7 +133,7 @@ class APIFlatfileConnection(models.Model):
     port = models.PositiveIntegerField(default=22)
     active = models.BooleanField(default=True)
 
-    def __unicode__(self):
+    def __str__(self) -> str:
         return self.name
 
     def send_file(self, f, name):
@@ -167,7 +167,7 @@ class APIPartner(models.Model):
     flatfile_connection = models.ForeignKey(
         'APIFlatfileConnection', null=True, blank=True, on_delete=models.SET_NULL)
 
-    def __unicode__(self):
+    def __str__(self) -> str:
         return self.name
 
     def add_patient(self, patient, clear_others=False):
@@ -555,5 +555,5 @@ class GenesisAPIException(Exception):
         super(GenesisAPIException, self).__init__(message, *args)
         self.error_code = error_code
 
-    def __unicode__(self):
+    def __str__(self) -> str:
         return '{0} - {1}'.format(self.error_code, self.message)

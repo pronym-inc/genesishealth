@@ -8,7 +8,7 @@ class GenericNamedModel(models.Model):
         abstract = True
         ordering = ('name',)
 
-    def __unicode__(self):
+    def __str__(self):
         return self.name
 
 
@@ -39,12 +39,12 @@ class CommunicationResolution(GenericNamedModel):
 
 
 class DeactivationReason(models.Model):
-    reason = models.CharField(max_length=255, unique=True)
+    reason: str = models.CharField(max_length=255, unique=True)
 
     class Meta:
         ordering = ('reason',)
 
-    def __unicode__(self):
+    def __str__(self) -> str:
         return self.reason
 
 

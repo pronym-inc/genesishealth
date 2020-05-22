@@ -20,8 +20,8 @@ class ProfessionalProfile(BaseProfile):
     class Meta:
         app_label = 'accounts'
 
-    def __unicode__(self):
-        return u"%s profile" % self.user.username
+    def __str__(self) -> str:
+        return "%s profile" % self.user.username
 
     def _get_business_partner(self):
         return self.parent_group

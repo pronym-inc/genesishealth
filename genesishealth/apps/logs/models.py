@@ -7,6 +7,6 @@ class QALogEntry(models.Model):
     glucose_value = models.IntegerField()
     meid = models.CharField(max_length=255)
 
-    def __unicode__(self):
+    def __str__(self) -> str:
         return "QALogEntry ({}) for {} at {}".format(
             self.glucose_value, self.meid, self.reading_datetime)

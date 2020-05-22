@@ -10,5 +10,5 @@ class EPCAPIUser(models.Model):
     class Meta:
         app_label = 'epc'
 
-    def __unicode__(self):  # pragma: no cover
+    def __str__(self) -> str:
         return self.name

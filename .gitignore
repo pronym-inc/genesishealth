@@ -127,3 +127,4 @@ celerybeat.pid
 
 node_modules
 /lib/
+.idea/

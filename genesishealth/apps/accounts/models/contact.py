@@ -20,8 +20,8 @@ class Contact(models.Model):
     class Meta:
         app_label = 'accounts'
 
-    def __unicode__(self):
-        return u'%s %s' % (self.first_name, self.last_name)
+    def __str__(self):
+        return '%s %s' % (self.first_name, self.last_name)
 
     def add_phone(self, phone, **kwargs):
         PhoneNumber.objects.create(phone=phone, contact=self, **kwargs)

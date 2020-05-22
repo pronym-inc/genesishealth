@@ -12,7 +12,7 @@ class NursingGroup(models.Model):
     phone_number = models.CharField(max_length=255, null=True)
     epc_identifier = models.CharField(max_length=255, null=True, unique=True)
 
-    def __unicode__(self):
+    def __str__(self) -> str:
         return self.name
 
     def get_full_address(self):

@@ -165,7 +165,7 @@ class LogbookDay:
 
         self.sort()
 
-    def __unicode__(self):
+    def __str__(self) -> str:
         return '%s logbook day for %s' % (self.day, self.patient)
 
     def add_entry(self, entry, cap_entries=None): 

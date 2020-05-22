@@ -61,7 +61,7 @@ class ProductType(models.Model):
     class Meta:
         ordering = ('name',)
 
-    def __unicode__(self):
+    def __str__(self) -> str:
         return self.name
 
     def convert_to_boxes(self, unit_count):

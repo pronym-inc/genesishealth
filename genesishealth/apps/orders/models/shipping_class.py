@@ -28,5 +28,5 @@ class ShippingClass(models.Model):
     enabled = models.BooleanField(default=True)
     is_for_bulk = models.BooleanField(default=False)
 
-    def __unicode__(self):
+    def __str__(self) -> str:
         return self.name

@@ -62,7 +62,7 @@ class UserOption(models.Model):
         oe.value = new_value
         oe.save()
 
-    def __unicode__(self):
+    def __str__(self) -> str:
         return self.display_name
 
     def validate_new_value(self, new_value):

@@ -89,7 +89,7 @@ class BaseServer(models.Model):
     name = models.CharField(max_length=255, unique=True)
     location = models.CharField(max_length=255, unique=True)
 
-    def __unicode__(self):
+    def __str__(self):
         return self.name
 
     def make_snapshot(self, dt):

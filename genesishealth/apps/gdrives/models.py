@@ -207,7 +207,7 @@ class GDrive(models.Model):
         super(GDrive, self).__init__(*args, **kwargs)
         self._last_reading_checked = False
 
-    def __unicode__(self):
+    def __str__(self) -> str:
         return ("Glucose Device %s" % (self.meid))
 
     def clear_patient(self, commit=True):
@@ -680,14 +680,14 @@ class GDriveLogEntry(models.Model):
 class GDriveFirmwareVersion(models.Model):
     name = models.CharField(max_length=255, unique=True)
 
-    def __unicode__(self):
+    def __str__(self) -> str:
         return self.name
 
 
 class GDriveModuleVersion(models.Model):
     name = models.CharField(max_length=255, unique=True)
 
-    def __unicode__(self):
+    def __str__(self) -> str:
         return self.name
 
 
@@ -789,7 +789,7 @@ class GDriveReworkRecord(models.Model):
 class PharmacyPartner(models.Model):
     name = models.CharField(max_length=255, unique=True)
 
-    def __unicode__(self):
+    def __str__(self) -> str:
         return self.name
 
 
@@ -811,7 +811,7 @@ class GDriveManufacturerCarton(models.Model):
         'GDriveModuleVersion', null=True,
         related_name='devices', on_delete=models.SET_NULL)
 
-    def __unicode__(self):
+    def __str__(self) -> str:
         return self.number
 
     def approve(self, approver):
@@ -835,7 +835,7 @@ class GDriveWarehouseCarton(models.Model):
         null=True,
         related_name='warehouse_cartons', on_delete=models.SET_NULL)
 
-    def __unicode__(self):
+    def __str__(self) -> str:
         return self.number
 
     def assign_to_shipment(self, shipment):
@@ -857,7 +857,7 @@ class BloodPressureDevice(models.Model):
     meid = models.CharField(max_length=40)
     device_id = models.CharField(max_length=40)
 
-    def __unicode__(self):
+    def __str__(self) -> str:
         return "Blood Pressure Device #%s" % self.meid
 
 
@@ -871,5 +871,5 @@ class WeightDevice(models.Model):
     meid = models.CharField(max_length=40)
     device_id = models.CharField(max_length=40)
 
-    def __unicode__(self):
+    def __str__(self) -> str:
         return "Weight Device #%s" % self.meid

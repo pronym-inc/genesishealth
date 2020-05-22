@@ -244,8 +244,8 @@ class PatientProfile(BaseProfile):
     class Meta:
         app_label = 'accounts'
 
-    def __unicode__(self):
-        return u"%s profile" % (self.user and self.user.username or '')
+    def __str__(self) -> str:
+        return "%s profile" % (self.user and self.user.username or '')
 
     @classmethod
     def activate_user(cls, activation_key):

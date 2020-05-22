@@ -41,7 +41,7 @@ class GenesisGroup(models.Model):
     class Meta:
         app_label = 'accounts'
 
-    def __unicode__(self):
+    def __str__(self) -> str:
         return self.name
 
     def add_patient(self, patient):
@@ -587,7 +587,7 @@ class Payor(models.Model):
         app_label = 'accounts'
         unique_together = ('name', 'group')
 
-    def __unicode__(self):
+    def __str__(self) -> str:
         return self.name
 
     def get_patients(self):
@@ -654,5 +654,5 @@ class Company(models.Model):
         unique_together = ('name', 'group')
         verbose_name_plural = "Companies"
 
-    def __unicode__(self):
+    def __str__(self) -> str:
         return self.name

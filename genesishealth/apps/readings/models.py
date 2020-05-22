@@ -406,7 +406,7 @@ class GlucoseReading(ModelWithNotes):
         post_processing.delay(reading.pk)
         return (True, clean, '', reading, reading_data['device'].patient)
 
-    def __unicode__(self):
+    def __str__(self) -> str:
         from genesishealth.apps.accounts.models import PatientProfile
         try:
             return u"%s's reading [%s]" % (

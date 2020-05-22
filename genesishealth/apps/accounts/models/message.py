@@ -35,5 +35,5 @@ class MessageEntry(models.Model):
         verbose_name = 'message entry'
         verbose_name_plural = 'message entries'
 
-    def __unicode__(self):
-        return u'Message %s from %s (%s)' % (self.message.subject, self.message.sender, self.message.sent_at)
+    def __str__(self) -> str:
+        return 'Message %s from %s (%s)' % (self.message.subject, self.message.sender, self.message.sent_at)
