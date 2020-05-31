@@ -22,8 +22,7 @@ from genesishealth.apps.api.models import APIPartner
 from genesishealth.apps.dropdowns.models import DeactivationReason
 from genesishealth.apps.health_information.models import (
     HealthInformation, HealthProfessionalTargets)
-from genesishealth.apps.orders.models import (
-    Order, OrderCategory, OrderEntry)
+from genesishealth.apps.orders.models import Order, OrderCategory, OrderEntry
 from genesishealth.apps.products.models import ProductType
 from genesishealth.apps.readings.models import GlucoseReading
 from genesishealth.apps.utils.tz_lookup import timezone_from_location_string
@@ -43,7 +42,7 @@ class PatientProfileManager(ProfileManager):
             email,
             password,
             email_password=True,
-            **kwargs):
+            **kwargs) -> User:
         """Creates a patient.  This should rarely be used directly;
         instead use either the MyGHR or Verizon manager for this."""
         kwargs.setdefault('account_activation_datetime', now())
@@ -53,7 +52,7 @@ class PatientProfileManager(ProfileManager):
         HealthInformation.objects.create(patient=patient)
         return patient
 
-    def update_stat_averages(self):
+    def update_stat_averages(self) -> None:
         """Updates all of the last_week_average_* stats."""
         map(lambda x: x.update_stat_averages(), self.all())
 
@@ -231,8 +230,7 @@ class PatientProfile(BaseProfile):
         null=True, blank=True)
     rx_partner = models.ForeignKey(
         'pharmacy.PharmacyPartner', null=True, related_name='patients', on_delete=models.SET_NULL)
-    epc_member_identifier = models.CharField(
-        max_length=255, null=True, blank=True)
+    epc_member_identifier = models.CharField(max_length=255, null=True, blank=True)
     nursing_group = models.ForeignKey(
         'nursing.NursingGroup', null=True, related_name='patients', on_delete=models.SET_NULL)
 
@@ -296,8 +294,7 @@ class PatientProfile(BaseProfile):
             return email
         elif first_name and last_name:
             c = 0
-            username_base = "{}.{}".format(first_name, last_name).replace(
-                ' ', '').lower()
+            username_base = "{}.{}".format(first_name, last_name).replace(' ', '').lower()
             while True:
                 new_username = username_base
                 if c > 0:

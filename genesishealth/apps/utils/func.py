@@ -1,4 +1,6 @@
 import io
+from typing import Any, Dict, Type
+
 import pytz
 import re
 
@@ -90,7 +92,7 @@ def set_attribute_extended(in_obj, extended_name, val):
         setattr(in_obj, next, val)
 
 
-def filter_dict_to_model_fields(in_dict, model):
+def filter_dict_to_model_fields(in_dict: Dict[str, Any], model: Type[models.Model]) -> Dict[str, Any]:
     """Given a dictionary, it will return a copy of the dictionary that
     only contains fields with names that match a field name on the model."""
     new_dict = {}

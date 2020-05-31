@@ -10,7 +10,6 @@ from django.forms.widgets import RadioSelect
 from django.utils.timezone import get_default_timezone, localtime, now
 
 from celery.task import chord
-
 from localflavor.us.forms import USStateField, USStateSelect
 
 from genesishealth.apps.accounts.models import (
@@ -115,11 +114,9 @@ class PatientForm(PhoneNumberFormMixin, GenesisModelForm):
 
         if not self.is_new:
             for cf in PatientForm.CONTACT_FIELDS:
-                self.fields[cf].initial = getattr(
-                    self.instance.patient_profile.contact, cf)
+                self.fields[cf].initial = getattr(self.instance.patient_profile.contact, cf)
             for pf in PatientForm.PROFILE_FIELDS:
-                self.fields[pf].initial = getattr(
-                    self.instance.patient_profile, pf)
+                self.fields[pf].initial = getattr(self.instance.patient_profile, pf)
             del self.fields['email']
             del self.fields['email_confirm']
 
@@ -412,7 +409,7 @@ class PatientMyProfileForm(PhoneNumberFormMixin, GenesisForm):
     address1 = forms.CharField(label='Address')
     address2 = forms.CharField(required=False, label='Address (Line 2)')
     city = forms.CharField()
-    state = USStateField()
+    state = USStateField(widget=USStateSelect)
     zip = ZipField()
     phone = PhoneField(required=False)
 
@@ -725,7 +722,7 @@ class CallLogReportForm(GenesisForm):
             timedelta(days=1) - timedelta(microseconds=1))
         qs = PatientCommunicationNote.objects.filter(
             datetime_added__range=(start, end))
-        output_buffer = io.BytesIO()
+        output_buffer = io.StringIO()
         writer = csv.writer(output_buffer)
         headers = [
             'Insurance ID', 'Caller Name', 'Call Date', 'GHT Agent Name',

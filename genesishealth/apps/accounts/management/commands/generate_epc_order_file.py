@@ -1,6 +1,5 @@
 import csv
-
-from io import BytesIO
+from StringIO import StringIO
 
 from dateutil.parser import parse
 
@@ -104,7 +103,7 @@ class Command(BaseCommand):
             'meid'
         ]
 
-        buf = BytesIO()
+        buf = StringIO()
         writer = csv.writer(buf)
         writer.writerow(headers)
         for row in output_rows:

@@ -12,10 +12,10 @@ class Message(models.Model):
     class Meta:
         app_label = 'accounts'
 
-    def recipient_list(self):
+    def recipient_list(self) -> str:
         return ', '.join(map(lambda x: "%s, %s (%s)" % x, self.recipients.all().values_list('last_name', 'first_name', 'email')))
 
-    def send(self):
+    def send(self) -> None:
         for r in self.recipients.all():
             try:
                 MessageEntry.objects.get(recipient=r, message=self)

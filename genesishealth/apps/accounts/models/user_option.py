@@ -27,7 +27,7 @@ class UserOption(models.Model):
         app_label = 'accounts'
 
     @classmethod
-    def get_option(cls, user, option):
+    def get_option(cls, user, option) -> 'UserOption':
         if isinstance(option, str):
             try:
                 option = UserOption.objects.get(name=option)

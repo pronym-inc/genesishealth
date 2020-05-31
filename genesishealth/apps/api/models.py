@@ -555,5 +555,5 @@ class GenesisAPIException(Exception):
         super(GenesisAPIException, self).__init__(message, *args)
         self.error_code = error_code
 
-    def __str__(self) -> str:
+    def __str__(self) -> int:
         return '{0} - {1}'.format(self.error_code, self.message)

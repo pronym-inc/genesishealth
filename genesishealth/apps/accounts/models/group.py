@@ -1,17 +1,20 @@
 import csv
 import io
-from datetime import timedelta
+from datetime import timedelta, datetime
+from typing import List, Optional, TYPE_CHECKING
 
 from django.db import models
 from django.contrib.auth.models import User
+from django.db.models import QuerySet
 from django.utils.timezone import make_naive, get_default_timezone
 
-from genesishealth.apps.accounts.reports import (
-    _generate_noncompliance_report, _generate_target_range_report)
+from genesishealth.apps.accounts.reports import _generate_noncompliance_report, _generate_target_range_report
 from genesishealth.apps.epc.models import EPCOrder
 from genesishealth.apps.gdrives.models import GDrive
 
-from .contact import Contact
+if TYPE_CHECKING:
+    from genesishealth.apps.accounts.models import PatientProfile
+    from genesishealth.apps.accounts.models.contact import Contact
 
 
 class GenesisGroup(models.Model):
@@ -31,7 +34,7 @@ class GenesisGroup(models.Model):
 
     name = models.CharField(max_length=255, unique=True)
     group_type = models.CharField(max_length=255, choices=GROUP_TYPE_CHOICES)
-    contact = models.ForeignKey(Contact, on_delete=models.CASCADE)
+    contact = models.ForeignKey('Contact', on_delete=models.CASCADE)
     is_demo_group = models.BooleanField(default=False)
     skip_device_deactivation = models.BooleanField(default=False)
     is_no_pii = models.BooleanField(default=False)
@@ -44,12 +47,12 @@ class GenesisGroup(models.Model):
     def __str__(self) -> str:
         return self.name
 
-    def add_patient(self, patient):
+    def add_patient(self, patient: User) -> None:
         """This method updates an existing relationship if it already exists"""
         patient.patient_profile.group = self
         patient.patient_profile.save()
 
-    def generate_inactive_participation_status_report(self, start, end):
+    def generate_inactive_participation_status_report(self, start: datetime, end: datetime) -> str:
         rows = []
         end_plus = end + timedelta(days=1)
         query = """
@@ -182,7 +185,7 @@ class GenesisGroup(models.Model):
             ]
             rows.append(new_row)
 
-        output = io.BytesIO()
+        output = io.StringIO()
         writer = csv.writer(output)
         # Write hreaders
         header_rows = [
@@ -225,7 +228,7 @@ class GenesisGroup(models.Model):
         content = output.getvalue()
         return content
 
-    def generate_noncompliance_report(self, hours):
+    def generate_noncompliance_report(self, hours: int) -> str:
         return _generate_noncompliance_report(
             self.get_patients(),
             hours,
@@ -233,7 +236,7 @@ class GenesisGroup(models.Model):
             no_pii=self.is_no_pii
         )
 
-    def generate_participation_report(self, start, end):
+    def generate_participation_report(self, start: datetime, end: datetime) -> str:
         rows = []
         end_plus = end + timedelta(days=1)
         query = """
@@ -312,14 +315,14 @@ class GenesisGroup(models.Model):
             ])
             rows.append(new_row)
 
-        output = io.BytesIO()
+        output = io.StringIO()
         writer = csv.writer(output)
         # Write hreaders
-        header_rows = [
+        header_rows: List[List[str]] = [
             ['Title', 'Group Participation Report'],
             ['Date', '{} - {}'.format(start, end)],
-            ['Group', self.name],
-            ['Number of Patients', patient_count],
+            ['Group', str(self.name)],
+            ['Number of Patients', str(patient_count)],
             [],
         ]
         if self.is_no_pii:
@@ -473,7 +476,7 @@ class GenesisGroup(models.Model):
             ])
             rows.append(new_row)
 
-        output = io.BytesIO()
+        output = io.StringIO()
         writer = csv.writer(output)
         # Write hreaders
         header_rows = [
@@ -536,7 +539,7 @@ class GenesisGroup(models.Model):
         content = output.getvalue()
         return content
 
-    def generate_target_range_report(self, days):
+    def generate_target_range_report(self, days: int) -> str:
         return _generate_target_range_report(
             self.get_patients(),
             days,
@@ -544,7 +547,7 @@ class GenesisGroup(models.Model):
             no_pii=self.is_no_pii
         )
 
-    def get_available_devices(self, patient=None, group_only=False):
+    def get_available_devices(self, patient: Optional[User] = None, group_only: bool = False) -> 'QuerySet[GDrive]':
         """Get all devices that are available to patient, or in general if
         patient is not provided. If group_only == True, it will only include
         group devices, and not devices that are not assigned to any group."""
@@ -560,22 +563,22 @@ class GenesisGroup(models.Model):
                 queryset = queryset.exclude(pk=current_device.pk)
         return queryset
 
-    def get_devices(self, group_only=False):
+    def get_devices(self, group_only: bool = False) -> 'QuerySet[GDrive]':
         queryset = self.gdrives.all()
         if not group_only:
             queryset |= GDrive.objects.filter(group=None)
         return queryset
 
-    def get_patients(self):
+    def get_patients(self) -> 'QuerySet[User]':
         return User.objects.filter(patient_profile__in=self.patients.all())
 
-    def get_professionals(self):
-        return User.objects.filter(
-            professional_profile__in=self.professionals.all())
+    def get_professionals(self) -> 'QuerySet[User]':
+        return User.objects.filter(professional_profile__in=self.professionals.all())
 
-    def remove_patient(self, patient):
-        patient.patient_profile.group = None
-        patient.patient_profile.save()
+    def remove_patient(self, patient: User) -> None:
+        profile: PatientProfile = patient.patient_profile
+        profile.group = None
+        profile.save()
 
 
 class Payor(models.Model):
@@ -590,7 +593,7 @@ class Payor(models.Model):
     def __str__(self) -> str:
         return self.name
 
-    def get_patients(self):
+    def get_patients(self) -> 'QuerySet[User]':
         company_ids = [
             int(i[0]) for i in self.companies.all().values_list('id')]
         return User.objects.filter(patient_profile__isnull=False).filter(
@@ -618,7 +621,7 @@ class Company(models.Model):
     )
 
     name = models.CharField(max_length=100)
-    contact = models.OneToOneField(Contact, on_delete=models.CASCADE)
+    contact = models.OneToOneField('Contact', on_delete=models.CASCADE)
     group = models.ForeignKey(
         GenesisGroup, related_name='companies', null=True, on_delete=models.SET_NULL)
     payor = models.ForeignKey(

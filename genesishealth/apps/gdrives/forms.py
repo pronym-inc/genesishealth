@@ -282,7 +282,7 @@ class GDriveComplaintForm(GenesisModelForm):
         instance.touch(self.requester)
         if commit:
             instance.save()
-            instance.reported_problems = self.cleaned_data['reported_problems']
+            instance.reported_problems.set(self.cleaned_data['reported_problems'])
         return instance
 
 

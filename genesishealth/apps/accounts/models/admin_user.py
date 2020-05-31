@@ -1,6 +1,7 @@
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, List
 
 from django.db import models
+from django.db.models import QuerySet
 
 if TYPE_CHECKING:
     from django.contrib.auth.models import User
@@ -25,7 +26,7 @@ class AdminProfile(models.Model):
     def __str__(self) -> str:
         return "{0}'s admin profile".format(self.user)
 
-    def get_all_permissions(self):
+    def get_all_permissions(self) -> 'QuerySet[AdminPermission]':
         if self.is_super_user:
             return AdminPermission.objects.all()
         permission_ids = set([p.id for p in self.permissions.all()])
@@ -38,7 +39,7 @@ class AdminProfile(models.Model):
         from genesishealth.apps.accounts.models.profile_base import LoginRecord
         LoginRecord(user=self.user).save()
 
-    def has_permission(self, permission_name):
+    def has_permission(self, permission_name: str) -> bool:
         if self.is_super_user:
             return True
         try:
@@ -48,10 +49,9 @@ class AdminProfile(models.Model):
         return True
 
     @property
-    def all_permissions(self):
+    def all_permissions(self) -> 'List[AdminPermission]':
         if not hasattr(self, '_permission_names'):
-            self._permission_names = list(map(
-                lambda x: x.name, self.get_all_permissions()))
+            self._permission_names = list(map(lambda x: x.name, self.get_all_permissions()))
         return self._permission_names
 
 

@@ -19,7 +19,7 @@ class PayorForm(PhoneNumberFormMixin, GenesisModelForm):
     address1 = forms.CharField(label='Address', required=False)
     address2 = forms.CharField(label='Address (cont.)', required=False)
     city = forms.CharField(widget=forms.TextInput(attrs={'class': 'required'}))
-    state = USStateField()
+    state = USStateField(widget=USStateSelect)
     zip = ZipField()
 
     class Meta:

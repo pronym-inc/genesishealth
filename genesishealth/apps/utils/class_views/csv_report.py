@@ -55,7 +55,7 @@ class CSVReport(object):
 
     def generate_csv_content(self, data):
         # Create CSV in memory buffer
-        buf = io.BytesIO()
+        buf = io.StringIO()
         writer = csv.writer(buf)
         # Write headers + rows
         for row in self.get_header_rows(data) + self.get_rows(data):
@@ -84,7 +84,7 @@ class CSVReport(object):
         raise Exception("Must supply a get_queryset function!")
 
     def get_rows(self, data):
-        return map(self.get_item_row, self.get_queryset(data))
+        return list(map(self.get_item_row, self.get_queryset(data)))
 
     def should_run_async(self, data):
         if self.never_async:

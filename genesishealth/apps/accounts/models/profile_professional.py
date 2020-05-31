@@ -1,11 +1,18 @@
+from typing import TYPE_CHECKING, Optional
+
 from django.db import models, connection
 from django.contrib.auth.models import User
+from django.db.models import QuerySet
 
 from genesishealth.apps.accounts.password import make_password
 from genesishealth.apps.accounts.reports import (
     _generate_noncompliance_report, _generate_target_range_report)
 
 from .profile_base import BaseProfile
+
+if TYPE_CHECKING:
+    from .group import GenesisGroup, Company
+    from ...alerts.models import ProfessionalAlert
 
 
 class ProfessionalProfile(BaseProfile):
@@ -23,25 +30,25 @@ class ProfessionalProfile(BaseProfile):
     def __str__(self) -> str:
         return "%s profile" % self.user.username
 
-    def _get_business_partner(self):
+    def _get_business_partner(self) -> 'GenesisGroup':
         return self.parent_group
 
-    def add_patient(self, patient):
+    def add_patient(self, patient: User) -> None:
         self.patients.add(patient.patient_profile)
 
-    def remove_patient(self, patient):
+    def remove_patient(self, patient: User) -> None:
         self.patients.remove(patient.patient_profile)
 
-    def add_to_watch_list(self, patient):
+    def add_to_watch_list(self, patient: User) -> None:
         self.watch_list.add(patient.patient_profile)
 
-    def remove_from_watch_list(self, patient):
+    def remove_from_watch_list(self, patient: User) -> None:
         self.watch_list.remove(patient.patient_profile)
 
-    def generate_standard_password(self):
+    def generate_standard_password(self) -> str:
         return make_password(self.user)
 
-    def generate_noncompliance_report(self, hours, employer=None):
+    def generate_noncompliance_report(self, hours: int, employer: 'Optional[Company]' = None) -> str:
         patients = self.get_patients()
         if employer is not None:
             patients = patients.filter(patient_profile__company=employer)
@@ -51,7 +58,7 @@ class ProfessionalProfile(BaseProfile):
             "Patients for {}".format(self.user.get_full_name())
         )
 
-    def generate_target_range_report(self, days, employer):
+    def generate_target_range_report(self, days: int, employer: 'Optional[Company]') -> str:
         patients = self.get_patients()
         if employer is not None:
             patients = patients.filter(patient_profile__company=employer)
@@ -61,13 +68,13 @@ class ProfessionalProfile(BaseProfile):
             "Patients for {}".format(self.user.get_full_name())
         )
 
-    def get_alerts(self):
+    def get_alerts(self) -> 'QuerySet[ProfessionalAlert]':
         return self.user.created_professionalalerts.all()
 
-    def get_patients(self):
+    def get_patients(self) -> 'QuerySet[User]':
         return User.objects.filter(patient_profile__in=self.patients.all())
 
-    def get_patients_by_range(self, number_of_days=7, target='inside'):
+    def get_patients_by_range(self, number_of_days: int = 7, target: str = 'inside') -> 'QuerySet[User]':
         assert number_of_days in (1, 7, 14, 30, 60, 90)
         assert target in ('inside', 'above', 'below')
         if target == 'inside':
@@ -122,7 +129,7 @@ class ProfessionalProfile(BaseProfile):
         ids = map(lambda x: x[0], cursor.fetchall())
         return self.get_patients().filter(pk__in=ids)
 
-    def get_patients_with_no_readings(self, number_of_days=7):
+    def get_patients_with_no_readings(self, number_of_days: int = 7) -> 'QuerySet[User]':
         assert number_of_days in (1, 7, 14, 30, 60, 90)
         query = """
             SELECT u.id FROM
@@ -138,7 +145,7 @@ class ProfessionalProfile(BaseProfile):
         ids = map(lambda x: x[0], cursor.fetchall())
         return self.get_patients().filter(pk__in=ids)
 
-    def get_in_compliance_patients(self, number_of_days=7):
+    def get_in_compliance_patients(self, number_of_days: int = 7) -> 'QuerySet[User]':
         assert number_of_days in (1, 7, 14, 30, 60, 90)
         query = """
             SELECT u.id FROM
@@ -157,7 +164,7 @@ class ProfessionalProfile(BaseProfile):
         ids = map(lambda x: x[0], cursor.fetchall())
         return self.get_patients().filter(pk__in=ids)
 
-    def get_out_of_compliance_patients(self, number_of_days=7):
+    def get_out_of_compliance_patients(self, number_of_days: int = 7) -> 'QuerySet[User]':
         assert number_of_days in (1, 7, 14, 30, 60, 90)
         query = """
             SELECT u.id FROM
@@ -176,7 +183,7 @@ class ProfessionalProfile(BaseProfile):
         ids = map(lambda x: x[0], cursor.fetchall())
         return self.get_patients().filter(pk__in=ids)
 
-    def get_out_of_range_patients(self, number_of_days=7):
+    def get_out_of_range_patients(self, number_of_days: int = 7) -> 'QuerySet[User]':
         assert number_of_days in (1, 7, 14, 30, 60, 90)
         query = """
             SELECT u.id FROM
@@ -199,17 +206,17 @@ class ProfessionalProfile(BaseProfile):
         ids = map(lambda x: x[0], cursor.fetchall())
         return self.get_patients().filter(pk__in=ids)
 
-    def get_professionals_in_group(self):
+    def get_professionals_in_group(self) -> 'QuerySet[ProfessionalProfile]':
         return self.parent_group.get_professionals()
 
-    def get_unread_alert_notifications(self):
+    def get_unread_alert_notifications(self) -> 'QuerySet[ProfessionalAlert]':
         return self.user.alert_notifications.filter(read=False)
 
-    def get_watch_list(self):
+    def get_watch_list(self) -> 'QuerySet[User]':
         return User.objects.filter(patient_profile__in=self.watch_list.all())
 
-    def save(self, *args, **kwargs):
-        super(ProfessionalProfile, self).save(*args, **kwargs)
+    def save(self, *args, **kwargs) -> None:
+        super().save(*args, **kwargs)
         # Make sure contact always stays up to date.
         shared_fields = ('first_name', 'last_name', 'email')
         for sf in shared_fields:
@@ -217,5 +224,5 @@ class ProfessionalProfile(BaseProfile):
 
         self.contact.save()
 
-    def login_type(self):
+    def login_type(self) -> str:
         return 'Caregiver'

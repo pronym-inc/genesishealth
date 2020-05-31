@@ -162,7 +162,7 @@ class ProfessionalMyProfileForm(PhoneNumberFormMixin, GenesisModelForm):
     address1 = forms.CharField(required=False)
     address2 = forms.CharField(required=False)
     city = forms.CharField(required=False)
-    state = USStateField(required=False)
+    state = USStateField(widget=USStateSelect, required=False)
     zip = ZipField(required=False)
     phone = PhoneField(required=False)
     fax = forms.CharField(required=False)

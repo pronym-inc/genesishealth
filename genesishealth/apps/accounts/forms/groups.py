@@ -3,7 +3,7 @@ from datetime import datetime, timedelta
 from django import forms
 from django.utils.timezone import now
 
-from localflavor.us.forms import USStateField
+from localflavor.us.forms import USStateField, USStateSelect
 
 from genesishealth.apps.accounts.models import GenesisGroup
 from genesishealth.apps.reports.models import TemporaryDownload
@@ -24,7 +24,7 @@ class GroupForm(PhoneNumberFormMixin, GenesisModelForm):
     address1 = forms.CharField(required=False, label="Contact address")
     address2 = forms.CharField(required=False, label="Contact address (cont.)")
     city = forms.CharField(required=False, label="Contact city")
-    state = USStateField(required=False, label="Contact state")
+    state = USStateField(widget=USStateSelect, required=False, label="Contact state")
     zip = ZipField(required=False, label="Contact zip")
 
     class Meta:

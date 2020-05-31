@@ -1,3 +1,5 @@
+from typing import Any
+
 from django.db import models
 
 
@@ -20,32 +22,32 @@ class Contact(models.Model):
     class Meta:
         app_label = 'accounts'
 
-    def __str__(self):
+    def __str__(self) -> str:
         return '%s %s' % (self.first_name, self.last_name)
 
-    def add_phone(self, phone, **kwargs):
+    def add_phone(self, phone: str, **kwargs: Any) -> None:
         PhoneNumber.objects.create(phone=phone, contact=self, **kwargs)
 
-    def get_full_address(self):
+    def get_full_address(self) -> str:
         return "%s%s" % (
             self.address1,
             "/ %s" % self.address2 if self.address2 else '')
 
-    def get_full_name(self):
+    def get_full_name(self) -> str:
         return "%s %s" % (self.first_name, self.last_name)
 
-    def cell_phone(self):
+    def cell_phone(self) -> str:
         try:
             return self.phonenumber_set.filter(is_cell=True)[0].phone
         except IndexError:
             return ''
     cell_phone = property(cell_phone)
 
-    def set_phone(self, new_phone):
+    def set_phone(self, new_phone: str) -> None:
         self.phonenumber_set.all().delete()
         self.add_phone(new_phone)
 
-    def phone(self):
+    def phone(self) -> str:
         try:
             return self.phonenumber_set.filter(is_contact=True)[0].phone
         except IndexError:

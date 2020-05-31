@@ -1,5 +1,6 @@
 import random
-from datetime import timedelta
+from datetime import timedelta, datetime
+from typing import Any
 
 from django.db import models
 from django.contrib.auth.models import User
@@ -55,7 +56,7 @@ class DemoPatientProfile(models.Model):
         app_label = 'accounts'
 
     @classmethod
-    def convert_to_demo_patient(cls, patient, **kwargs):
+    def convert_to_demo_patient(cls, patient: User, **kwargs: Any) -> None:
         """Converts a normal patient to a demo patient."""
         patient.patient_profile.demo_patient = True
         patient.patient_profile.save()
@@ -70,26 +71,26 @@ class DemoPatientProfile(models.Model):
         except DemoPatientProfile.DoesNotExist:
             DemoPatientProfile.objects.create(user=patient, **kwargs)
 
-    def cron_process(self):
+    def cron_process(self) -> None:
         self.schedule()
         for sdr in self.user.scheduled_demo_readings.filter(
                 fired=False, reading_datetime__lt=utcnow()):
             if self.user.patient_profile.get_device():
                 sdr.process()
 
-    def check_schedule_ok(self):
+    def check_schedule_ok(self) -> bool:
         return (self.last_scheduled is not None and
                 (utcnow() - self.last_scheduled <
                     (timedelta(days=7) - timedelta(hours=1))))
 
-    def generate_glucose_value(self, premeal):
+    def generate_glucose_value(self, premeal: bool) -> int:
         if premeal:
             start = self.average_premeal_glucose_level
         else:
             start = self.average_postmeal_glucose_level
         return random.randint(start - 30, start + 30)
 
-    def schedule(self):
+    def schedule(self) -> None:
         if self.check_schedule_ok():
             return
         glucose_reading_times = []
@@ -126,7 +127,7 @@ class DemoPatientProfile(models.Model):
         self.last_scheduled = utcnow()
         self.save()
 
-    def login_type(self):
+    def login_type(self) -> str:
         return "Demo Patient"
 
 
@@ -146,7 +147,7 @@ class DemoScheduledReading(models.Model):
         app_label = 'accounts'
 
     @classmethod
-    def generate_scheduled_reading(cls, patient, in_datetime, premeal):
+    def generate_scheduled_reading(cls, patient: User, in_datetime: datetime, premeal: bool) -> 'DemoScheduledReading':
         glucose_value = patient.demo_profile.generate_glucose_value(premeal)
         reading = cls(
             patient=patient, value=glucose_value,
@@ -154,7 +155,7 @@ class DemoScheduledReading(models.Model):
         reading.save()
         return reading
 
-    def process(self, force=False):
+    def process(self, force: bool = False) -> None:
         if (self.fired or
                 (self.reading_datetime > utcnow() and not force) or
                 not self.patient.patient_profile.get_device()):

@@ -8,7 +8,10 @@ from django.conf.global_settings import STATICFILES_FINDERS
 from kombu.utils.url import safequote
 
 secrets_path = '/etc/secrets.json'
-secrets = json.load(open(secrets_path))
+try:
+    secrets = json.load(open(secrets_path))
+except FileNotFoundError:
+    secrets = {}
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
@@ -16,7 +19,7 @@ VIRTUALENV_DIR = os.path.dirname(os.path.dirname(os.path.dirname(BASE_DIR)))
 VAR_DIR = os.path.join(VIRTUALENV_DIR, 'var')
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = secrets['django_secret']
+SECRET_KEY = secrets.get('django_secret', 'insecure')
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
@@ -104,10 +107,10 @@ WSGI_APPLICATION = 'genesishealth.conf.wsgi.app.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'HOST': secrets['db_host'],
-        'NAME': secrets['db_name'],
-        'USER': secrets['db_username'],
-        'PASSWORD': secrets['db_password']
+        'HOST': secrets.get('db_host', 'localhost'),
+        'NAME': secrets.get('db_name', 'genesishealth'),
+        'USER': secrets.get('db_username', 'genesishealth'),
+        'PASSWORD': secrets.get('db_password', 'password123')
     }
 }
 
@@ -148,8 +151,8 @@ USE_SQS = secrets.get('use_sqs', False)
 
 if USE_SQS:
     CELERY_BROKER_URL = "sqs://{0}:{1}@".format(
-        safequote(secrets['aws_access_key']),
-        safequote(secrets['aws_secret_key'])
+        safequote(secrets.get('aws_access_key', 'fakeaws')),
+        safequote(secrets.get('aws_secret_key', 'fakeaws'))
     )
 else:
     # If not using SQS, expect a local redis queue.
@@ -204,7 +207,7 @@ LOG_PATH = os.path.join(VAR_ROOT, 'log')
 
 DEBUG_STATIC_FILES = True
 TOKEN_EXPIRATION_MINUTES = 120
-API_SECRET = secrets['api_secret']
+API_SECRET = secrets.get('api_secret', 'fakeapisecret123')
 
 DEFAULT_FROM_EMAIL = 'admin@genesishealth.com'
 USE_COMPILED_JS = False
