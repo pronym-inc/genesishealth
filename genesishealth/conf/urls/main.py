@@ -23,8 +23,8 @@ urlpatterns = [
             namespace='accounts')),
     url(r'^api/',
         include(
-            ('genesishealth.apps.api.urls',
-             'genesishealth.apps.api'),
+            ('genesishealth.apps.healthsplash.urls',
+             'genesishealth.apps.healthsplash'),
             namespace='api')),
     url(r'^dashboard/',
         include(

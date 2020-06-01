@@ -29,3 +29,4 @@ sendgrid==3.6.5
 sendgrid-django==4.2.0
 stamps.py==0.9.1
 twilio==6.38.1
+git+ssh://git@github.com/pronym-inc/pronym-django-api.git@v2.0#egg=pronym_api

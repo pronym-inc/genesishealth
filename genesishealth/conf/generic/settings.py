@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'django_extensions',
     'solo',
+    'pronym_api',
     'genesishealth.apps.accounts',
     'genesishealth.apps.api',
     'genesishealth.apps.dashboard',
@@ -530,3 +531,8 @@ CONNECTIONS_API_USERNAME = 'jcross@genesishealthtechnologies.com'
 CONNECTIONS_API_PASSWORD = 'textus138'
 
 SKIP_FORWARD_READINGS = False
+RAISE_ON_500 = False
+
+JWT_SUB = 'genesis'
+JWT_ISS = 'genesishealth'
+JWT_AUD = 'genesisapi'
