@@ -84,9 +84,7 @@ class DisplayLogbookForm(GenesisForm):
         self.requester = kwargs.pop('requester', None)
         super(DisplayLogbookForm, self).__init__(*args, **kwargs)
         if self.patient:
-            self.fields['patient'].queryset = \
-                PatientProfile.myghr_patients.get_users().get(
-                    pk=self.patient.id)
+            self.fields['patient'].queryset = PatientProfile.myghr_patients.get_users().filter(pk=self.patient.id)
             self.fields['patient'].initial = self.patient
             self.fields['start_date'].initial = \
                 utcnow().astimezone(
