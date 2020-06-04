@@ -25,6 +25,16 @@ class GetBloodGlucoseStatAction(ResourceAction[User]):
         output = {
            'id': resource.id,
            'meid': device.meid if device else None,
+           'demographic_data': {
+               'first_name': user.first_name,
+               'last_name': user.last_name,
+               'gender': profile.gender,
+               'date_of_birth': str(profile.date_of_birth),
+               'address': profile.contact.address1,
+               'city': profile.contact.city,
+               'state': profile.contact.state,
+               'zip_code': profile.contact.zip
+           }
         }
         for i in (7, 14, 28, 90):
             average = profile.get_average_glucose_level(i)
@@ -67,19 +77,35 @@ class GetBloodGlucoseStatAction(ResourceAction[User]):
 
 class GetBloodGlucoseStatApiView(ResourceApiView[User]):
     def _get_resource(self) -> Optional[User]:
-        try:
-            return User.objects.get(
-                first_name=self.request.GET['first_name'],
-                last_name=self.request.GET['last_name'],
-                patient_profile__gender=self.request.GET['gender'],
-                patient_profile__date_of_birth=self.request.GET['date_of_birth'],
-                patient_profile__contact__address1=self.request.GET['address'],
-                patient_profile__contact__city=self.request.GET['city'],
-                patient_profile__contact__state=self.request.GET['state'],
-                patient_profile__contact__zip=self.request.GET['zip_code']
-            )
-        except User.DoesNotExist:
-            return None
+        # If their request contains an id parameter, we'll try to look up using that, otherwise we'll look
+        # at their GET parameters.
+        qs = User.objects.filter(patient_profile__isnull=False)
+        if 'id' in self.request.GET:
+            try:
+                return qs.get(pk=self.request.GET['id'])
+            except User.DoesNotExist:
+                return None
+        required_fields = ('first_name', 'last_name', 'gender', 'date_of_birth', 'address', 'city', 'state', 'zip_code')
+        has_required_fields = True
+        for field in required_fields:
+            if field not in self.request.GET:
+                has_required_fields = False
+                break
+        if has_required_fields:
+            try:
+                return qs.get(
+                    first_name=self.request.GET['first_name'],
+                    last_name=self.request.GET['last_name'],
+                    patient_profile__gender=self.request.GET['gender'],
+                    patient_profile__date_of_birth=self.request.GET['date_of_birth'],
+                    patient_profile__contact__address1=self.request.GET['address'],
+                    patient_profile__contact__city=self.request.GET['city'],
+                    patient_profile__contact__state=self.request.GET['state'],
+                    patient_profile__contact__zip=self.request.GET['zip_code']
+                )
+            except User.DoesNotExist:
+                pass
+        return None
 
     def _get_endpoint_name(self) -> str:
         return "get-blood-glucose-stat"
