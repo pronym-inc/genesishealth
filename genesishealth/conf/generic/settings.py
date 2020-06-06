@@ -64,6 +64,7 @@ INSTALLED_APPS = [
     'genesishealth.apps.epc',
     'genesishealth.apps.nursing',
     'genesishealth.apps.text_messaging',
+    'genesishealth.apps.healthsplash',
     'compressor',
     'localflavor',
 ]
@@ -536,3 +537,4 @@ RAISE_ON_500 = False
 JWT_SUB = 'genesis'
 JWT_ISS = 'genesishealth'
 JWT_AUD = 'genesisapi'
+USE_HTTPS = True

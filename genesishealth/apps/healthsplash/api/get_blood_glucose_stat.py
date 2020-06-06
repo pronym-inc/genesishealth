@@ -1,9 +1,12 @@
-from datetime import timedelta
+from datetime import timedelta, date
 from typing import Optional, Any, Dict, Union
 
+import numpy
 from django.contrib.auth.models import User
 from django.db.models import QuerySet
 from django.utils.timezone import now
+from matplotlib import pyplot
+from matplotlib.dates import YearLocator, DateFormatter, DayLocator
 from pronym_api.models import ApiAccountMember
 from pronym_api.views.actions import ApiProcessingFailure, ResourceAction, ResourceT
 from pronym_api.views.api_view import ResourceApiView, HttpMethod
@@ -11,6 +14,7 @@ from pronym_api.views.validation import ApiValidationErrorSummary
 
 from genesishealth.apps.accounts.models import PatientProfile
 from genesishealth.apps.gdrives.models import GDrive
+from genesishealth.apps.healthsplash.models import BloodGlucoseGraph
 from genesishealth.apps.readings.models import GlucoseReading
 
 
@@ -68,6 +72,7 @@ class GetBloodGlucoseStatAction(ResourceAction[User]):
         average = user.patient_profile.get_average_glucose_level(days)
         cutoff = now() - timedelta(days=days)
         readings = user.glucose_readings.filter(reading_datetime_utc__gt=cutoff).order_by('glucose_value')
+        graph = BloodGlucoseGraph.for_readings(readings, cutoff.date(), now().date())
         if len(readings) == 0:
             max_reading = None
             min_reading = None
@@ -78,7 +83,7 @@ class GetBloodGlucoseStatAction(ResourceAction[User]):
             'average': average,
             'max': max_reading,
             'min': min_reading,
-            'line_graph': ''
+            'line_graph': graph.get_secure_url()
         }
 
     def validate(

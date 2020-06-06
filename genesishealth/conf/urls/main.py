@@ -25,7 +25,7 @@ urlpatterns = [
         include(
             ('genesishealth.apps.healthsplash.urls',
              'genesishealth.apps.healthsplash'),
-            namespace='api')),
+            namespace='healthsplash')),
     url(r'^dashboard/',
         include(
             ('genesishealth.apps.dashboard.urls',
