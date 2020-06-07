@@ -1,11 +1,10 @@
-from celery.schedules import crontab
-from celery.task import periodic_task
+from celery import shared_task
 
 from genesishealth.apps.accounts.models import PatientProfile
 
 
-@periodic_task(run_every=crontab(hour=2, minute=30))
-def check_refills():
+@shared_task
+def check_refills() -> None:
     from django.contrib.auth.models import User
     users = User.objects.filter(
         patient_profile__isnull=False,
