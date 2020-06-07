@@ -1,4 +1,4 @@
-from datetime import date
+from datetime import date, timedelta
 from io import BytesIO
 
 import numpy
@@ -25,6 +25,7 @@ class BloodGlucoseGraph(models.Model):
             start_date: date,
             end_date: date
     ) -> 'BloodGlucoseGraph':
+        """Create a graph for the given set of readings, for the given period of time."""
         date_format = "%m-%d-%y"
         fig, ax = pyplot.subplots()
         sorted_readings = readings.order_by('reading_datetime_utc')
@@ -33,7 +34,8 @@ class BloodGlucoseGraph(models.Model):
             [reading.glucose_value for reading in sorted_readings],
             'ko:'
         )
-        ax.set_xlim(numpy.datetime64(start_date), numpy.datetime64(end_date))
+        # Add a day to the end date, so we include all the readings from that day.
+        ax.set_xlim(numpy.datetime64(start_date), numpy.datetime64(end_date + timedelta(days=1)))
         pyplot.title(f"Blood Glucose - {start_date.strftime(date_format)} - {end_date.strftime(date_format)}")
         pyplot.ylabel("Blood Sugar - mg/dL")
         pyplot.xlabel("Date")
