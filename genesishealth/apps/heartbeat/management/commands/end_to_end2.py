@@ -61,22 +61,6 @@ def do_test(device, reading_server):
         raise EndToEndException(
             '[{0}] Reading not found in database.'.format(
                 reading_server))
-    if settings.END_TO_END_SKIP_API:
-        return
-    # Assume reading is latest one by db ID.
-    reading = user.glucose_readings.order_by('-id')[0]
-    # See if API record was sent.
-    for i in range(10):
-        qs = APILogRecord.objects.filter(
-            is_inbound=False, data__contains=reading.glucose_value,
-            datetime__gt=start_time)
-        if qs.count() > 0:
-            break
-        time.sleep(.5)
-    else:
-        raise EndToEndException(
-            '[{0}] Reading not received by API.'.format(
-                reading_server))
 
 
 class Command(BaseCommand):
