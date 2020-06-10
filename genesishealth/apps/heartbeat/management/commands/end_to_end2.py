@@ -18,11 +18,10 @@ import paramiko
 
 
 def send_restart_command(reading_server):
-    local_name = settings.READING_SERVER_INTERNAL_LOCATIONS[reading_server]
     key = paramiko.RSAKey.from_private_key_file(settings.REMOTE_ACCESS_SSH_KEY_PATH)
     client = paramiko.SSHClient()
     client.set_missing_host_key_policy(paramiko.AutoAddPolicy())
-    client.connect(hostname=local_name,
+    client.connect(hostname=reading_server,
                    port=22,
                    pkey=key,
                    username=settings.REMOTE_ACCESS_SSH_USERNAME)

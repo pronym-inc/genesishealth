@@ -20,9 +20,3 @@ if USE_SQS:
 REMOTE_ACCESS_SSH_KEY_PATH = '/home/genesishealth/e2e_key'
 REMOTE_ACCESS_SSH_USERNAME = 'ubuntu'
 AUTORESTART_COMMAND = 'sudo systemctl restart supervisord'
-
-READING_SERVER_INTERNAL_LOCATIONS = {
-    'reading1.genesishealthtechnologies.com': 'reading1.ght-plumbing.in',
-    'reading2.genesishealthtechnologies.com': 'reading2.ght-plumbing.in',
-    'reading3.genesishealthtechnologies.com': 'reading3.ght-plumbing.in'
-}
