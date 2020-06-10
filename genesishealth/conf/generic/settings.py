@@ -426,9 +426,9 @@ WKHTMLTOPDF_CMD = 'xvfb-run /usr/bin/wkhtmltopdf'
 
 # Locations of reading servers
 READING_SERVER_LOCATIONS = (
-    'reading1.genesishealthtechnologies.com',
-    'reading2.genesishealthtechnologies.com',
-    'reading3.genesishealthtechnologies.com'
+    'reading1.ght-plumbing.in',
+    'reading2.ght-plumbing.in',
+    'reading3.ght-plumbing.in'
 )
 
 # Number of rows beginning each CSV file
