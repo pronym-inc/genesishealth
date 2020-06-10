@@ -41,7 +41,6 @@ def do_test(device, reading_server):
     try:
         response, reading_data = user.patient_profile.send_http_reading(
             reading_server=reading_server)
-        print(response, reading_data)
         assert response
     except:
         raise EndToEndException(

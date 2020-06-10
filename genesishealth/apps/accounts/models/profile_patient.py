@@ -724,8 +724,7 @@ class PatientProfile(BaseProfile):
             self.user, **kwargs)
         response = GlucoseReading.send_raw_reading(
             raw_reading, reading_server=reading_server)
-        print(response)
-        return response == 'success', reading_data
+        return response == b'success', reading_data
 
     def set_phone_number(self, number):
         self.contact.phonenumber_set.all().delete()
