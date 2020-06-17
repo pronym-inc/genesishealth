@@ -315,10 +315,9 @@ class GenesisBatchForm(GenesisForm):
     def __init__(self, *args, **kwargs):
         self.batch_queryset = kwargs.pop('batch_queryset')
         try:
-            self.batch = self.batch_queryset.filter(pk__in=kwargs.pop('batch'))
+            self.batch = self.batch_queryset.filter(pk__in=list(kwargs.pop('batch')))
         except KeyError:
-            raise Exception(
-                'GenesisBatchForm did not receive a batch in kwargs.')
+            raise Exception('GenesisBatchForm did not receive a batch in kwargs.')
         super(GenesisBatchForm, self).__init__(*args, **kwargs)
 
     def has_no_fields(self):

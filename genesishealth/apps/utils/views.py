@@ -103,14 +103,14 @@ def generic_form(request, form_class, page_title='', form_kwargs=None,
         try:
             batch_data = post_data.get(batch_variable)
             post_data.pop(batch_variable)
-            form_kwargs['batch'] = map(int, batch_data.split(','))
+            form_kwargs['batch'] = list(map(int, batch_data.split(',')))
             form_kwargs['batch_queryset'] = batch_queryset
             c['batch_queryset'] = batch_queryset
         except KeyError:
             raise Exception(
                 'generic_form was called in batch mode, but the request did not contain the batch variable (%s)' % batch_variable) # noqa
 
-        c['batch_id_str'] = ','.join(map(str, form_kwargs['batch']))
+        c['batch_id_str'] = ','.join(list(map(str, form_kwargs['batch'])))
         if len(post_data) == 1 and post_data.get('csrfmiddlewaretoken'):
             post_data.pop('csrfmiddlewaretoken')
     else:
