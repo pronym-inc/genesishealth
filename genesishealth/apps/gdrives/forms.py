@@ -557,7 +557,7 @@ class RMAInspectionForm(GenesisModelForm):
         obj.validated_by = self.requester
         obj.touch(self.requester)
         obj.save()
-        obj.found_problems = self.cleaned_data['found_problems']
+        obj.found_problems.set(self.cleaned_data['found_problems'])
         # Create update object, also.
         update = GDriveComplaintUpdate.objects.create(
             complaint=obj,
