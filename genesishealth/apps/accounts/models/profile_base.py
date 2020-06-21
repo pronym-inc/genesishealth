@@ -92,8 +92,13 @@ class ProfileManager(Manager):
         profile.save()
         return profile
 
-    def create_user(self, username: str, email: str, password: Optional[str] = None,
-                    email_password: bool = True, **kwargs: Any) -> User:
+    def create_user(
+            self,
+            username: str,
+            email: str,
+            password: Optional[str] = None,
+            email_password: bool = True,
+            **kwargs: Any) -> User:
         """Creates a user with the proper profile."""
         if password is None:
             password = make_password()

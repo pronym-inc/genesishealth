@@ -266,10 +266,12 @@ class GlucoseReading(ModelWithNotes):
         try:
             sock.connect((reading_server, settings.GDRIVE_READING_PORT))
         except socket.error:
+            print("Socket connection failed.")
             pass
         sock.send(reading)
         response = sock.recv(7)
         sock.close()
+        print(f"We sent it supposably: {reading} | {response}")
         return response
 
     @classmethod

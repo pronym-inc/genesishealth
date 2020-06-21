@@ -13,3 +13,5 @@ if USE_SQS:
 
 RAISE_ON_500 = True
 USE_HTTPS = False
+
+READING_SERVER_LOCATIONS = ('localhost',)

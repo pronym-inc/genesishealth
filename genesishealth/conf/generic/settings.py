@@ -538,3 +538,6 @@ JWT_SUB = 'genesis'
 JWT_ISS = 'genesishealth'
 JWT_AUD = 'genesisapi'
 USE_HTTPS = True
+
+USE_TZ = True
+TIME_ZONE = 'America/Chicago'

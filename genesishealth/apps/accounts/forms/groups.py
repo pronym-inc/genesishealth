@@ -213,8 +213,7 @@ class TargetRangeReportForm(GenesisForm):
         super(TargetRangeReportForm, self).__init__(*args, **kwargs)
 
     def save(self):
-        content = self.group.generate_target_range_report(
-            self.cleaned_data['days_back'])
+        content = self.group.generate_target_range_report(self.cleaned_data['days_back'])
         cleaned_group_name = self.group.name.replace(' ', '_').lower()
         filename = "{}_target_range_{}.csv".format(
             cleaned_group_name,

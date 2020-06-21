@@ -6,6 +6,7 @@ import re
 
 from datetime import date, timedelta
 from hashlib import sha1 as sha_constructor
+from typing import Optional, Any, Dict
 
 from django.conf import settings
 from django.contrib.auth.models import User
@@ -16,6 +17,8 @@ from django.dispatch import receiver
 from django.template.loader import render_to_string
 from django.utils.timezone import now, localtime
 
+from genesishealth.apps.accounts.models.group import Company
+from genesishealth.apps.accounts.models.profile_base import BaseProfile, ProfileManager
 from genesishealth.apps.accounts.password import make_password
 from genesishealth.apps.accounts.tasks import do_detect_timezone
 from genesishealth.apps.api.models import APIPartner
@@ -27,9 +30,6 @@ from genesishealth.apps.products.models import ProductType
 from genesishealth.apps.readings.models import GlucoseReading
 from genesishealth.apps.utils.tz_lookup import timezone_from_location_string
 
-from .group import Company
-from .profile_base import BaseProfile, ProfileManager
-
 
 SHA1_RE = re.compile('^[a-f0-9]{40}$')
 VALIDATION_STATUSES = (('active', 'active'), ('pending', 'pending'))
@@ -38,11 +38,12 @@ VALIDATION_STATUSES = (('active', 'active'), ('pending', 'pending'))
 class PatientProfileManager(ProfileManager):
     def create_user(
             self,
-            username,
-            email,
-            password,
-            email_password=True,
-            **kwargs) -> User:
+            username: str,
+            email: str,
+            password: Optional[str] = None,
+            email_password: bool = True,
+            **kwargs: Any
+    ) -> User:
         """Creates a patient.  This should rarely be used directly;
         instead use either the MyGHR or Verizon manager for this."""
         kwargs.setdefault('account_activation_datetime', now())
@@ -59,7 +60,10 @@ class PatientProfileManager(ProfileManager):
 
 class MyGHRPatientManager(PatientProfileManager):
     def create_user(
-            self, first_name, last_name, password=None,
+            self,
+            first_name: str,
+            last_name: str,
+            password: Optional[str] = None,
             email=None, email_password=True, **kwargs):
         # Username will default to email, but if not provided, it will
         # generate one.
@@ -720,10 +724,8 @@ class PatientProfile(BaseProfile):
     def send_http_reading(self, **kwargs):
         """Sends HTTP reading to configured READING_SERVER_LOCATIONS."""
         reading_server = kwargs.pop('reading_server', None)
-        raw_reading, reading_data = GlucoseReading.generate_raw_reading(
-            self.user, **kwargs)
-        response = GlucoseReading.send_raw_reading(
-            raw_reading, reading_server=reading_server)
+        raw_reading, reading_data = GlucoseReading.generate_raw_reading(self.user, **kwargs)
+        response = GlucoseReading.send_raw_reading(raw_reading, reading_server=reading_server)
         return response == b'success', reading_data
 
     def set_phone_number(self, number):

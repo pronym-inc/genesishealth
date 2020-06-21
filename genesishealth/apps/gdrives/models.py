@@ -342,7 +342,7 @@ class GDrive(models.Model):
                 recovered_count += 1
         return recovered_count
 
-    def register(self, patient):
+    def register(self, patient: User) -> None:
         """Updates the device with a new patient."""
         if self.patient:
             raise Exception(
