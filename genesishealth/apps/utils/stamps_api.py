@@ -1,13 +1,24 @@
 from datetime import date
 
+from django.conf import settings
+from stamps.config import StampsConfiguration
+from stamps.services import StampsService
 
 
-def create_stamps_connection():
-    return None
+def create_stamps_connection() -> StampsService:
+    configuration = StampsConfiguration(
+        integration_id=settings.STAMPS_INTEGRATION_ID,
+        username=settings.STAMPS_USERNAME,
+        password=settings.STAMPS_PASSWORD
+    )
+    service = StampsService(configuration=configuration)
+    return service
 
 
 def create_stamps_label(
-        from_address, to_address, rate_info, package_type,
+        from_address: str,
+        to_address: str,
+        rate_info, package_type,
         hide_postage=True, connection=None):
     connection = connection if connection else create_stamps_connection()
     rate = connection.create_shipping()

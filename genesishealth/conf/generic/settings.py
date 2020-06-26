@@ -167,20 +167,32 @@ LOGGING = {
     'version': 1,
     'disable_existing_loggers': False,
     'handlers': {
-        'file': {
-            'level': 'DEBUG',
-            'class': 'logging.FileHandler',
-            'filename': LOG_PATH,
+        'mail_admins': {
+            'level': 'ERROR',
+            'class': 'django.utils.log.AdminEmailHandler'
         },
+        'console': {
+            'class': 'logging.StreamHandler',
+        },
+        'default': {
+            'level': 'DEBUG',
+            'class': 'logging.handlers.RotatingFileHandler',
+            'filename': LOG_PATH,
+            'maxBytes': 1024 * 1024 * 5,  # 5 MB
+            'backupCount': 5,
+            'formatter': 'verbose'
+        }
     },
     'loggers': {
-        'doctors': {
-            'handlers': ['file'],
-            'level': 'DEBUG',
+        'django.request': {
+            'handlers': ['mail_admins'],
+            'level': 'ERROR',
             'propagate': True,
-        },
-    },
+        }
+    }
 }
+
+ADMIN = [('Gregg Keithley', 'gregg@pronym.com')]
 
 LOGIN_URL = '/accounts/login/'
 LOGOUT_URL = '/accounts/logout/'
