@@ -1,65 +1,47 @@
 from datetime import date
+from typing import List, Optional
 
 from django.conf import settings
-from stamps.config import StampsConfiguration
-from stamps.services import StampsService
+from stamps.request_models.common import StampsAddress, Rate, ServiceType, PackageType
+from stamps.response_models.create_indicium import PostageLabel
+from stamps.service import FakeStampsService, BaseStampsService, StampsService
 
 
-def create_stamps_connection() -> StampsService:
-    configuration = StampsConfiguration(
-        integration_id=settings.STAMPS_INTEGRATION_ID,
-        username=settings.STAMPS_USERNAME,
-        password=settings.STAMPS_PASSWORD
-    )
-    service = StampsService(configuration=configuration)
-    return service
+class GenesisStampsService:
+    _service: BaseStampsService
 
+    def __init__(self):
+        self._service = self._get_service()
 
-def create_stamps_label(
-        from_address: str,
-        to_address: str,
-        rate_info, package_type,
-        hide_postage=True, connection=None):
-    connection = connection if connection else create_stamps_connection()
-    rate = connection.create_shipping()
-    rate.ShipDate = date.today().isoformat()
-    rate.FromZIPCode = from_address.ZIPCode
-    rate.ToZIPCode = to_address.ZIPCode
-    rate.PackageType = package_type
-    copy_fields = ('Amount', 'ServiceType', 'DeliverDays', 'DimWeighting',
-                   'Zone', 'RateCategory', 'ToState')
-    for field in copy_fields:
-        setattr(rate, field, getattr(rate_info, field))
-    if hide_postage:
-        add_on = connection.create_add_on()
-        add_on.AddOnType = "SC-A-HP"
-        rate.AddOns.AddOnV7.append(add_on)
-    transaction_id = date.today().isoformat()
-    return connection.get_label(
-        from_address, to_address, rate, transaction_id=transaction_id)
+    def cleanse_address(self, address: StampsAddress) -> StampsAddress:
+        return self._service.cleanse_address(address)
 
+    def get_label(
+            self,
+            to_address: StampsAddress,
+            from_address: StampsAddress,
+            rate: Rate
+    ) -> PostageLabel:
+        return self._service.get_label(to_address, from_address, rate)
 
-def get_rates(rate_names, shipment_data, connection=None):
-    """shipment_data, e.g.
-    shipment_data = {
-    'FromZIPCode': '94107', 'ToZIPCode': '20500', 'PackageType': 'Package',
-    'ShipDate': date.today ().isoformat()}"""
-    connection = connection if connection else create_stamps_connection()
-    shipping_obj = connection.create_shipping()
-    for key, value in shipment_data.items():
-        setattr(shipping_obj, key, value)
-    rates = connection.get_rates(shipping_obj)
-    return filter(lambda x: x.ServiceType in rate_names, rates)
+    def get_rates(
+            self,
+            from_zip: str,
+            to_zip: str,
+            weight_in_ounces: float,
+            ship_date: date,
+            package_type: PackageType,
+    ) -> List[Rate]:
+        return self._service.get_rates(from_zip, to_zip, weight_in_ounces, ship_date, package_type)
 
-
-def get_stamps_address(address_data, connection=None):
-    """Address data, e.g.
-    {"FullName": "POTUS", "Address1": "1600 Pennsylvania Avenue NW",
-    "City": "Washington", "State": "DC"}"""
-    connection = connection if connection else create_stamps_connection()
-    address = connection.create_address()
-    fields = ('FullName', 'Address1', 'Address2', 'City', 'State')
-    for field in fields:
-        if field in address_data:
-            setattr(address, field, address_data[field])
-    return connection.get_address(address).Address
+    @classmethod
+    def _get_service(cls) -> BaseStampsService:
+        if settings.STAMPS_USE_FAKE_SERVICE:
+            return FakeStampsService(settings.STAMPS_FAKE_LABEL_URL)
+        else:
+            return StampsService(
+                integration_id=settings.STAMPS_INTEGRATION_ID,
+                username=settings.STAMPS_USERNAME,
+                password=settings.STAMPS_PASSWORD,
+                is_dev=settings.STAMPS_USE_DEV_SERVER
+            )

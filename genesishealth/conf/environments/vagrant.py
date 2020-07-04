@@ -15,3 +15,5 @@ RAISE_ON_500 = True
 USE_HTTPS = False
 
 READING_SERVER_LOCATIONS = ('localhost',)
+
+LOGGING['loggers']['django.request']['handlers'] = ['console']

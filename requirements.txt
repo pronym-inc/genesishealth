@@ -32,3 +32,4 @@ sendgrid==6.3.1
 sendgrid-django==4.2.0
 twilio==6.41.0
 git+ssh://git@github.com/pronym-inc/pronym-django-api.git@v2.0#egg=pronym_api
+git+ssh://git@github.com/pronym-inc/stamps.git@v1.0#egg=stamps

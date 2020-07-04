@@ -112,7 +112,7 @@ DATABASES = {
         'HOST': secrets.get('db_host', 'localhost'),
         'NAME': secrets.get('db_name', 'genesishealth'),
         'USER': secrets.get('db_username', 'genesishealth'),
-        'PASSWORD': secrets.get('db_password', 'password123')
+        'PASSWORD': secrets.get('db_password', 'changeme123')
     }
 }
 
@@ -174,16 +174,19 @@ LOGGING = {
         'console': {
             'class': 'logging.StreamHandler',
         },
-        'default': {
+        'rotating_file': {
             'level': 'DEBUG',
             'class': 'logging.handlers.RotatingFileHandler',
             'filename': LOG_PATH,
             'maxBytes': 1024 * 1024 * 5,  # 5 MB
-            'backupCount': 5,
-            'formatter': 'verbose'
+            'backupCount': 5
         }
     },
     'loggers': {
+        'django': {
+            'handlers': ['rotating_file'],
+            'level': 'WARNING',
+        },
         'django.request': {
             'handlers': ['mail_admins'],
             'level': 'ERROR',
@@ -517,6 +520,9 @@ E2E_CRITICAL_THRESHOLD = 3
 
 GOOGLE_MAPS_TIMEZONE_API_KEY = secrets.get('google_maps_timezone_api_key', '')
 
+STAMPS_USE_FAKE_SERVICE = True
+STAMPS_USE_DEV_SERVER = True
+STAMPS_FAKE_LABEL_URL = ""
 STAMPS_INTEGRATION_ID = secrets.get('stamps_integration_id', '')
 STAMPS_USERNAME = secrets.get('stamps_username')
 STAMPS_PASSWORD = secrets.get('stamps_password')

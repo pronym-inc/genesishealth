@@ -17,8 +17,7 @@ class ShipmentLabelView(TemplateView):
 
     def get_shipment(self):
         if not hasattr(self, '_shipment'):
-            self._shipment = OrderShipment.objects.get(
-                pk=self.kwargs['shipment_id'])
+            self._shipment = OrderShipment.objects.get(pk=self.kwargs['shipment_id'])
         return self._shipment
 
     def get_page_title(self):

@@ -148,6 +148,8 @@ class RetrieveUsernameView(TemplateView):  # REFACTOR
 
         return self.render_to_response(
             self.get_context_data(form=form, hidden_data=hidden_data))
+
+
 retrieve_username = RetrieveUsernameView.as_view()
 
 
@@ -400,6 +402,7 @@ def reset_password(request, forgot_hash):  # REFACTOR
         form = ResetPasswordForm(user=user)
     return render(request, "accounts/reset.html", {"form": form})
 
+
 admin_test = user_passes_test(admin_user)
 
 
@@ -408,6 +411,7 @@ class UserTableView(GenesisTableView):
         'patient_profile__insurance_identifier',
         'patient_profile__epc_member_identifier',
         'gdrives__meid',
+        'patient_profile__date_of_birth',
         'id']
 
     def create_columns(self):
@@ -424,7 +428,7 @@ class UserTableView(GenesisTableView):
                 failsafe='None', searchable=False, sortable=False),
             AttributeTableColumn(
                 'Date of Birth', 'get_profile.date_of_birth',
-                searchable=False, sortable=False),
+                sortable=False),
             AttributeTableColumn(
                 'Address', 'get_profile.contact.address1',
                 searchable=False, sortable=False),
@@ -486,6 +490,7 @@ class AcceptSomethingView(TemplateView):
         profile.save()
         print(self.target_field)
         return genesis_redirect(request, reverse('dashboard:home'))
+
 
 accept_terms = prof_and_patient(AcceptSomethingView.as_view(
     template_name='accounts/accept_terms.html',
@@ -689,6 +694,8 @@ class CommunicationsResolutionReportView(ReportView):
         else:
             end_date = start_date + relativedelta(months=4)
         return start_date, end_date
+
+
 communications_resolution_report = user_passes_test(admin_user)(
     CommunicationsResolutionReportView.as_view())
 communications_resolution_report_print = user_passes_test(admin_user)(
@@ -715,6 +722,8 @@ class CallLogReportConfigureView(GenesisFormView):
             reverse('accounts:call-log-report'),
             urlencode(date_info)
         )
+
+
 configure_call_log_report = user_passes_test(admin_user)(
     CallLogReportConfigureView.as_view())
 
@@ -872,6 +881,8 @@ class CallLogReportView(ReportView):
         else:
             end_date = start_date + relativedelta(months=4)
         return start_date, end_date
+
+
 call_log_report = user_passes_test(admin_user)(
     CallLogReportView.as_view())
 call_log_report_print = user_passes_test(admin_user)(

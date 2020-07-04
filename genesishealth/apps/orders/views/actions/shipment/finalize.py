@@ -71,13 +71,12 @@ class FinalizeShipmentView(GenesisFormView):
         kwargs = super(FinalizeShipmentView, self).get_form_kwargs()
         shipment = self.get_shipment()
         kwargs['instance'] = shipment
-        rates = shipment.get_shipping_rates(
-            shipment.package_type.name, 0)
-        rate_info = {r.ServiceType: r.Amount for r in rates}
+        rates = shipment.get_shipping_rates()
+        rate_info = {r.service_type.name: r.amount for r in rates}
         kwargs['rates'] = rate_info
         return kwargs
 
-    def get_shipment(self):
+    def get_shipment(self) -> OrderShipment:
         if not hasattr(self, '_shipment'):
             self._shipment = OrderShipment.objects.get(
                 pk=self.kwargs['shipment_id'])

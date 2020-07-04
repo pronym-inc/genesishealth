@@ -20,3 +20,4 @@ if USE_SQS:
 REMOTE_ACCESS_SSH_KEY_PATH = '/home/genesishealth/e2e_key'
 REMOTE_ACCESS_SSH_USERNAME = 'ubuntu'
 AUTORESTART_COMMAND = 'sudo systemctl restart supervisord'
+STAMPS_FAKE_LABEL_URL = f"https://{SITE_URL}/static/img/fake_label.png"
