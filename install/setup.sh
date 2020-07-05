@@ -6,3 +6,4 @@ DIR="$(cd "$(dirname "$0")" && pwd)"
 "$DIR"/installPipRequirements.sh
 "$DIR"/migrateDatabase.sh
 "$DIR"/installFixtures.sh
+"$DIR"/configureLocalDns.sh
