@@ -10,4 +10,4 @@ class TestExampleTestCase(TestCase):
             device_id="987654321"
         )
         self.assertEqual(device.meid, "123456789")
-        self.assertEqual(device.device_id, "98765432102")
+        self.assertEqual(device.device_id, "987654321")
