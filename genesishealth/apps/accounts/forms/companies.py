@@ -1,8 +1,10 @@
 from django import forms
+from django.contrib.auth.models import User
 
 from localflavor.us.forms import USStateField, USStateSelect
 
-from genesishealth.apps.accounts.models import Company, Contact, Payor
+from genesishealth.apps.accounts.models import Company, Contact, Payor, GenesisGroup
+from genesishealth.apps.utils.class_views.csv_report import CSVReportForm
 from genesishealth.apps.utils.forms import (
     GenesisForm, GenesisModelForm, PhoneField,
     ZipField, PhoneNumberFormMixin)
@@ -127,3 +129,18 @@ class ImportCompaniesForm(GenesisForm):
     def save(self, *args, **kwargs):
         for form in self.forms:
             form.save()
+
+
+class ConfigureGlucoseAverageReportForm(CSVReportForm):
+    start_date = forms.DateField()
+    end_date = forms.DateField()
+    company = forms.ModelChoiceField(queryset=None, required=False)
+
+    _group: GenesisGroup
+    _user: User
+
+    def __init__(self, *args, **kwargs):
+        self._group = kwargs.pop('group')
+        self._user = kwargs.pop('user')
+        super().__init__(*args, **kwargs)
+        self.fields['company'].queryset = self._group.companies.all()

@@ -20,7 +20,7 @@ class ManufacturerCartonImportFormView(GenesisFormView):
     success_message = 'The cartons have been added.'
     page_title = 'Import Manufacturer Cartons'
 
-    def get_breadcrumbs(self):
+    def _get_breadcrumbs(self):
         return [
             Breadcrumb(
                 'Manufacturer Cartons',
@@ -96,7 +96,7 @@ class NewGDriveManufacturerCartonFormView(GenesisFormView):
     page_title = 'Add Manufacturer Carton'
     success_message = 'The manufacturer carton has been added.'
 
-    def get_breadcrumbs(self):
+    def _get_breadcrumbs(self):
         return [
             Breadcrumb('Manufacturer Cartons',
                        reverse('gdrives:manufacturer-cartons'))
@@ -112,7 +112,7 @@ class EditGDriveManufacturerCartonFormView(GenesisFormView):
     form_class = GDriveManufacturerCartonForm
     success_message = 'The manufacturer carton has been updated.'
 
-    def get_breadcrumbs(self):
+    def _get_breadcrumbs(self):
         return [
             Breadcrumb('Manufacturer Cartons',
                        reverse('gdrives:manufacturer-cartons'))
@@ -130,7 +130,7 @@ class EditGDriveManufacturerCartonFormView(GenesisFormView):
         kwargs['instance'] = self.get_carton()
         return kwargs
 
-    def get_page_title(self):
+    def _get_page_title(self):
         return 'Edit Manufacturer Carton {0}'.format(
             self.get_carton().number)
 

@@ -48,7 +48,7 @@ class ShippingHistoryReport(CSVReport):
 
     configuration_form_class = ConfigureShippingHistoryReportForm
 
-    def configure(self, group_id):
+    def _configure(self, group_id):
         self.group = GenesisGroup.objects.get(pk=group_id)
 
     def get_configuration_form_kwargs(self):
@@ -146,7 +146,7 @@ class ShippingHistoryReportView(CSVReportView):
     page_title = "Shipping History Report"
     report_class = ShippingHistoryReport
 
-    def get_breadcrumbs(self):
+    def _get_breadcrumbs(self):
         group = self.get_group()
         return [
             Breadcrumb('Business Partners',
@@ -164,13 +164,13 @@ class ShippingHistoryReportView(CSVReportView):
     def get_group(self):
         return GenesisGroup.objects.get(pk=self.kwargs['group_id'])
 
-    def get_post_data(self):  # pragma: no cover
-        data = super(ShippingHistoryReportView, self).get_post_data()
+    def _get_post_data(self):  # pragma: no cover
+        data = super(ShippingHistoryReportView, self)._get_post_data()
         if not isinstance(data['companies'], list):
             data['companies'] = [data['companies']]
         return data
 
-    def get_report_kwargs(self):
+    def _get_report_kwargs(self):
         return {'group_id': self.get_group().id}
 
 

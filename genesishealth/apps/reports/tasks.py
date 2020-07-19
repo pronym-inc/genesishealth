@@ -2,7 +2,7 @@ from celery.task import task
 
 
 def get_report_class(report_name):
-    from genesishealth.apps.accounts.views.groups import GroupExportReport, GroupExportAccountReport, GroupAccountStatusReport, GroupReadingDelayReport  # noqa
+    from genesishealth.apps.accounts.views.groups import GroupExportReport, GroupExportAccountReport, GroupAccountStatusReport, GroupReadingDelayReport, GlucoseAverageCSVReport  # noqa
     from genesishealth.apps.epc.views.groups.export import ShippingHistoryReport  # noqa
     from genesishealth.apps.gdrives.views.cellular import CellularFullMEIDListReport, CellularDeactivationReport  # noqa
     from genesishealth.apps.orders.views.reports.business_partner_order_history import BusinessPartnerOrderHistoryReport  # noqa
@@ -18,7 +18,7 @@ def get_report_class(report_name):
         GroupExportAccountReport, CellularFullMEIDListReport,
         CellularDeactivationReport, GroupAccountStatusReport,
         ShippingHistoryReport, GroupReadingDelayReport,
-        ReadingExceptionReport]
+        ReadingExceptionReport, GlucoseAverageCSVReport]
     report_dict = {str(a): a for a in reports}
     report = report_dict.get(report_name)
     if report is not None:

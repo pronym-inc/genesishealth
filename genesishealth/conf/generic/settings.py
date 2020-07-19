@@ -65,6 +65,7 @@ INSTALLED_APPS = [
     'genesishealth.apps.nursing',
     'genesishealth.apps.text_messaging',
     'genesishealth.apps.healthsplash',
+    'genesishealth.apps.work_queue',
     'compressor',
     'localflavor',
 ]
@@ -329,6 +330,8 @@ TABLE_ACTION_ICON_CLASSES = {
     'orders:edit-shipment': 'fa fa-pencil-square-o',
     'orders:shipment-packing-list': 'fa fa-file-text-o',
     'orders:create-shipment': 'fa fa-send',
+    'work_queue:view-item': 'icon-folder-open',
+    'work_queue:approve-item': 'fa fa-pencil-square-o',
     'default': 'icon-certificate',
 }
 

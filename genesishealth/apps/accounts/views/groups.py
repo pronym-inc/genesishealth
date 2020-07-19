@@ -1,15 +1,17 @@
-from datetime import datetime, time, timedelta
+from datetime import datetime, time, timedelta, date
+from typing import Optional, Dict, Any, List
 
 from django.contrib.auth.models import User
 from django.contrib.auth.decorators import user_passes_test
 from django.urls import reverse
-from django.db.models import Avg, DurationField, ExpressionWrapper, F
+from django.db.models import Avg, DurationField, ExpressionWrapper, F, QuerySet
 from django.http import HttpResponseNotFound
 from django.shortcuts import render
 from django.utils.timezone import get_default_timezone, now
 
 from genesishealth.apps.accounts.breadcrumbs.groups import (
     get_group_breadcrumbs)
+from genesishealth.apps.accounts.forms.companies import ConfigureGlucoseAverageReportForm
 from genesishealth.apps.accounts.forms.groups import (
     GroupForm, ImportGroupsForm,
     ParticipationReportForm, NoncompliantReportForm,
@@ -17,7 +19,7 @@ from genesishealth.apps.accounts.forms.groups import (
     ConfigurePatientExportForm, ConfigureExportAccountReportForm,
     ConfigureAccountStatusReportForm, ConfigureReadingDelayReportForm,
     InactiveParticipationStatusReportForm)
-from genesishealth.apps.accounts.models import GenesisGroup
+from genesishealth.apps.accounts.models import GenesisGroup, Company
 from genesishealth.apps.accounts.models.profile_patient import (
     PatientCommunication)
 from genesishealth.apps.readings.models import GlucoseReading
@@ -504,7 +506,6 @@ class GroupCommunicationsTableView(GenesisTableView, GetGroupMixin):
             patient__patient_profile__group=self.get_group())
         if self.should_show_closed():
             return qs.filter(status__is_closed=True)
-        print(qs.filter(status__is_closed=False).count())
         return qs.filter(status__is_closed=False)
 
     def should_show_closed(self):
@@ -539,7 +540,7 @@ class GroupExportReport(CSVReport):
         "Alerts"
     ]]
 
-    def configure(self, **kwargs):
+    def _configure(self, **kwargs):
         self.business_partner = GenesisGroup.objects.get(
             pk=kwargs['business_partner_id'])
         self.user = User.objects.get(pk=kwargs['user_id'])
@@ -621,7 +622,7 @@ class GroupExportReportView(CSVReportView, GetGroupMixin):
     success_message = "Your report has been generated."
     report_class = GroupExportReport
 
-    def get_breadcrumbs(self):
+    def _get_breadcrumbs(self):
         group = self.get_group()
         return [
             Breadcrumb('Business Partners',
@@ -636,7 +637,7 @@ class GroupExportReportView(CSVReportView, GetGroupMixin):
                         args=[group.pk]))
         ]
 
-    def get_report_kwargs(self):
+    def _get_report_kwargs(self):
         return {
             'business_partner_id': self.get_group().id,
             'user_id': self.request.user.id
@@ -649,7 +650,7 @@ group_export = test(GroupExportReportView.as_view())
 class GroupExportAccountReport(CSVReport):
     configuration_form_class = ConfigureExportAccountReportForm
 
-    def configure(self, **kwargs):
+    def _configure(self, **kwargs):
         self.business_partner = GenesisGroup.objects.get(
             pk=kwargs['business_partner_id'])
         self.user = User.objects.get(pk=kwargs['user_id'])
@@ -769,7 +770,7 @@ class GroupExportAccountReportView(CSVReportView, GetGroupMixin):
     success_message = "Your report has been generated."
     report_class = GroupExportAccountReport
 
-    def get_breadcrumbs(self):
+    def _get_breadcrumbs(self):
         group = self.get_group()
         return [
             Breadcrumb('Business Partners',
@@ -784,7 +785,7 @@ class GroupExportAccountReportView(CSVReportView, GetGroupMixin):
                         args=[group.pk]))
         ]
 
-    def get_report_kwargs(self):
+    def _get_report_kwargs(self):
         return {
             'business_partner_id': self.get_group().id,
             'user_id': self.request.user.id
@@ -797,7 +798,7 @@ group_export_accounts = test(GroupExportAccountReportView.as_view())
 class GroupAccountStatusReport(CSVReport):
     configuration_form_class = ConfigureAccountStatusReportForm
 
-    def configure(self, **kwargs):
+    def _configure(self, **kwargs):
         self.business_partner = GenesisGroup.objects.get(
             pk=kwargs['business_partner_id'])
         self.user = User.objects.get(pk=kwargs['user_id'])
@@ -909,7 +910,7 @@ class GroupAccountStatusReportView(CSVReportView, GetGroupMixin):
     success_message = "Your report has been generated."
     report_class = GroupAccountStatusReport
 
-    def get_breadcrumbs(self):
+    def _get_breadcrumbs(self):
         group = self.get_group()
         return [
             Breadcrumb('Business Partners',
@@ -924,7 +925,7 @@ class GroupAccountStatusReportView(CSVReportView, GetGroupMixin):
                         args=[group.pk]))
         ]
 
-    def get_report_kwargs(self):
+    def _get_report_kwargs(self):
         return {
             'business_partner_id': self.get_group().id,
             'user_id': self.request.user.id
@@ -949,7 +950,7 @@ class GroupReadingDelayReport(CSVReport):
         "Bucket"
     ]]
 
-    def configure(self, **kwargs):
+    def _configure(self, **kwargs):
         self.business_partner = GenesisGroup.objects.get(
             pk=kwargs['business_partner_id'])
         self.user = User.objects.get(pk=kwargs['user_id'])
@@ -1050,7 +1051,7 @@ class GroupReadingDelayReportView(CSVReportView, GetGroupMixin):
     success_message = "Your report has been generated."
     report_class = GroupReadingDelayReport
 
-    def get_breadcrumbs(self):
+    def _get_breadcrumbs(self):
         group = self.get_group()
         return [
             Breadcrumb('Business Partners',
@@ -1065,7 +1066,7 @@ class GroupReadingDelayReportView(CSVReportView, GetGroupMixin):
                         args=[group.pk]))
         ]
 
-    def get_report_kwargs(self):
+    def _get_report_kwargs(self):
         return {
             'business_partner_id': self.get_group().id,
             'user_id': self.request.user.id
@@ -1073,3 +1074,118 @@ class GroupReadingDelayReportView(CSVReportView, GetGroupMixin):
 
 
 group_reading_delay_report = test(GroupReadingDelayReportView.as_view())
+
+
+class GlucoseAverageCSVReport(CSVReport):
+    configuration_form_class = ConfigureGlucoseAverageReportForm
+
+    _group: GenesisGroup
+    _company: Optional[Company]
+    _user: User
+    _qs: 'QuerySet[User]'
+
+    __glucose_averages: Dict[User, float]
+
+    def _configure(self, **kwargs: Any) -> None:
+        self._group = GenesisGroup.objects.get(pk=kwargs['group_id'])
+        if 'company_id' in kwargs:
+            self._company = self._group.companies.get(pk=kwargs['company_id'])
+        else:
+            self._company = None
+        self._user = User.objects.get(pk=kwargs['user_id'])
+
+    def get_configuration_form_kwargs(self) -> Dict[str, Any]:
+        kwargs = super().get_configuration_form_kwargs()
+        kwargs['group'] = self._group
+        kwargs['user'] = self._user
+        return kwargs
+
+    def get_filename(self, data: Dict[str, Any]) -> str:
+        report_name: str
+        if self._company is not None:
+            report_name = self._company.name
+        else:
+            report_name = self._group.name
+        report_name = report_name.lower().replace(' ', '_')
+        return "{0}_{1}_{2}_average_glucose.csv".format(
+            data['start_date'].strftime("%Y_%m_%d"),
+            data['end_date'].strftime("%Y_%m_%d"),
+            report_name)
+
+    def get_header_rows(self, data: Dict[str, Any]) -> List[List[str]]:
+        queryset = self.get_queryset(data)
+        all_averages = list(filter(
+            lambda x: x is not None,
+            self.__calculate_averages(
+                queryset, data['start_date'], data['end_date']
+            ).values()
+        ))
+        avg: str
+        if len(all_averages) == 0:
+            avg = 'N/A'
+        else:
+            avg = str(sum(all_averages) / len(all_averages))
+        return [
+            ['First Name', 'Last Name', 'Insurance ID', 'Avg Blood Glucose Reading'],
+            ['GROUP', 'AVERAGE', '', avg]
+        ]
+
+    def get_item_row(self, patient: User) -> List[str]:
+        qs = self.get_queryset({})
+        avg = self.__calculate_averages(qs, None, None)
+        return [
+            patient.first_name,
+            patient.last_name,
+            patient.patient_profile.insurance_identifier or 'N/A',
+            str(avg[patient])
+        ]
+
+    def get_queryset(self, data) -> 'QuerySet[User]':
+        if not hasattr(self, '_qs'):
+            if self._company is not None:
+                self._qs = User.objects.filter(patient_profile__company=self._company)
+            else:
+                self._qs = User.objects.filter(patient_profile__group=self._group)
+        return self._qs
+
+    def __calculate_averages(self, qs: 'QuerySet[User]', start_date: date, end_date: date) -> Dict[User, float]:
+        if not hasattr(self, '_glucose_averages'):
+            output: Dict[User, float] = {}
+            for patient in qs:
+                readings = patient.glucose_readings.filter(
+                    reading_datetime_utc__range=(start_date, end_date + timedelta(days=1))
+                )
+                avg = readings.aggregate(reading_avg=Avg('glucose_value'))['reading_avg']
+                output[patient] = avg
+            self._glucose_averages = output
+        return self._glucose_averages
+
+
+class GlucoseAverageCSVReportView(CSVReportView, GetGroupMixin):
+    page_title = "Export Glucose Average View"
+    success_message = "Your report has been generated."
+    report_class = GlucoseAverageCSVReport
+
+    def _get_breadcrumbs(self) -> List[Breadcrumb]:
+        group = self.get_group()
+        return [
+            Breadcrumb('Business Partners',
+                       reverse('accounts:manage-groups')),
+            Breadcrumb(
+                'Business Partner: {0}'.format(group.name),
+                reverse('accounts:manage-groups-detail',
+                        args=[group.pk])),
+            Breadcrumb(
+                'Reports',
+                reverse('accounts:manage-groups-reports',
+                        args=[group.pk]))
+        ]
+
+    def _get_report_kwargs(self) -> Dict[str, Any]:
+        return {
+            'group_id': self.get_group().id,
+            'user_id': self.request.user.id
+        }
+
+
+glucose_average_report_view = test(GlucoseAverageCSVReportView.as_view())

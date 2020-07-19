@@ -24,7 +24,7 @@ class CreatePharmacyPartnerView(GenesisFormView):
     success_message = "The pharmacy partner has been created."
     page_title = "Create Pharmacy Partner"
 
-    def get_breadcrumbs(self):
+    def _get_breadcrumbs(self):
         return [
             Breadcrumb('Pharmacy Partners',
                        reverse('pharmacy:index'))]

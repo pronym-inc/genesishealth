@@ -117,7 +117,7 @@ class ReadingExceptionReportView(CSVReportView):
     page_title = "Reading Exception Report"
     report_class = ReadingExceptionReport
 
-    def get_breadcrumbs(self):
+    def _get_breadcrumbs(self):
         return []
 
 

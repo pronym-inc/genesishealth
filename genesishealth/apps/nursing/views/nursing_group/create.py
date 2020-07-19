@@ -24,7 +24,7 @@ class CreateNursingGroupView(GenesisFormView):
     success_message = "The nursing group has been created."
     page_title = "Create Nursing Group"
 
-    def get_breadcrumbs(self):
+    def _get_breadcrumbs(self):
         return [
             Breadcrumb('Nursing Groups',
                        reverse('nursing:index'))]

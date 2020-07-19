@@ -439,7 +439,7 @@ class PatientImportView(CSVImportView):
                 pk=self.kwargs['group_id'])
         return self._group
 
-    def get_page_title(self):
+    def _get_page_title(self):
         return "Import Patients for {0}".format(self.get_group())
 
     def process_line(self, form, line):
@@ -602,7 +602,7 @@ class ActivatePatientView(GenesisFormView, GetPatientMixin):
         kwargs['requester'] = self.request.user
         return kwargs
 
-    def get_page_title(self):
+    def _get_page_title(self):
         if self.is_activating():
             verb = "Activate"
         else:
@@ -1067,7 +1067,7 @@ class NewPatientCommunicationFormView(GenesisFormView, GetPatientMixin):
             go_back_until=['accounts:patient-communications',
                            'accounts:communications'])
 
-    def get_breadcrumbs(self):
+    def _get_breadcrumbs(self):
         patient = self.get_patient()
         requester = self.request.user
         breadcrumbs = get_patient_breadcrumbs(patient, requester)
@@ -1114,7 +1114,7 @@ class NewPatientCommunicationFormView(GenesisFormView, GetPatientMixin):
             })
         return kwargs
 
-    def get_page_title(self):
+    def _get_page_title(self):
         return 'New Communication for {0}'.format(
             self.get_patient().get_reversed_name())
 
@@ -1163,7 +1163,7 @@ class EditCommunicationFormView(GenesisFormView, GetCommunicationMixin):
     template_name = 'accounts/patients/edit_patient_communication.html'
     prefix = 'note'
 
-    def get_breadcrumbs(self):
+    def _get_breadcrumbs(self):
         return get_communication_breadcrumbs(
             self.get_communication(), self.request.user)
 
@@ -1182,7 +1182,7 @@ class EditCommunicationFormView(GenesisFormView, GetCommunicationMixin):
         kwargs['communication'] = self.get_communication()
         return kwargs
 
-    def get_page_title(self):
+    def _get_page_title(self):
         return 'Edit Communication for {0}'.format(
             self.get_patient().get_reversed_name())
 

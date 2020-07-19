@@ -69,7 +69,7 @@ class ProjectedRefillReportView(CSVReportView):
     page_title = "Projected Refill Report"
     report_class = ProjectedRefillReport
 
-    def get_breadcrumbs(self):
+    def _get_breadcrumbs(self):
         return [
             Breadcrumb("Reports", reverse("orders:reports-index", args=[]))
         ]

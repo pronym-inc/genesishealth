@@ -14,7 +14,7 @@ test = require_admin_permission('orders')
 
 
 class RxPartnerOrderHistoryReport(BaseOrderHistoryReport):
-    def configure(self, **kwargs):
+    def _configure(self, **kwargs):
         self.rx_partner = PharmacyPartner.objects.get(
             pk=kwargs['rx_partner_id'])
 
@@ -34,16 +34,16 @@ class RxPartnerOrderHistoryReport(BaseOrderHistoryReport):
 class RxPartnerOrderHistoryReportView(BaseOrderHistoryReportView):
     report_class = RxPartnerOrderHistoryReport
 
-    def get_breadcrumbs(self):
+    def _get_breadcrumbs(self):
         return get_rx_partner_breadcrumbs(
             self.get_rx_partner(), self.request.user)
 
-    def get_page_title(self):
+    def _get_page_title(self):
         return "Generate Order History For {0}".format(
             self.get_rx_partner().name)
 
-    def get_report_kwargs(self):
-        data = super(RxPartnerOrderHistoryReportView, self).get_report_kwargs()
+    def _get_report_kwargs(self):
+        data = super(RxPartnerOrderHistoryReportView, self)._get_report_kwargs()
         data['rx_partner_id'] = self.kwargs['rx_partner_id']
         return data
 

@@ -122,5 +122,11 @@
             </a>
             <img class="innerloader" id="menulevelloader" src="/static/images/ajax-loader-menu.gif" style="display: none;">
         </li>
+        <li style="border-top:1px solid #ccc;">
+            <a href="{% get_dashboard_url accounts:manage-groups-glucose-average-report group.id %}" class="summarylink" title="Export Average Glucose Report">
+                <img src="/static/images/navicons/153.png" alt=""><span>Export Average Glucose Report</span>
+            </a>
+            <img class="innerloader" id="menulevelloader" src="/static/images/ajax-loader-menu.gif" style="display: none;">
+        </li>
     </ul>
 {% endblock %}

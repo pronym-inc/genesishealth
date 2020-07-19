@@ -1,5 +1,8 @@
+from typing import List, Optional, ClassVar
+
 from django.views.generic.edit import FormMixin, FormView
 
+from genesishealth.apps.utils.breadcrumbs import Breadcrumb
 from genesishealth.apps.utils.request import redirect_with_message
 
 
@@ -41,40 +44,41 @@ class GenesisFormMixin(GenesisBaseFormMixin, FormMixin):
 class GenesisFormView(GenesisBaseFormMixin, FormView):
     template_name = 'utils/generic_form.html'
     form_message = None
-
-    def get_breadcrumbs(self):
-        return []
+    page_title: ClassVar[str]
 
     def get_context_data(self, **kwargs):
         if 'breadcrumbs' not in kwargs:
-            kwargs['breadcrumbs'] = self.get_breadcrumbs()
-        kwargs.setdefault('title', self.get_page_title())
-        form_message = self.get_form_message()
+            kwargs['breadcrumbs'] = self._get_breadcrumbs()
+        kwargs.setdefault('title', self._get_page_title())
+        form_message = self._get_form_message()
         if form_message:
             kwargs.setdefault('form_message', form_message)
         return super(GenesisFormView, self).get_context_data(**kwargs)
 
-    def get_form_message(self):
+    def _get_breadcrumbs(self) -> List[Breadcrumb]:
+        return []
+
+    def _get_form_message(self) -> Optional[str]:
         return self.form_message
 
-    def get_page_title(self):
+    def _get_page_title(self) -> str:
         return self.page_title
 
 
 class GenesisBatchFormView(GenesisFormView):
     batch_variable = "batch_ids"
 
-    def get_batch_id_string(self):
-        post_data = self.request.POST.copy()
-        return post_data.get(self.batch_variable)
-
     def get_context_data(self, **kwargs):
         data = GenesisFormView.get_context_data(self, **kwargs)
-        data['batch_id_str'] = self.get_batch_id_string()
+        data['batch_id_str'] = self._get_batch_id_string()
         return data
 
     def get_form_kwargs(self):
         kwargs = GenesisFormView.get_form_kwargs(self)
         kwargs['batch_queryset'] = self.get_batch_queryset()
-        kwargs['batch'] = map(int, self.get_batch_id_string().split(","))
+        kwargs['batch'] = map(int, self._get_batch_id_string().split(","))
         return kwargs
+
+    def _get_batch_id_string(self):
+        post_data = self.request.POST.copy()
+        return post_data.get(self.batch_variable)

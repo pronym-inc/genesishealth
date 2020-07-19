@@ -81,6 +81,9 @@ urlpatterns = [
     url(r'^(?P<group_id>\d+)/reading_delay_report/$',
         views.group_reading_delay_report,
         name='manage-groups-reading-delay-report'),
+    url(r'^(?P<group_id>\d+)/glucose_average_report/$',
+        views.glucose_average_report_view,
+        name='manage-groups-glucose-average-report'),
     url(r'(?P<group_id>\d+?)/',
         include(id_urlpatterns)),
 ]

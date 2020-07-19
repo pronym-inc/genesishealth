@@ -21,7 +21,7 @@ class EditRxPartnerView(GenesisFormView):
     go_back_until = ['pharmacy:details']
     success_message = "The pharmacy partner has been updated."
 
-    def get_breadcrumbs(self):
+    def _get_breadcrumbs(self):
         return get_rx_partner_breadcrumbs(
             self.get_rx_partner(), self.request.user)
 
@@ -36,7 +36,7 @@ class EditRxPartnerView(GenesisFormView):
                 pk=self.kwargs['rx_partner_id'])
         return self._rx_partner
 
-    def get_page_title(self):
+    def _get_page_title(self):
         return "Edit Pharmacy Partner {0}".format(
             self.get_rx_partner())
 

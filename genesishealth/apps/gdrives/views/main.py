@@ -69,7 +69,7 @@ class AssignByCSVView(GenesisFormView):
     success_message = "The devices have been assigned."
     page_title = "Assign Devices"
 
-    def get_breadcrumbs(self):
+    def _get_breadcrumbs(self):
         return [
             Breadcrumb('Available Devices', reverse('gdrives:available'))
         ]
@@ -315,7 +315,7 @@ class GDriveImportFormView(GenesisFormView):
     success_message = 'The devices have been added.'
     page_title = 'Import Devices'
 
-    def get_breadcrumbs(self):
+    def _get_breadcrumbs(self):
         return [
             Breadcrumb('Devices', reverse('gdrives:new-devices'))
         ]
@@ -396,7 +396,7 @@ class GDriveInspectionView(GenesisFormView, GetDeviceMixin):
         kwargs['requester'] = self.request.user
         return kwargs
 
-    def get_page_title(self):
+    def _get_page_title(self):
         return 'Inspect Device {0}'.format(self.get_device().meid)
 
     def get_success_message(self, form):

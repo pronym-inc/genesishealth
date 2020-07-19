@@ -19,7 +19,7 @@ class SendGroupTextView(GenesisFormView):
     go_back_until = ['accounts:manage-groups-companies']
     success_message = "The text message has been sent."
 
-    def get_breadcrumbs(self):
+    def _get_breadcrumbs(self):
         group = self.get_company().group
         return [
             Breadcrumb('Business Partners',
@@ -39,7 +39,7 @@ class SendGroupTextView(GenesisFormView):
             self._company = Company.objects.get(pk=self.kwargs['company_id'])
         return self._company
 
-    def get_page_title(self):
+    def _get_page_title(self):
         return "Send Group Text Message to {0}".format(self.get_company().name)
 
     def get_success_url(self, form):

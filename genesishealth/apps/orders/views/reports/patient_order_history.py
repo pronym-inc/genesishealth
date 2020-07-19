@@ -17,7 +17,7 @@ test = require_admin_permission('orders')
 
 
 class PatientOrderHistoryReport(BaseOrderHistoryReport):
-    def configure(self, **kwargs):
+    def _configure(self, **kwargs):
         self.patient = User.objects.get(
             pk=kwargs['patient_id'])
 
@@ -37,7 +37,7 @@ class PatientOrderHistoryReport(BaseOrderHistoryReport):
 class PatientOrderHistoryReportView(BaseOrderHistoryReportView):
     report_class = PatientOrderHistoryReport
 
-    def get_breadcrumbs(self):
+    def _get_breadcrumbs(self):
         user = self.get_patient()
         breadcrumbs = get_patient_breadcrumbs(user, self.request.user)
         breadcrumbs.append(
@@ -45,7 +45,7 @@ class PatientOrderHistoryReportView(BaseOrderHistoryReportView):
                        reverse('reports:patient-index', args=[user.pk])))
         return breadcrumbs
 
-    def get_page_title(self):
+    def _get_page_title(self):
         return "Generate Order History For {0}".format(
             self.get_patient().get_reversed_name())
 
@@ -56,8 +56,8 @@ class PatientOrderHistoryReportView(BaseOrderHistoryReportView):
                 id=self.kwargs['patient_id'])
         return self._patient
 
-    def get_report_kwargs(self):
-        data = super(PatientOrderHistoryReportView, self).get_report_kwargs()
+    def _get_report_kwargs(self):
+        data = super(PatientOrderHistoryReportView, self)._get_report_kwargs()
         data['patient_id'] = self.kwargs['patient_id']
         return data
 

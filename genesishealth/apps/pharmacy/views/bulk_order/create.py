@@ -55,7 +55,7 @@ class CreateRxBulkOrderView(GenesisFormView):
     go_back_until = ['pharmacy:details']
     success_message = "The bulk order has been created."
 
-    def get_breadcrumbs(self):
+    def _get_breadcrumbs(self):
         return get_rx_partner_breadcrumbs(
             self.get_rx_partner(), self.request.user)
 
@@ -64,7 +64,7 @@ class CreateRxBulkOrderView(GenesisFormView):
         kwargs['rx_partner'] = self.get_rx_partner()
         return kwargs
 
-    def get_page_title(self):
+    def _get_page_title(self):
         return "Create Bulk Order for {0}".format(self.get_rx_partner())
 
     def get_rx_partner(self):

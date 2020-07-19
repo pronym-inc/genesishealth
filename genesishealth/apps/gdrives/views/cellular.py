@@ -140,7 +140,7 @@ class CellularFullMEIDListReportView(CSVReportView):
     page_title = "Full MEID Export"
     report_class = CellularFullMEIDListReport
 
-    def get_breadcrumbs(self):
+    def _get_breadcrumbs(self):
         return [
             Breadcrumb(
                 'Cellular Management',
@@ -256,7 +256,7 @@ class CellularDeactivationReportView(CSVReportView):
     page_title = "Cellular Deactivation Report"
     report_class = CellularDeactivationReport
 
-    def get_breadcrumbs(self):
+    def _get_breadcrumbs(self):
         return [
             Breadcrumb(
                 'Cellular Management',

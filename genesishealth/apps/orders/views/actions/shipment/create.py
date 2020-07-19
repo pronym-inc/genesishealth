@@ -130,7 +130,7 @@ class CreateShipmentView(GenesisFormView):
             self._order = Order.objects.get(pk=self.kwargs['order_id'])
         return self._order
 
-    def get_page_title(self):
+    def _get_page_title(self):
         order = self.get_order()
         if order.patient:
             for_label = order.patient.get_reversed_name()

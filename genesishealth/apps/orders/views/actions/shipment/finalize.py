@@ -51,7 +51,7 @@ class FinalizeShipmentView(GenesisFormView):
         self.get_shipment().finalize(self.request.user)
         return super(FinalizeShipmentView, self).form_valid(form)
 
-    def get_breadcrumbs(self):
+    def _get_breadcrumbs(self):
         order = self.get_shipment().order
         if order.is_patient_order():
             patient = order.patient
@@ -82,7 +82,7 @@ class FinalizeShipmentView(GenesisFormView):
                 pk=self.kwargs['shipment_id'])
         return self._shipment
 
-    def get_page_title(self):
+    def _get_page_title(self):
         order = self.get_shipment().order
         if order.patient:
             for_label = order.patient.get_reversed_name()

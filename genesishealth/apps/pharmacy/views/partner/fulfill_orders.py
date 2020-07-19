@@ -49,7 +49,7 @@ class FulfillOrdersView(GenesisFormView):
             order.fulfill()
         return super(FulfillOrdersView, self).form_valid(form)
 
-    def get_page_title(self):
+    def _get_page_title(self):
         return "Fulfill Orders for Rx Partner {0}".format(
             self.get_rx_partner().name)
 

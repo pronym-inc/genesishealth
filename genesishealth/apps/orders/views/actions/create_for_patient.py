@@ -67,7 +67,7 @@ class CreateForPatientView(GenesisFormView):
     success_message = "The order has been created."
     go_back_until = ['accounts:patient-orders']
 
-    def get_breadcrumbs(self):
+    def _get_breadcrumbs(self):
         patient = self.get_patient()
         breadcrumbs = get_patient_breadcrumbs(patient, self.request.user)
         breadcrumbs.append(
@@ -88,7 +88,7 @@ class CreateForPatientView(GenesisFormView):
                 pk=self.kwargs['patient_id'])
         return self._patient
 
-    def get_page_title(self):
+    def _get_page_title(self):
         return "Create New Order for {0}".format(
             self.get_patient().get_reversed_name())
 

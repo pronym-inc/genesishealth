@@ -67,11 +67,11 @@ class OrderHistoryReport(BaseOrderHistoryReport):
 class OrderHistoryReportView(BaseOrderHistoryReportView):
     report_class = OrderHistoryReport
 
-    def get_breadcrumbs(self):
+    def _get_breadcrumbs(self):
         return [
             Breadcrumb("Reports", reverse("orders:reports-index", args=[]))]
 
-    def get_page_title(self):
+    def _get_page_title(self):
         return "Generate Order History"
 
 

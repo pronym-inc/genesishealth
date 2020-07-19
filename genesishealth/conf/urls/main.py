@@ -109,6 +109,11 @@ urlpatterns = [
             ('genesishealth.apps.text_messaging.urls',
              'genesishealth.apps.text_messaging'),
             namespace='text_messaging')),
+url(r'^work_queue/',
+        include(
+            ('genesishealth.apps.work_queue.urls',
+             'genesishealth.apps.work_queue'),
+            namespace='work_queue')),
     url(r'^admin/', admin.site.urls),
     url(r'^$',
         RedirectView.as_view(url='/dashboard/'),

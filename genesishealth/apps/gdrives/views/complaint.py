@@ -91,7 +91,7 @@ class NewGDriveComplaintFormView(GenesisFormView, GetDeviceMixin):
     success_message = 'The complaint has been added.'
     go_back_until = ['accounts:patient-communications']
 
-    def get_breadcrumbs(self):
+    def _get_breadcrumbs(self):
         device = self.get_device()
         breadcrumbs = get_device_breadcrumbs(device, self.request.user)
         breadcrumbs.append(
@@ -105,7 +105,7 @@ class NewGDriveComplaintFormView(GenesisFormView, GetDeviceMixin):
         kwargs['device'] = self.get_device()
         return kwargs
 
-    def get_page_title(self):
+    def _get_page_title(self):
         device = self.get_device()
         return 'Add New Complaint for Device {0}'.format(device.meid)
 
@@ -121,7 +121,7 @@ class EditGDriveComplaintFormView(GenesisFormView, GetDeviceMixin):
     go_back_until = ['accounts:patient-communications']
     template_name = 'gdrives/edit_complaint.html'
 
-    def get_breadcrumbs(self):
+    def _get_breadcrumbs(self):
         device = self.get_device()
         breadcrumbs = get_device_breadcrumbs(device, self.request.user)
         breadcrumbs.append(
@@ -152,7 +152,7 @@ class EditGDriveComplaintFormView(GenesisFormView, GetDeviceMixin):
     def get_initial(self):
         return {'rma_return_date': now().date()}
 
-    def get_page_title(self):
+    def _get_page_title(self):
         device = self.get_device()
         return 'Edit Complaint for Device {0}'.format(device.meid)
 

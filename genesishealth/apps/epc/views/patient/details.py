@@ -40,7 +40,7 @@ class OrderDetailsView(GenesisFormView):
     success_message = 'The note has been added to the order.'
     template_name = 'epc/patient/details.html'
 
-    def get_breadcrumbs(self):
+    def _get_breadcrumbs(self):
         patient = self.get_order().epc_member.user
         breadcrumbs = get_patient_breadcrumbs(
             patient, self.request.user, include_detail=True)
@@ -66,7 +66,7 @@ class OrderDetailsView(GenesisFormView):
                 pk=self.kwargs['order_id'])
         return self._order
 
-    def get_page_title(self):
+    def _get_page_title(self):
         order = self.get_order()
         return 'Manage Order {0} for {1}'.format(
             order.order_number,

@@ -34,7 +34,7 @@ class CreateOrderProblemView(GenesisFormView):
     go_back_until = ['orders:details']
     success_message = "The problem has been added to the order."
 
-    def get_breadcrumbs(self):
+    def _get_breadcrumbs(self):
         return get_order_breadcrumbs(self.get_order(), self.request.user)
 
     def get_form_kwargs(self):
@@ -48,7 +48,7 @@ class CreateOrderProblemView(GenesisFormView):
             self._order = Order.objects.get(pk=self.kwargs['order_id'])
         return self._order
 
-    def get_page_title(self):
+    def _get_page_title(self):
         order = self.get_order()
         if order.is_patient_order():
             for_label = order.patient.get_reversed_name()

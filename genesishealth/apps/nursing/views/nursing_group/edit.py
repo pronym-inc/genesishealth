@@ -22,7 +22,7 @@ class EditNursingGroupView(GenesisFormView):
     go_back_until = ['nursing:details']
     success_message = "The nursing group has been updated."
 
-    def get_breadcrumbs(self):
+    def _get_breadcrumbs(self):
         return get_nursing_group_breadcrumbs(
             self.get_nursing_group(), self.request.user)
 
@@ -37,7 +37,7 @@ class EditNursingGroupView(GenesisFormView):
                 pk=self.kwargs['nursing_group_id'])
         return self._nursing_group
 
-    def get_page_title(self):
+    def _get_page_title(self):
         return "Edit Nursing Group {0}".format(
             self.get_nursing_group())
 

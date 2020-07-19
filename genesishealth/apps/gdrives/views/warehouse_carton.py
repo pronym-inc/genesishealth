@@ -123,7 +123,7 @@ class FinishWarehouseCartonFormView(GenesisFormView):
             pk__in=self.request.session['new_warehouse_device_ids'])
         return kwargs
 
-    def get_page_title(self):
+    def _get_page_title(self):
         return 'Finish Warehouse Carton'
 
     def get_success_url(self, form):
@@ -162,7 +162,7 @@ class GenerateWarehouseCartonLabelsView(GenesisFormView):
     success_message = "Your labels have been generated."
     do_raw_redirect = True
 
-    def get_breadcrumbs(self):
+    def _get_breadcrumbs(self):
         return [
             Breadcrumb(
                 'Warehouse Cartons', reverse('gdrives:warehouse-cartons'))

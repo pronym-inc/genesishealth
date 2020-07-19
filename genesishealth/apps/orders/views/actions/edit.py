@@ -19,7 +19,7 @@ class EditOrderView(GenesisFormView):
     go_back_until = ['orders:shipments']
     success_message = "The shipment has been updated."
 
-    def get_breadcrumbs(self):
+    def _get_breadcrumbs(self):
         return get_order_breadcrumbs(self.get_order(), self.request.user)
 
     def get_form_kwargs(self):
@@ -32,7 +32,7 @@ class EditOrderView(GenesisFormView):
             self._order = Order.objects.get(pk=self.kwargs['order_id'])
         return self._order
 
-    def get_page_title(self):
+    def _get_page_title(self):
         order = self.get_order()
         if order.is_patient_order():
             return "Edit Order #{0} for {1}".format(

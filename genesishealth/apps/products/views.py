@@ -60,7 +60,7 @@ class AddProductTypeFormView(GenesisFormView):
     success_message = 'The product type has been added.'
     page_title = 'Add Product Type'
 
-    def get_breadcrumbs(self):
+    def _get_breadcrumbs(self):
         return [Breadcrumb('Products', reverse('products:index'))]
 add_product_type = user_passes_test(admin_user)(
     AddProductTypeFormView.as_view())
@@ -71,7 +71,7 @@ class EditProductTypeFormView(GenesisFormView):
     go_back_until = ['products:index']
     success_message = 'The product type has been updated.'
 
-    def get_breadcrumbs(self):
+    def _get_breadcrumbs(self):
         return [Breadcrumb('Products', reverse('products:index'))]
 
     def get_form_kwargs(self):
@@ -79,7 +79,7 @@ class EditProductTypeFormView(GenesisFormView):
         kwargs['instance'] = self.get_product_type()
         return kwargs
 
-    def get_page_title(self):
+    def _get_page_title(self):
         return 'Edit Product Type {0}'.format(self.get_product_type().name)
 
     def get_product_type(self):

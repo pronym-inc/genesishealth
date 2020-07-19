@@ -81,7 +81,7 @@ class ImportOrdersView(GenesisFormView):
                     product=product)
         return super(ImportOrdersView, self).form_valid(form)
 
-    def get_page_title(self):
+    def _get_page_title(self):
         return "Import Orders for Rx Partner {0}".format(
             self.get_rx_partner().name)
 

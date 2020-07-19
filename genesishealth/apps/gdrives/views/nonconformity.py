@@ -60,7 +60,7 @@ class GDriveNewNonConformityFormView(GenesisFormView, GetDeviceMixin):
     go_back_until = ['gdrives:non-conformities']
     success_message = 'The non-conformity has been added.'
 
-    def get_breadcrumbs(self):
+    def _get_breadcrumbs(self):
         device = self.get_device()
         breadcrumbs = get_device_breadcrumbs(
             device, self.request.user)

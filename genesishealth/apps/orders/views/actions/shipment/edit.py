@@ -35,7 +35,7 @@ class EditShipmentView(GenesisFormView):
     go_back_until = ['orders:shipments']
     success_message = "The shipment has been updated."
 
-    def get_breadcrumbs(self):
+    def _get_breadcrumbs(self):
         order = self.get_shipment().order
         if order.is_patient_order():
             patient = order.patient
@@ -62,7 +62,7 @@ class EditShipmentView(GenesisFormView):
                 pk=self.kwargs['shipment_id'])
         return self._shipment
 
-    def get_page_title(self):
+    def _get_page_title(self):
         order = self.get_shipment().order
         if order.patient:
             for_label = order.patient.get_reversed_name()
