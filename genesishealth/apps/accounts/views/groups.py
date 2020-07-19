@@ -1142,8 +1142,8 @@ class GlucoseAverageCSVReport(CSVReport):
 
     def get_queryset(self, data) -> 'QuerySet[User]':
         if not hasattr(self, '_qs'):
-            if self._company is not None:
-                self._qs = User.objects.filter(patient_profile__company=self._company)
+            if data.get('company'):
+                self._qs = User.objects.filter(patient_profile__company=data['company'])
             else:
                 self._qs = User.objects.filter(patient_profile__group=self._group)
         return self._qs
