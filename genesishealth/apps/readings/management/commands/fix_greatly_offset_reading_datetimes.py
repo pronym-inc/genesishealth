@@ -21,9 +21,8 @@ class Command(BaseCommand):
                 diff = abs((reading.reading_datetime_utc - last_reading_datetime).total_seconds())
                 if diff > 1000:
                     fixed_datetime = last_reading_datetime + timedelta(seconds=2)
-                    if is_dry_run:
-                        print(f"Changing reading {reading} from {reading.reading_datetime_utc} to {fixed_datetime}")
-                    else:
+                    print(f"Changing reading {reading} from {reading.reading_datetime_utc} to {fixed_datetime}")
+                    if not is_dry_run:
                         reading.reading_datetime_utc = fixed_datetime
                         reading.save()
             if fixed_datetime is None:
