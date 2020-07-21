@@ -44,7 +44,7 @@ class CompanyForm(PhoneNumberFormMixin, GenesisModelForm):
                 self.fields[cf].initial = getattr(self.instance.contact, cf)
 
     def get_phone_initialdata(self):
-        return self.instance.contact.phonenumber_set.all()
+        return self.instance.contact.phone_numbers.all()
 
     def clean_name(self):
         name = self.cleaned_data.get('name')

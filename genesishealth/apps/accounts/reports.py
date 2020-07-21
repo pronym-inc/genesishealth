@@ -30,7 +30,7 @@ def _generate_noncompliance_report(qs: 'QuerySet[User]', hours: int, report_name
         .prefetch_related('patient_profile__last_reading')\
         .prefetch_related('patient_profile__last_reading__gdrive_log_entry')\
         .select_related('patient_profile__contact')\
-        .prefetch_related('patient_profile__contact__phonenumber_set')\
+        .prefetch_related('patient_profile__contact__phone_numbers')\
         .prefetch_related('patient_profile__company')
     rows: List[List[str]] = []
     tz = get_default_timezone()
@@ -57,8 +57,8 @@ def _generate_noncompliance_report(qs: 'QuerySet[User]', hours: int, report_name
                 profile.last_reading.reading_datetime_utc,
                 tz).strftime("%m/%d/%y %I:%M:%S %p")
 
-        if profile.contact.phonenumber_set.count() > 0:
-            phone = profile.contact.phonenumber_set.all()[0].phone
+        if profile.contact.phone_numbers.count() > 0:
+            phone = profile.contact.phone_numbers.all()[0].phone
         else:
             phone = 'N/A'
         if no_pii:
@@ -151,7 +151,7 @@ def _generate_target_range_report(qs: 'QuerySet[User]', days: int, report_name: 
         select_related('patient__patient_profile__contact').\
         select_related('patient__patient_profile__company').\
         prefetch_related(
-            'patient__patient_profile__contact__phonenumber_set').\
+            'patient__patient_profile__contact__phone_numbers').\
         filter(gdrive_log_entry__date_created__gte=cutoff,
                patient__in=patients).\
         filter(
@@ -165,8 +165,8 @@ def _generate_target_range_report(qs: 'QuerySet[User]', days: int, report_name: 
             continue
         patient: User = reading.patient
         profile: PatientProfile = patient.patient_profile
-        if profile.contact.phonenumber_set.all().count() > 0:
-            phone = profile.contact.phonenumber_set.all()[0].phone
+        if profile.contact.phone_numbers.all().count() > 0:
+            phone = profile.contact.phone_numbers.all()[0].phone
         else:
             phone = 'N/A'
 

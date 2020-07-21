@@ -41,7 +41,7 @@ class PatientForm(PhoneNumberFormMixin, GenesisModelForm):
         'company', 'preferred_contact_method', 'gender',
         'date_of_birth', 'insurance_identifier',
         'bin_number', 'pcn_number', 'billing_method', 'refill_method',
-        'rx_partner', 'epc_member_identifier', 'nursing_group')
+        'rx_partner', 'epc_member_identifier', 'nursing_group', 'doctors_name')
 
     account_number = forms.IntegerField(required=False)
     epc_member_identifier = forms.CharField(
@@ -81,6 +81,7 @@ class PatientForm(PhoneNumberFormMixin, GenesisModelForm):
         queryset=PharmacyPartner.objects.all(), required=False)
     nursing_group = forms.ModelChoiceField(
         queryset=NursingGroup.objects.all(), required=False)
+    doctors_name = forms.CharField(label='Doctor\'s Name', required=False)
 
     class Meta:
         model = User
@@ -91,7 +92,7 @@ class PatientForm(PhoneNumberFormMixin, GenesisModelForm):
             'address2', 'city', 'phone',
             'preferred_contact_method', 'company',
             'bin_number', 'pcn_number', 'billing_method', 'refill_method',
-            'rx_partner', 'nursing_group')
+            'rx_partner', 'nursing_group', 'doctors_name')
 
     def __init__(self, *args, **kwargs):
         self.initial_group = kwargs.pop('initial_group')
@@ -121,7 +122,7 @@ class PatientForm(PhoneNumberFormMixin, GenesisModelForm):
             del self.fields['email_confirm']
 
     def get_phone_initialdata(self):
-        return self.instance.patient_profile.contact.phonenumber_set.all()
+        return self.instance.patient_profile.contact.phone_numbers.all()
 
     def clean(self):
         cleaned_data = super(PatientForm, self).clean()
@@ -427,7 +428,7 @@ class PatientMyProfileForm(PhoneNumberFormMixin, GenesisForm):
                 self.fields[j].initial = getattr(i[0], j)
 
     def get_phone_initialdata(self):
-        return self.patient.patient_profile.contact.phonenumber_set.all()
+        return self.patient.patient_profile.contact.phone_numbers.all()
 
     def save(self):
         for i in (

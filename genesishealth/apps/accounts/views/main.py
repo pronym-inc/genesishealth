@@ -412,7 +412,7 @@ class UserTableView(GenesisTableView):
         'patient_profile__epc_member_identifier',
         'gdrives__meid',
         'patient_profile__date_of_birth',
-        'patient_profile__contact__phonenumber_set__phone'
+        'patient_profile__contact__phone_numbers__phone',
         'id']
 
     def create_columns(self):

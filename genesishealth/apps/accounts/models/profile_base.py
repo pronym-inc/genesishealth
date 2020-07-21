@@ -251,7 +251,7 @@ class BaseProfile(models.Model):
 
     def has_phone_number(self, phone_number: str) -> bool:
         """Returns whether or not user has the provided phone number."""
-        for pn in self.contact.phonenumber_set.all():
+        for pn in self.contact.phone_numbers.all():
             if compare_phone_numbers(phone_number, pn.phone):
                 return True
         return False

@@ -38,21 +38,21 @@ class Contact(models.Model):
 
     def cell_phone(self) -> str:
         try:
-            return self.phonenumber_set.filter(is_cell=True)[0].phone
+            return self.phone_numbers.filter(is_cell=True)[0].phone
         except IndexError:
             return ''
     cell_phone = property(cell_phone)
 
     def set_phone(self, new_phone: str) -> None:
-        self.phonenumber_set.all().delete()
+        self.phone_numbers.all().delete()
         self.add_phone(new_phone)
 
     def phone(self) -> str:
         try:
-            return self.phonenumber_set.filter(is_contact=True)[0].phone
+            return self.phone_numbers.filter(is_contact=True)[0].phone
         except IndexError:
             try:
-                return self.phonenumber_set.filter()[0].phone
+                return self.phone_numbers.filter()[0].phone
             except IndexError:
                 return ''
     phone = property(phone)
@@ -62,7 +62,7 @@ class PhoneNumber(models.Model):
     """
     Phone model to allow Contact to have multiple phone numbers
     """
-    contact = models.ForeignKey(Contact, on_delete=models.CASCADE)
+    contact = models.ForeignKey(Contact, on_delete=models.CASCADE, related_name='phone_numbers')
     phone = models.CharField(max_length=255)
     is_cell = models.BooleanField(default=False)
     is_contact = models.BooleanField(default=False)

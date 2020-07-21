@@ -60,7 +60,7 @@ class ProfessionalForm(PhoneNumberFormMixin, GenesisModelForm):
             del self.fields['confirm_email']
 
     def get_phone_initialdata(self):
-        return self.instance.professional_profile.contact.phonenumber_set.all()
+        return self.instance.professional_profile.contact.phone_numbers.all()
 
     def clean_email(self):
         email = self.cleaned_data.get('email')
@@ -174,7 +174,7 @@ class ProfessionalMyProfileForm(PhoneNumberFormMixin, GenesisModelForm):
             'phone', 'address1', 'address2', 'city', 'fax')
 
     def get_phone_initialdata(self):
-        return self.instance.professional_profile.contact.phonenumber_set.all()
+        return self.instance.professional_profile.contact.phone_numbers.all()
 
     def save(self, *args, **kwargs):
         obj = super(ProfessionalMyProfileForm, self).save(*args, **kwargs)

@@ -34,7 +34,7 @@ class GroupForm(PhoneNumberFormMixin, GenesisModelForm):
             'address1', 'address2', 'city', 'is_no_pii')
 
     def get_phone_initialdata(self):
-        return self.instance.contact.phonenumber_set.all()
+        return self.instance.contact.phone_numbers.all()
 
     def save(self, *args, **kwargs):
         obj = super(GroupForm, self).save(*args, **kwargs)

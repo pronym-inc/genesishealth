@@ -106,7 +106,7 @@ class PhoneNumberFormMixin(object):
             if pn.id:
                 # NOTE: Silently fail to edit phone numbers of another contact
                 try:
-                    contact.phonenumber_set.get(id=pn.id)
+                    contact.phone_numbers.get(id=pn.id)
                 except PhoneNumber.DoesNotExist:
                     continue
             if pn.phone:
