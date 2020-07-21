@@ -29,6 +29,11 @@ class EditShipmentForm(GenesisModelForm):
                 "That tracking number is already in use.")
         return tracking_number
 
+    def save(self, commit=True, *args, **kwargs):
+        obj: OrderShipment = super().save(commit, *args, **kwargs)
+        obj.order.check_if_shipped()
+        return obj
+
 
 class EditShipmentView(GenesisFormView):
     form_class = EditShipmentForm
