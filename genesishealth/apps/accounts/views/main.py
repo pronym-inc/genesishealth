@@ -476,7 +476,7 @@ class UserTableView(GenesisTableView):
                 first_name='',
                 last_name='',
                 patient_profile__group__is_no_pii=False) |
-            ProfessionalProfile.objects.get_users())
+            ProfessionalProfile.objects.get_users()).distinct()
 
 
 users = admin_test(UserTableView.as_view())
