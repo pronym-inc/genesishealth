@@ -103,7 +103,7 @@ class CreateShipmentForm(GenesisForm):
     def should_have_meid(self):
         return (
             self.order.is_patient_order() and
-            self.order.entries.filter(product__is_device=True).count() > 0)
+            self.order.entries.filter(product__is_device=True, quantity__gt=0).count() > 0)
 
 
 class CreateShipmentView(GenesisFormView):
