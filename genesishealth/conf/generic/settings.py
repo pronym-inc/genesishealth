@@ -1,17 +1,33 @@
 import json
 import os
+import sys
 
 from datetime import date
 
+import requests
 from django.conf.global_settings import STATICFILES_FINDERS
 
 from kombu.utils.url import safequote
 
-secrets_path = '/etc/secrets.json'
-try:
-    secrets = json.load(open(secrets_path))
-except FileNotFoundError:
-    secrets = {}
+# Download secrets from remote server if we have a pronym secrets token.
+if 'PRONYM_SECRETS_TOKEN' in os.environ:
+    pronym_secrets_url = 'https://secrets.pronym.com/core/application/genesis_health/configuration/localdev/secrets/'
+
+    response = requests.get(
+        pronym_secrets_url,
+        headers={'Authorization': f'Token {os.environ["PRONYM_SECRETS_TOKEN"]}'}
+    )
+    if response.status_code >= 400:
+        print(f'Received an error code when trying to retrieve secrets: {response.status_code} {response.text}')
+        sys.exit()
+    secrets = response.json()
+    print('Loaded secrets from localdev remote configuration on pronym secrets.')
+else:
+    secrets_path = '/etc/secrets.json'
+    try:
+        secrets = json.load(open(secrets_path))
+    except FileNotFoundError:
+        secrets = {}
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
@@ -331,7 +347,8 @@ TABLE_ACTION_ICON_CLASSES = {
     'orders:shipment-packing-list': 'fa fa-file-text-o',
     'orders:create-shipment': 'fa fa-send',
     'work_queue:view-item': 'icon-folder-open',
-    'work_queue:approve-item': 'fa fa-pencil-square-o',
+    'work_queue:approve-item': 'icon-thumbs-up',
+    'work_queue:delay-item': 'fa fa-clock-o',
     'default': 'icon-certificate',
 }
 
@@ -523,7 +540,7 @@ E2E_CRITICAL_THRESHOLD = 3
 
 GOOGLE_MAPS_TIMEZONE_API_KEY = secrets.get('google_maps_timezone_api_key', '')
 
-STAMPS_USE_FAKE_SERVICE = True
+STAMPS_USE_FAKE_SERVICE = False
 STAMPS_USE_DEV_SERVER = True
 STAMPS_FAKE_LABEL_URL = ""
 STAMPS_INTEGRATION_ID = secrets.get('stamps_integration_id', '')
@@ -534,9 +551,10 @@ STAMPS_FROM_ZIPCODE = '63117'
 STAMPS_FROM_ADDRESS = {
     'FullName': "Genesis Health Technologies",
     'Address1': '212 Lone Oak Rd',
-    'Address2': '',
+    'Address2': None,
     'City': 'Paducah',
-    'State': 'KY'
+    'State': 'KY',
+    'ZipCode': '42003'
 }
 
 PASSWORD_CHANGE_INTERVAL = 90

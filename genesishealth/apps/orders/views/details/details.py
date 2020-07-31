@@ -95,6 +95,7 @@ class OrderDetailView(GenesisDetailView):
                 'Show Shipping Label',
                 order.get_shipping_label(),
                 prefix=""))
+        print(order.get_shipping_label())
         return buttons
 
     def get_order(self):

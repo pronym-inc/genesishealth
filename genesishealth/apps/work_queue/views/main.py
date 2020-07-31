@@ -3,7 +3,7 @@ from django.contrib.auth.decorators import user_passes_test
 from genesishealth.apps.utils.class_views import GenesisTableView, AttributeTableColumn, ActionTableColumn, ActionItem, \
     GenesisTableLink, GenesisTableLinkAttrArg
 from genesishealth.apps.utils.request import admin_user
-from genesishealth.apps.work_queue.models import WorkQueueItem
+from genesishealth.apps.work_queue.models import WorkQueueItem, WorkQueueProfile
 
 
 class MainWorkQueueTableView(GenesisTableView):
@@ -39,7 +39,14 @@ class MainWorkQueueTableView(GenesisTableView):
                             'work_queue:approve-item',
                             url_args=[GenesisTableLinkAttrArg('pk')]
                         ),
-                        condition=['is_passed_qa']
+                        condition=['!is_passed_qa']
+                    ),
+                    ActionItem(
+                        'Delay',
+                        GenesisTableLink(
+                            'work_queue:delay-item',
+                            url_args=[GenesisTableLinkAttrArg('pk')]
+                        )
                     )
                 ]
             )
@@ -49,7 +56,11 @@ class MainWorkQueueTableView(GenesisTableView):
         return 'Work Queue'
 
     def get_queryset(self):
-        return WorkQueueItem.objects.all()
+        try:
+            work_queue_profile = self.request.user.work_queue_profile
+        except WorkQueueProfile.DoesNotExist:
+            return WorkQueueItem.objects.none()
+        return WorkQueueItem.objects.filter(item_type__in=work_queue_profile.allowed_types.all())
 
 
 main_queue = user_passes_test(admin_user)(MainWorkQueueTableView.as_view())

@@ -589,7 +589,6 @@ class GenesisSingleTableBase(GenesisTableBase):
                 if query is not None:
                     queries.append(query)
             if len(queries) > 0:
-                print(queries)
                 filtered_queryset = filtered_queryset.filter(*queries)
             if not self.fake_count:
                 json_data['iTotalDisplayRecords'] = filtered_queryset.count()

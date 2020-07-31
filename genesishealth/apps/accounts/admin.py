@@ -4,6 +4,7 @@ from genesishealth.apps.accounts.models import (
 from genesishealth.apps.accounts.models.admin_user import (
     AdminProfile, AdminPermission, AdminPermissionGroup)
 
+
 admin.site.register(ProfessionalProfile)
 admin.site.register(PatientProfile)
 admin.site.register(Company)

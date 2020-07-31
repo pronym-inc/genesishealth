@@ -37,6 +37,7 @@ class FinalizeShipmentForm(GenesisModelForm):
         self.rates = kwargs.pop('rates')
         super(FinalizeShipmentForm, self).__init__(*args, **kwargs)
         self.fields['shipping_class'].set_rates(self.rates)
+        print(list(self.rates.keys()))
         self.fields['shipping_class'].queryset = ShippingClass.objects.filter(
             stamps_abbreviation__in=self.rates.keys(),
             enabled=True)
@@ -71,8 +72,8 @@ class FinalizeShipmentView(GenesisFormView):
         kwargs = super(FinalizeShipmentView, self).get_form_kwargs()
         shipment = self.get_shipment()
         kwargs['instance'] = shipment
-        rates = shipment.get_shipping_rates()
-        rate_info = {r.service_type.name: r.amount for r in rates}
+        rates = shipment.get_shipping_rates(get_all=True)
+        rate_info = {r.service_type.value: r.amount for r in rates}
         kwargs['rates'] = rate_info
         return kwargs
 
