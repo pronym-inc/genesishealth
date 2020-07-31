@@ -11,7 +11,10 @@
             {% endif %}
             <br>{{ patient.patient_profile.contact.phone }}
         </p>
-        <p>Physician: {{ patient.patient_profile.doctors_name }}</p>
+        <p>
+            <b>Physician:</b>
+            <br> {{ patient.patient_profile.get_caregiver.get_reversed_name }}
+        </p>
     </div>
     <div class="grid_6">
         <p>

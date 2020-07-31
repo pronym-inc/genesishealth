@@ -237,7 +237,6 @@ class PatientProfile(BaseProfile):
     epc_member_identifier = models.CharField(max_length=255, null=True, blank=True)
     nursing_group = models.ForeignKey(
         'nursing.NursingGroup', null=True, related_name='patients', on_delete=models.SET_NULL)
-    doctors_name = models.CharField(max_length=255, null=True, blank=True)
 
     welcome_text_sent = models.BooleanField(default=False)
 

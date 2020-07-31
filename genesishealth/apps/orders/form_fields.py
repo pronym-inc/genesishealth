@@ -35,9 +35,7 @@ class SelectProductsWidget(Input):
 
     def get_context(self, *args, **kwargs):
         ctx = super(SelectProductsWidget, self).get_context(*args, **kwargs)
-        form = self.order_product_form_class()
-        form.fields['product'].queryset = self.get_products()
-        ctx['product_form'] = form
+        ctx['products'] = self.get_products()
         return ctx
 
     def get_products(self):

@@ -81,7 +81,6 @@ class PatientForm(PhoneNumberFormMixin, GenesisModelForm):
         queryset=PharmacyPartner.objects.all(), required=False)
     nursing_group = forms.ModelChoiceField(
         queryset=NursingGroup.objects.all(), required=False)
-    doctors_name = forms.CharField(label='Doctor\'s Name', required=False)
 
     class Meta:
         model = User
@@ -92,7 +91,7 @@ class PatientForm(PhoneNumberFormMixin, GenesisModelForm):
             'address2', 'city', 'phone',
             'preferred_contact_method', 'company',
             'bin_number', 'pcn_number', 'billing_method', 'refill_method',
-            'rx_partner', 'nursing_group', 'doctors_name')
+            'rx_partner', 'nursing_group')
 
     def __init__(self, *args, **kwargs):
         self.initial_group = kwargs.pop('initial_group')
