@@ -250,12 +250,11 @@ class Order(models.Model):
             }
 
     def get_shipping_label(self):
-        shipments = self.shipments.all()
+        shipments = self.shipments.filter(is_finalized=True, shipping_label_url__isnull=False)
         if shipments.count() == 0:
             return
         shipment = shipments[0]
-        if shipment.is_finalized and shipment.shipping_label_url:
-            return shipment.shipping_label_url
+        return shipment.shipping_label_url
 
     def get_strips_quantity(self):
         return self.get_quantity_by_category(
