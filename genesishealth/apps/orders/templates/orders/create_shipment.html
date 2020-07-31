@@ -9,11 +9,13 @@
     <h3>Order Contents</h3>
     <p><a href="{% url "orders:shipment-packing-list" order.id %}" target="_blank">Print Packing List</a>
     {% for name, quantity in order.get_unshipped_entries_dict.items %}
-    <div class="container_12">
-        <div class="grid_2">{{ quantity }}x</div>
-        <div class="grid_3">{{ name }}</div>
-        <div class="grid_7"></div>
-    </div><br>
+    {% if quantity > 0 %}
+        <div class="container_12">
+            <div class="grid_2">{{ quantity }}x</div>
+            <div class="grid_3">{{ name }}</div>
+            <div class="grid_7"></div>
+        </div><br>
+    {% endif %}
     {% endfor %}
     {{ block.super }}
     <br><br>
