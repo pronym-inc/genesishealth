@@ -11,7 +11,7 @@
         {% for product in products %}
             <tr>
                 <td>{{ product.name }}</td>
-                <td><input type="input" style="width: 3ch" maxlength="2" data-product-id="{{ product.id }}" class="product-quantity"></td>
+                <td><input type="input" style="width: 3ch" maxlength="2" data-product-id="{{ product.id }}" class="product-quantity" value="0"></td>
             </tr>
         {% endfor %}
         </tbody>
