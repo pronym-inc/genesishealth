@@ -1,14 +1,13 @@
 from django import forms
 from django.contrib.auth.models import User
 
-from localflavor.us.forms import USStateField, USStateSelect
-
 from genesishealth.apps.accounts.models import Company, Contact, Payor, GenesisGroup
 from genesishealth.apps.utils.class_views.csv_report import CSVReportForm
 from genesishealth.apps.utils.forms import (
     GenesisForm, GenesisModelForm, PhoneField,
     ZipField, PhoneNumberFormMixin)
 from genesishealth.apps.utils.func import read_csv_file
+from genesishealth.apps.utils.us_states import US_STATES
 
 
 class CompanyForm(PhoneNumberFormMixin, GenesisModelForm):
@@ -23,7 +22,7 @@ class CompanyForm(PhoneNumberFormMixin, GenesisModelForm):
     address1 = forms.CharField(label='Address')
     address2 = forms.CharField(label='Address (cont.)', required=False)
     city = forms.CharField()
-    state = USStateField(widget=USStateSelect)
+    state = forms.ChoiceField(choices=US_STATES, required=False)
     zip = ZipField()
 
     class Meta:

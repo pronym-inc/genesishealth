@@ -14,8 +14,6 @@ from django.shortcuts import render
 from django.utils.timezone import now
 from django.views.decorators.http import require_POST
 
-from localflavor.us.forms import USStateField, USStateSelect
-
 from genesishealth.apps.accounts.breadcrumbs.patients import (
     get_patient_breadcrumbs, get_communication_breadcrumbs)
 from genesishealth.apps.accounts.breadcrumbs.groups import (
@@ -51,6 +49,7 @@ from genesishealth.apps.utils.forms import (
 from genesishealth.apps.utils.request import (
     admin_user, check_user_type, debug_response, professional_user,
     redirect_with_message)
+from genesishealth.apps.utils.us_states import US_STATES
 from genesishealth.apps.utils.views import (
     generic_delete_form, generic_form)
 
@@ -384,7 +383,7 @@ class PatientImportLineForm(GenesisForm):
     address1 = forms.CharField()
     address2 = forms.CharField(required=False)
     city = forms.CharField()
-    state = USStateField(widget=USStateSelect)
+    state = forms.ChoiceField(choices=US_STATES, required=False)
     zip = ZipField()
     phone = forms.CharField(required=False, label="Primary phone")
     insurance_identifier = forms.CharField()

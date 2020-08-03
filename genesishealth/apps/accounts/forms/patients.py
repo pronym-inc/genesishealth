@@ -10,8 +10,6 @@ from django.forms.widgets import RadioSelect
 from django.utils.timezone import get_default_timezone, localtime, now
 
 from celery.task import chord
-from localflavor.us.forms import USStateField, USStateSelect
-from localflavor.us.us_states import US_STATES
 
 from genesishealth.apps.accounts.models import (
     PatientProfile, Note, Company)
@@ -31,6 +29,7 @@ from genesishealth.apps.pharmacy.models import PharmacyPartner
 from genesishealth.apps.products.models import ProductType
 from genesishealth.apps.reports.models import TemporaryDownload
 from genesishealth.apps.utils.func import read_csv_file, expand_birthday_year
+from genesishealth.apps.utils.us_states import US_STATES
 from genesishealth.apps.utils.widgets import (
     AdditionalModelMultipleChoiceWidget)
 
@@ -223,7 +222,7 @@ class PatientWizardForm(PatientForm):
     address1 = forms.CharField(label='Address')
     address2 = forms.CharField(required=False, label='Address (Line 2)')
     city = forms.CharField()
-    state = USStateField(widget=USStateSelect)
+    state = forms.ChoiceField(choices=US_STATES, required=False)
     zip = ZipField()
     phone = PhoneField(required=False, label="Primary phone")
     preferred_contact_method = forms.ChoiceField(
@@ -410,7 +409,7 @@ class PatientMyProfileForm(PhoneNumberFormMixin, GenesisForm):
     address1 = forms.CharField(label='Address')
     address2 = forms.CharField(required=False, label='Address (Line 2)')
     city = forms.CharField()
-    state = USStateField(widget=USStateSelect)
+    state = forms.ChoiceField(choices=US_STATES, required=False)
     zip = ZipField()
     phone = PhoneField(required=False)
 
