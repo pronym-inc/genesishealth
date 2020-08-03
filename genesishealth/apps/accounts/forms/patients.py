@@ -88,7 +88,7 @@ class PatientForm(PhoneNumberFormMixin, GenesisModelForm):
             'account_number', 'epc_member_identifier', 'insurance_identifier',
             'salutation', 'first_name', 'middle_initial', 'last_name',
             'gender', 'date_of_birth', 'email', 'email_confirm', 'address1',
-            'address2', 'city', 'phone', 'state',
+            'address2', 'city', 'phone', 'state', 'zip',
             'preferred_contact_method', 'company',
             'bin_number', 'pcn_number', 'billing_method', 'refill_method',
             'rx_partner', 'nursing_group')
