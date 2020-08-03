@@ -11,6 +11,7 @@ from django.utils.timezone import get_default_timezone, localtime, now
 
 from celery.task import chord
 from localflavor.us.forms import USStateField, USStateSelect
+from localflavor.us.us_states import US_STATES
 
 from genesishealth.apps.accounts.models import (
     PatientProfile, Note, Company)
@@ -59,7 +60,7 @@ class PatientForm(PhoneNumberFormMixin, GenesisModelForm):
     address1 = forms.CharField(label='Address', required=False)
     address2 = forms.CharField(required=False, label='Address (Line 2)')
     city = forms.CharField(required=False)
-    state = USStateField(widget=USStateSelect, required=False)
+    state = forms.ChoiceField(choices=US_STATES, required=False)
     zip = ZipField(required=False)
     phone = PhoneField(required=False, label="Primary phone")
     preferred_contact_method = forms.ChoiceField(
