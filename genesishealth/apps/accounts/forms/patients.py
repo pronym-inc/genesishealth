@@ -41,7 +41,7 @@ class PatientForm(PhoneNumberFormMixin, GenesisModelForm):
         'company', 'preferred_contact_method', 'gender',
         'date_of_birth', 'insurance_identifier',
         'bin_number', 'pcn_number', 'billing_method', 'refill_method',
-        'rx_partner', 'epc_member_identifier', 'nursing_group', 'doctors_name')
+        'rx_partner', 'epc_member_identifier', 'nursing_group')
 
     account_number = forms.IntegerField(required=False)
     epc_member_identifier = forms.CharField(
