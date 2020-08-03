@@ -14,7 +14,6 @@ future==0.18.2
 googlemaps==4.4.1
 gunicorn==20.0.4
 kombu==4.6.10
-localflavor==1.8
 matplotlib==3.2.1
 mypy==0.780
 numpy==1.18.5
