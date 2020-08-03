@@ -44,8 +44,7 @@ from genesishealth.apps.utils.class_views import (
 )
 from genesishealth.apps.utils.class_views.csv_import import (
     CSVImportForm, CSVImportView)
-from genesishealth.apps.utils.forms import (
-    GenesisForm, ZipField)
+from genesishealth.apps.utils.forms import GenesisForm
 from genesishealth.apps.utils.request import (
     admin_user, check_user_type, debug_response, professional_user,
     redirect_with_message)
@@ -384,7 +383,7 @@ class PatientImportLineForm(GenesisForm):
     address2 = forms.CharField(required=False)
     city = forms.CharField()
     state = forms.ChoiceField(choices=US_STATES, required=False)
-    zip = ZipField()
+    zip = forms.CharField(max_length=5)
     phone = forms.CharField(required=False, label="Primary phone")
     insurance_identifier = forms.CharField()
     insurance_suffix = forms.CharField(required=False)

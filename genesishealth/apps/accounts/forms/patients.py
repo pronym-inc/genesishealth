@@ -19,7 +19,7 @@ from genesishealth.apps.accounts.tasks import (
     process_patient_form_data, process_patient_form_data_row)
 from genesishealth.apps.utils.forms import (
     GenesisForm, GenesisBatchForm, GenesisModelForm,
-    PhoneField, ZipField, BirthdayWidget, PhoneNumberFormMixin)
+    PhoneField, BirthdayWidget, PhoneNumberFormMixin)
 from genesishealth.apps.api.models import APIPartner
 from genesishealth.apps.api.tasks import migrate_readings
 from genesishealth.apps.dropdowns.models import (
@@ -60,7 +60,7 @@ class PatientForm(PhoneNumberFormMixin, GenesisModelForm):
     address2 = forms.CharField(required=False, label='Address (Line 2)')
     city = forms.CharField(required=False)
     state = forms.ChoiceField(choices=US_STATES, required=False)
-    zip = ZipField(required=False)
+    zip = forms.CharField(required=False)
     phone = PhoneField(required=False, label="Primary phone")
     preferred_contact_method = forms.ChoiceField(
         widget=forms.RadioSelect,
@@ -223,7 +223,7 @@ class PatientWizardForm(PatientForm):
     address2 = forms.CharField(required=False, label='Address (Line 2)')
     city = forms.CharField()
     state = forms.ChoiceField(choices=US_STATES, required=False)
-    zip = ZipField()
+    zip = forms.CharField(max_length=5)
     phone = PhoneField(required=False, label="Primary phone")
     preferred_contact_method = forms.ChoiceField(
         widget=forms.RadioSelect,
@@ -410,7 +410,7 @@ class PatientMyProfileForm(PhoneNumberFormMixin, GenesisForm):
     address2 = forms.CharField(required=False, label='Address (Line 2)')
     city = forms.CharField()
     state = forms.ChoiceField(choices=US_STATES, required=False)
-    zip = ZipField()
+    zip = forms.CharField(max_length=5)
     phone = PhoneField(required=False)
 
     def __init__(self, *args, **kwargs):

@@ -1,8 +1,7 @@
 from django import forms
 
 from genesishealth.apps.accounts.models import Payor, Contact
-from genesishealth.apps.utils.forms import (GenesisForm, GenesisModelForm, ZipField,
-    PhoneField, PhoneNumberFormMixin)
+from genesishealth.apps.utils.forms import (GenesisForm, GenesisModelForm, PhoneField, PhoneNumberFormMixin)
 from genesishealth.apps.utils.func import read_csv_file
 from genesishealth.apps.utils.us_states import US_STATES
 
@@ -19,7 +18,7 @@ class PayorForm(PhoneNumberFormMixin, GenesisModelForm):
     address2 = forms.CharField(label='Address (cont.)', required=False)
     city = forms.CharField(widget=forms.TextInput(attrs={'class': 'required'}))
     state = forms.ChoiceField(choices=US_STATES, required=False)
-    zip = ZipField()
+    zip = forms.CharField(max_length=5)
 
     class Meta:
         model = Payor

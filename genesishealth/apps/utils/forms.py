@@ -7,8 +7,6 @@ from django.db.models import ForeignKey
 from django.conf import settings
 from django.template.loader import render_to_string
 
-from localflavor.us.forms import USZipCodeField
-
 from genesishealth.apps.utils.func import (
     get_attribute_extended, set_attribute_extended, utcnow, read_csv_file)
 from genesishealth.apps.accounts.models import PhoneNumber
@@ -118,10 +116,6 @@ class PhoneNumberFormMixin(object):
 
 class SinglePhoneField:
     pass
-
-
-class ZipField(USZipCodeField):
-    widget = forms.TextInput(attrs={'class': 'zip'})
 
 
 class UserModelChoiceField(forms.ModelChoiceField):

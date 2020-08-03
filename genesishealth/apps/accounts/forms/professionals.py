@@ -5,8 +5,7 @@ from django.utils.timezone import now
 
 from genesishealth.apps.accounts.models import ProfessionalProfile, Company
 from genesishealth.apps.reports.models import TemporaryDownload
-from genesishealth.apps.utils.forms import (
-    GenesisForm, GenesisModelForm, PhoneField, SinglePhoneField, ZipField)
+from genesishealth.apps.utils.forms import GenesisForm, GenesisModelForm, PhoneField, SinglePhoneField
 from genesishealth.apps.utils.forms import (
     PhoneNumberFormMixin, GenesisBatchForm)
 from genesishealth.apps.utils.func import read_csv_file
@@ -29,8 +28,8 @@ class ProfessionalForm(PhoneNumberFormMixin, GenesisModelForm):
     address2 = forms.CharField(label='Address (cont.)', required=False)
     city = forms.CharField(required=False)
     state = forms.ChoiceField(choices=US_STATES, required=False)
-    zip = ZipField(
-        required=False, widget=forms.TextInput(attrs={'class': 'zip'}))
+    zip = forms.CharField(
+        max_length=5, required=False, widget=forms.TextInput(attrs={'class': 'zip'}))
     phone = PhoneField(required=False)
     fax = forms.CharField(required=False)
     timezone_name = forms.ChoiceField(
@@ -162,7 +161,7 @@ class ProfessionalMyProfileForm(PhoneNumberFormMixin, GenesisModelForm):
     address2 = forms.CharField(required=False)
     city = forms.CharField(required=False)
     state = forms.ChoiceField(choices=US_STATES, required=False)
-    zip = ZipField(required=False)
+    zip = forms.CharField(max_length=5, required=False)
     phone = PhoneField(required=False)
     fax = forms.CharField(required=False)
 
