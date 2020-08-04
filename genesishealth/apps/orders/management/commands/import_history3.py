@@ -28,7 +28,7 @@ class Command(BaseCommand):
         with open(options['history_file_path']) as f:
             reader = csv.reader(f)
             # Skip header.
-            reader.next()
+            next(reader)
             counter = 0
             for row in reader:
                 counter += 1
