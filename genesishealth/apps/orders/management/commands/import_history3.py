@@ -51,7 +51,7 @@ class Command(BaseCommand):
         insurance_identifier = row[6]
         try:
             profile = PatientProfile.objects.get(insurance_identifier=insurance_identifier)
-        except PatientProfile.DoesNotExist:
+        except (PatientProfile.DoesNotExist, PatientProfile.MultipleObjectsReturned):
             logger.warning(f"Could not find patient with insurance ID: {insurance_identifier}, skipping...")
             return
 
