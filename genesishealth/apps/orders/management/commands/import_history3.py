@@ -87,7 +87,7 @@ class Command(BaseCommand):
         order = Order.objects.create(
             patient=profile.user,
             order_type=Order.ORDER_TYPE_PATIENT,
-            order_category=order_category,
+            category=order_category,
             datetime_added=order_date,
             order_status=Order.ORDER_STATUS_SHIPPED,
             order_origin=Order.ORDER_ORIGIN_BATCH_IMPORT,
