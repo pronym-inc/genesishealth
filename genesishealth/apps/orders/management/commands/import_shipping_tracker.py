@@ -58,7 +58,7 @@ class Command(BaseCommand):
         # See if we have a refill within a day of it.
         start = order_date - timedelta(days=2)
         end = order_date + timedelta(days=2)
-        if len(profile.user.orders.filter(datetime_shipped__range=(start, end), category__is_refill=True)) > 0:
+        if len(profile.user.orders.filter(datetime_added__range=(start, end), category__is_refill=True)) > 0:
             logger.warning(f"[{row_count}] Found refill order within a few days, skipping.")
             return
 
