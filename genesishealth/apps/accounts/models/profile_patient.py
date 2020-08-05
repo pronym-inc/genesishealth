@@ -550,13 +550,13 @@ class PatientProfile(BaseProfile):
 
     def get_glucose_refill_frequency(self):
         if self.get_refill_method() != self.REFILL_METHOD_SUBSCRIPTION:
-            return 90
+            return 80
         if self.glucose_strip_refill_frequency is not None:
             return self.glucose_strip_refill_frequency
         if (self.company is not None and
                 self.company.glucose_strip_refill_frequency is not None):
             return self.company.glucose_strip_refill_frequency
-        return 90
+        return 80
 
     def get_group(self):
         return self.group
