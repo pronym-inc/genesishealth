@@ -50,7 +50,7 @@ class Command(BaseCommand):
             return
 
         try:
-            order_date = ship_date = parse(row[3])
+            order_date = ship_date = tz.localize(parse(row[3]))
         except ValueError:
             logger.warning(f"[{row_count}] Couldn't parse a last refill date: {row[3]}, skipping.")
             return
