@@ -82,9 +82,11 @@ class Command(BaseCommand):
             logger.warning(f"Could not parse device quantity: {row[17]}, skipping.")
             return
 
+        order_type = Order.ORDER_TYPE_BULK if invoice_number is not None else Order.ORDER_TYPE_PATIENT
+
         order = Order.objects.create(
             patient=profile.user,
-            order_type=Order.ORDER_TYPE_PATIENT,
+            order_type=order_type,
             category=order_category,
             datetime_added=order_date,
             order_status=Order.ORDER_STATUS_SHIPPED,
