@@ -60,7 +60,7 @@ class Command(BaseCommand):
             strip_count = 0
 
         if strip_count > 0:
-            order_category = OrderCategory.objects.get(is_refill=True)
+            order_category = OrderCategory.objects.get(name='Automatic Refill')
         else:
             order_category = None
 
