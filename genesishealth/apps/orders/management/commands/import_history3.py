@@ -1,6 +1,7 @@
 # pragma: no cover
 import csv
 import logging
+from typing import Optional
 
 from dateutil.parser import parse
 
@@ -43,10 +44,7 @@ class Command(BaseCommand):
     def process_row(self, row):
         tz = get_default_timezone()
         # If it has an invoice number, skip it - we're just interested in patient readings.
-        invoice_number = row[1]
-        if len(invoice_number) > 0:
-            logger.info(f"Skipping row with invoice number.")
-            return
+        invoice_number: Optional[str] = row[1] if len(row[1]) > 0 else None
 
         insurance_identifier = row[6]
         try:
@@ -92,7 +90,8 @@ class Command(BaseCommand):
             order_status=Order.ORDER_STATUS_SHIPPED,
             order_origin=Order.ORDER_ORIGIN_BATCH_IMPORT,
             datetime_shipped=ship_date,
-            order_notes=row[20]
+            order_notes=row[20],
+            invoice_number=invoice_number
         )
         # Add entries
         if device_count > 0:
