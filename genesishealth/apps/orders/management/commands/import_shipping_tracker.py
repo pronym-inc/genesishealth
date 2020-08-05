@@ -48,6 +48,11 @@ class Command(BaseCommand):
                 f"[{row_count}] Could not find patient with insurance identifier {insurance_identifier}, skipping."
             )
             return
+        except PatientProfile.MultipleObjectsReturned:
+            logger.warning(
+                f"[{row_count}] Found multiple patients with insurance identifier {insurance_identifier}, picking one."
+            )
+            profile = PatientProfile.objects.filter(insurance_identifier=insurance_identifier)[0]
 
         try:
             order_date = ship_date = tz.localize(parse(row[3]))
