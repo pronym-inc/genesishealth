@@ -38,7 +38,7 @@ class CreateOrderForm(GenesisForm):
 
     def clean(self):
         errors = []
-        if not self.cleaned_data['products']:
+        if not self.cleaned_data['category'].allow_empty_products and not self.cleaned_data['products']:
             errors.append("You must choose at least one product.")
         if errors:
             msg = "\n".join(errors)
