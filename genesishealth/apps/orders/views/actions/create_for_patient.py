@@ -25,8 +25,6 @@ class CreateOrderForm(GenesisForm):
         queryset=OrderCategory.objects.all())
     products = SelectProductsField(
         error_messages=product_error_messages, required=False)
-    delivery_priority = forms.ModelChoiceField(
-        queryset=ShippingClass.objects.filter(enabled=True))
     notes = forms.CharField(widget=forms.widgets.Textarea, required=False)
 
     class Media:
@@ -49,7 +47,6 @@ class CreateOrderForm(GenesisForm):
         order = Order.objects.create(
             patient=self.patient,
             category=self.cleaned_data['category'],
-            delivery_priority=self.cleaned_data['delivery_priority'],
             order_origin=Order.ORDER_ORIGIN_MANUAL,
             order_notes=self.cleaned_data['notes'],
             order_type=Order.ORDER_TYPE_PATIENT
