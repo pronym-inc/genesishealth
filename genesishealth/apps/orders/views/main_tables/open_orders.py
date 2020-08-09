@@ -31,6 +31,17 @@ class OpenOrdersView(GenesisTableView):
             AttributeTableColumn(
                 "Employer / Group", "patient.patient_profile.company.name"),
             ActionTableColumn(
+                "View",
+                actions=[
+                    ActionItem(
+                        'Details',
+                        GenesisTableLink(
+                            'orders:details',
+                            url_args=[GenesisTableLinkAttrArg('id')]
+                        ))
+                ]
+            )
+            ActionTableColumn(
                 "Claim",
                 actions=[
                     ActionItem(
