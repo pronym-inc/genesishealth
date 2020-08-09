@@ -40,7 +40,7 @@ class OpenOrdersView(GenesisTableView):
                             url_args=[GenesisTableLinkAttrArg('id')]
                         ))
                 ]
-            )
+            ),
             ActionTableColumn(
                 "Claim",
                 actions=[
