@@ -1,5 +1,6 @@
 import csv
 import io
+from typing import Any, Dict
 
 from django import forms
 from django.http import HttpResponse
@@ -145,8 +146,8 @@ class CSVImportView(GenesisFormView):
     template_name = "utils/generic_form_csv_import.html"
     show_template_link = True
 
-    def download_import_template(self):
-        buf = io.BytesIO()
+    def download_import_template(self) -> HttpResponse:
+        buf = io.StringIO()
         writer = csv.writer(buf)
         for i in range(self.form_class.header_row_count - 1):
             writer.writerow([])
@@ -167,3 +168,8 @@ class CSVImportView(GenesisFormView):
 
     def process_line(self, form, line):
         pass
+
+    def get_context_data(self, **kwargs: Any) -> Dict[str, Any]:
+        kwargs = super().get_context_data(**kwargs)
+        kwargs['show_template_link'] = self.show_template_link
+        return kwargs

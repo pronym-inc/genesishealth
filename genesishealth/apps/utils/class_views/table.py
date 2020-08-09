@@ -574,7 +574,6 @@ class GenesisSingleTableBase(GenesisTableBase):
                 extra_field, None, None
             ])
         # Handle searching.
-        print(queryable_columns)
         if len(search_terms) > 0:
             queries = []
             for term in search_terms:

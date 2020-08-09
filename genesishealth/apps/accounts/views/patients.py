@@ -441,7 +441,6 @@ class PatientImportView(CSVImportView):
         return "Import Patients for {0}".format(self.get_group())
 
     def process_line(self, form, line):
-        print(line)
         clean_line = line.copy()
         del clean_line['existing_profile']
         del clean_line['action']
