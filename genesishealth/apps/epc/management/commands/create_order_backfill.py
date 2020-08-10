@@ -35,7 +35,7 @@ class Command(BaseCommand):
             rows = []
             rdr = csv.reader(f)
             # Skip header line
-            rdr.next()
+            next(rdr)
             # Go through rows and make new rows.
             for row in rdr:
                 meter_count = int(row[19])

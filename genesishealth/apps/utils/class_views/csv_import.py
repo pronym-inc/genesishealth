@@ -110,7 +110,7 @@ class CSVImportForm(GenesisForm):
         # Skip lines for header rows
         if not include_header:
             for _ in range(self.header_row_count):
-                reader.next()
+                next(reader)
 
         for row in reader:
             yield row

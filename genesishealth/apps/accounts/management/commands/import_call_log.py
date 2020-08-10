@@ -28,7 +28,7 @@ class Command(BaseCommand):
         with open(single_call_log_file, 'rbU') as csvfile:
             reader = csv.reader(csvfile, delimiter=',')
             # Skip header
-            reader.next()
+            next(reader)
             for row in reader:
                 patient = User.objects.filter(
                     patient_profile__isnull=False).get(pk=row[0])
@@ -91,7 +91,7 @@ class Command(BaseCommand):
         with open(multiple_call_log_file, 'rbU') as csvfile:
             reader = csv.reader(csvfile, delimiter=',')
             comm = None
-            reader.next()
+            next(reader)
             for row in reader:
                 idx = int(row[0])
                 patient = User.objects.filter(

@@ -1,0 +1,113 @@
+{% extends "base.html" %}
+{% load genesis_tools %}
+
+{% block pageTitle %}Reports{% if target %} for {{ target.get_full_name }}{% endif %}{% endblock %}
+
+{% block extrahead %}
+<style type="text/css">
+     ul.tempnav {
+         width: 300px;
+         margin-top: 25px;
+     }
+     ul.tempnav li a {
+         display: block;
+     }
+     ul.tempnav li img {
+         vertical-align: middle;
+     }
+     ul.tempnav li {
+         position: relative;
+         border-left:1px solid #ccc;
+         border-right:1px solid #ccc;
+         border-bottom: 1px solid #ccc;
+         display: block;
+         -o-transition-duration: 0.2s;
+         -ms-transition-duration: 0.2s;
+         -moz-transition-duration: 0.2s;
+         -khtml-transition-duration: 0.2s;
+         -webkit-transition-duration: 0.2s;
+         transition-duration: 0.2s;
+     }
+
+     ul.tempnav li:hover {
+         background-color:#f1f1f1;
+
+     }
+     ul.tempnav li span {
+         -o-transition-duration: 0.2s;
+        -ms-transition-duration: 0.2s;
+        -moz-transition-duration: 0.2s;
+        -khtml-transition-duration: 0.2s;
+        -webkit-transition-duration: 0.2s;
+        transition-duration: 0.2s;
+     }
+     ul.tempnav li:hover span {
+         padding-left:5px;
+     }
+
+    </style>
+{% endblock %}
+
+{% block main_content %}
+    <div class="message info">
+        <h3>Admin</h3>
+        <p>To navigate between reports, select the report of interest below. On that page, you'll have the option to return to this page to select a different report type.</p>
+    </div>
+
+    <ul class="tempnav">
+        <li style="border-top:1px solid #ccc;">
+            <a href="{% get_dashboard_url ghtadmin:admin-reports %}" class="summarylink" title="Reports">
+                <img src="/static/images/navicons/153.png" alt=""><span>Reports</span>
+            </a>
+            <img class="innerloader" id="menulevelloader" src="/static/images/ajax-loader-menu.gif" style="display: none;">
+        </li>
+        <li style="border-top:1px solid #ccc;">
+            <a href="{% get_dashboard_url nursing:index %}" class="summarylink" title="Nursing">
+                <img src="/static/images/navicons/153.png" alt=""><span>Nursing</span>
+            </a>
+            <img class="innerloader" id="menulevelloader" src="/static/images/ajax-loader-menu.gif" style="display: none;">
+        </li>
+        <li style="border-top:1px solid #ccc;">
+            <a href="{% get_dashboard_url ghtadmin:admin-messaging %}}" class="summarylink" title="Messaging">
+                <img src="/static/images/navicons/153.png" alt=""><span>Messaging</span>
+            </a>
+            <img class="innerloader" id="menulevelloader" src="/static/images/ajax-loader-menu.gif" style="display: none;">
+        </li>
+        <li style="border-top:1px solid #ccc;">
+            <a href="{% get_dashboard_url ghtadmin:admin-eligibility %}" class="summarylink" title="Eligibility">
+                <img src="/static/images/navicons/153.png" alt=""><span>Eligibility</span>
+            </a>
+            <img class="innerloader" id="menulevelloader" src="/static/images/ajax-loader-menu.gif" style="display: none;">
+        </li>
+        <li style="border-top:1px solid #ccc;">
+            <a href="{% get_dashboard_url ghtadmin:admin-program-tiers" class="summarylink" title="Program Tiers">
+                <img src="/static/images/navicons/153.png" alt=""><span>Program Tiers</span>
+            </a>
+            <img class="innerloader" id="menulevelloader" src="/static/images/ajax-loader-menu.gif" style="display: none;">
+        </li>
+        <li style="border-top:1px solid #ccc;">
+            <a href="{% get_dashboard_url ghtadmin:admin-product-types %}" class="summarylink" title="Product Types">
+                <img src="/static/images/navicons/153.png" alt=""><span>Product Types</span>
+            </a>
+            <img class="innerloader" id="menulevelloader" src="/static/images/ajax-loader-menu.gif" style="display: none;">
+        </li>
+        <li style="border-top:1px solid #ccc;">
+            <a href="{% get_dashboard_url ghtadmin:admin-shipping %}" class="summarylink" title="Shipping">
+                <img src="/static/images/navicons/153.png" alt=""><span>Shipping</span>
+            </a>
+            <img class="innerloader" id="menulevelloader" src="/static/images/ajax-loader-menu.gif" style="display: none;">
+        </li>
+        <li style="border-top:1px solid #ccc;">
+            <a href="{% get_dashboard_url ghtadmin:admin-marketing}" class="summarylink" title="Marketing">
+                <img src="/static/images/navicons/153.png" alt=""><span>Marketing</span>
+            </a>
+            <img class="innerloader" id="menulevelloader" src="/static/images/ajax-loader-menu.gif" style="display: none;">
+        </li>
+        <li style="border-top:1px solid #ccc;">
+            <a href="{% get_dashboard_url ghtadmin:admin-education %}" class="summarylink" title="Education">
+                <img src="/static/images/navicons/153.png" alt=""><span>Education</span>
+            </a>
+            <img class="innerloader" id="menulevelloader" src="/static/images/ajax-loader-menu.gif" style="display: none;">
+        </li>
+    </ul>
+{% endblock %}

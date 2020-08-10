@@ -21,7 +21,7 @@ class Command(BaseCommand):
             with open(file_path) as f:
                 reader = csv.reader(f)
                 # Skip header
-                reader.next()
+                next(reader)
                 line_number = 1
                 for row in reader:
                     line_number += 1
