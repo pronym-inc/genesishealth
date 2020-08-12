@@ -14,8 +14,8 @@ app.autodiscover_tasks()
 
 # Set up recurring tasks
 app.conf.beat_schedule = {
-    # 'check_refills': {
-    #     'task': 'genesishealth.apps.orders.tasks.check_refills',
-    #     'schedule': crontab(hour='2', minute='30')
-    # }
+    'check_refills': {
+        'task': 'genesishealth.apps.orders.tasks.check_refills',
+        'schedule': crontab(hour='2', minute='30')
+    }
 }
