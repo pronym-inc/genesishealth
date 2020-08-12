@@ -4,7 +4,7 @@ import math
 import random
 import re
 
-from datetime import date, timedelta
+from datetime import date, timedelta, datetime
 from hashlib import sha1 as sha_constructor
 from typing import Optional, Any, Dict
 
@@ -583,20 +583,29 @@ class PatientProfile(BaseProfile):
             return None
         return last_reading
 
-    def get_last_refill_datetime(self):
-        last_refill = self.get_last_refill_order()
+    def get_last_refill_datetime(self) -> datetime:
+        last_refill = self.get_last_shipped_refill_order()
         if last_refill:
-            return last_refill.datetime_added
+            return last_refill.datetime_shipped
         return self.user.date_joined
 
-    def get_last_refill_order(self):
+    def get_last_refill_order(self) -> Optional[Order]:
         orders = self.user.orders.filter(
             category__is_refill=True).order_by('-datetime_added')
         if orders.count() == 0:
-            return
+            return None
         return orders[0]
 
-    def get_next_refill_date(self):
+    def get_last_shipped_refill_order(self) -> Optional[Order]:
+        orders = self.user.orders.filter(
+            category__is_refill=True,
+            datetime_shipped__isnull=False
+        ).order_by('-datetime_shipped')
+        if orders.count() == 0:
+            return None
+        return orders[0]
+
+    def get_next_refill_date(self) -> Optional[datetime]:
         if self.get_refill_method() != self.REFILL_METHOD_SUBSCRIPTION:
             return
         last_refill = self.get_last_refill_order()
@@ -607,10 +616,8 @@ class PatientProfile(BaseProfile):
             base_date = last_refill.datetime_added
         return base_date + timedelta(days=refill_interval)
 
-    def get_partner_string(self):
-        return ", ".join(
-            map(lambda x: x['name'],
-                self.partners.all().values('name')))
+    def get_partner_string(self) -> Optional[datetime]:
+        return ", ".join(map(lambda x: x['name'],self.partners.all().values('name')))
 
     def get_professionals(self):
         return self.professionals.all()

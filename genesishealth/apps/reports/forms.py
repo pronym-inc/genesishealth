@@ -128,8 +128,8 @@ class BaseEntryForm(GenesisForm):
             self.fields[field].widget.attrs['readonly'] = 'readonly'
         # Move note to the bottom.  It's always first by default.
         self.fields = OrderedDict(
-            self.fields.items()[1:] +
-            self.fields.items()[:1]
+            list(self.fields.items())[1:] +
+            list(self.fields.items())[:1]
         )
 
     def save(self):
