@@ -1,6 +1,6 @@
 import csv
 import io
-from typing import Any, Dict
+from typing import Any, Dict, Type
 
 from django import forms
 from django.http import HttpResponse
@@ -56,7 +56,7 @@ class CSVImportForm(GenesisForm):
         ext = self.get_extension(doc)
         if ext == 'csv':
             return self.get_header_csv(doc)
-        elif ext in EXCEL_EXTENSIONS:
+        if ext in EXCEL_EXTENSIONS:
             return self.get_header_xlsx(doc)
         raise Exception('Invalid extension: {0}'.format(ext))
 
@@ -84,15 +84,17 @@ class CSVImportForm(GenesisForm):
             output.append(row_output)
         return output
 
-    def get_line_form_class(self):
+    def get_line_form_class(self) -> Type[GenesisForm]:
         return self.line_form_class
 
     def iter_cleaned_lines(self, doc):
+        output = []
         for line in self.iter_lines(doc):
             form_cls = self.get_line_form_class()
             form = form_cls(line)
             if form.is_valid():
-                yield form.cleaned_data
+                output.append(form.cleaned_data)
+        return output
 
     def iter_lines(self, doc):
         extension = self.get_extension(doc)
@@ -102,18 +104,18 @@ class CSVImportForm(GenesisForm):
             gen = self.iter_excel_lines(doc)
         else:
             raise Exception('Invalid extension: {0}'.format(extension))
-        for i in gen:
-            yield i
+        return [i for i in gen]
 
     def iter_csv_lines(self, doc, include_header=False):
-        reader = csv.DictReader(doc, fieldnames=self.get_column_names())
+        doc.seek(0)
+        contents = doc.read().decode('utf-8')
+        reader = csv.DictReader(io.StringIO(contents), fieldnames=self.get_column_names())
         # Skip lines for header rows
         if not include_header:
             for _ in range(self.header_row_count):
                 next(reader)
 
-        for row in reader:
-            yield row
+        return [row for row in reader]
 
     def iter_excel_lines(self, doc, include_header=False):
         wb = load_workbook(doc)
@@ -126,13 +128,15 @@ class CSVImportForm(GenesisForm):
         rows = ws.iter_rows(
             min_row=start,
             max_col=len(column_names))
+        output = []
         for row in rows:
             row_output = {}
             for column_name, cell in zip(column_names, row):
                 row_output[column_name] = cell.value
             if not any(row_output.values()):
                 break
-            yield row_output
+            output.append(row_output)
+        return output
 
     def validate_line(self, line):
         form_cls = self.get_line_form_class()
