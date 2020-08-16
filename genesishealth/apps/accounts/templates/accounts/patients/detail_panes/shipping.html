@@ -3,7 +3,7 @@
     <br>
     {% with ar=patient.patient_profile.get_activation_record %}
     {% if ar and ar.notification_method %}
-    <strong>Notification Method</strong>:{{ ar.notification_method }}
+    <strong>Notification Method</strong>: {{ ar.notification_method }}
     <br>
     {% endif %}
     <strong>Account Last Changed</strong>:{% if ar %}{{ ar.effective_date|date:"N j, Y" }}{% else %}{{ patient.date_joined|date:"N j, Y" }}{% endif %}
