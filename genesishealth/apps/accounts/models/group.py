@@ -541,7 +541,7 @@ class GenesisGroup(models.Model):
 
     def generate_target_range_report(self, days: int) -> str:
         return _generate_target_range_report(
-            self.get_patients(),
+            self.get_patients().filter(patient_profile__account_status=PatientProfile.ACCOUNT_STATUS_ACTIVE),
             days,
             self.name,
             no_pii=self.is_no_pii

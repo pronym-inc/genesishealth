@@ -7,6 +7,7 @@ from django.db.models import QuerySet
 from genesishealth.apps.accounts.password import make_password
 from genesishealth.apps.accounts.reports import (
     _generate_noncompliance_report, _generate_target_range_report)
+from . import PatientProfile
 
 from .profile_base import BaseProfile
 
@@ -59,7 +60,7 @@ class ProfessionalProfile(BaseProfile):
         )
 
     def generate_target_range_report(self, days: int, employer: 'Optional[Company]') -> str:
-        patients = self.get_patients()
+        patients = self.get_patients().filter(patient_profile__account_status=PatientProfile.ACCOUNT_STATUS_ACTIVE)
         if employer is not None:
             patients = patients.filter(patient_profile__company=employer)
         return _generate_target_range_report(
