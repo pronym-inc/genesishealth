@@ -12,7 +12,10 @@ test = require_admin_permission('orders')
 class OrderTableView(GenesisTableView):
     page_title = "Manage Orders"
 
-    extra_search_fields = ['shipments__tracking_number']
+    extra_search_fields = [
+        'shipments__tracking_number',
+        'patient__patient_profile__insurance_identifier'
+    ]
 
     def create_columns(self):
         return [

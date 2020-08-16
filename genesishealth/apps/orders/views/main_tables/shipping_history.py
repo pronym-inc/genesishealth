@@ -16,7 +16,8 @@ class ShippingHistoryView(GenesisTableView):
     page_title = "Shipping History"
 
     extra_search_fields = [
-        'tracking_number'
+        'tracking_number',
+        'order__patient__patient_profile__insurance_identifier'
     ]
 
     def create_columns(self):

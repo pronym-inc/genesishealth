@@ -11,6 +11,8 @@ test = require_admin_permission('orders')
 class CanceledOrderView(GenesisTableView):
     page_title = "Manage Canceled Orders"
 
+    extra_search_fields = ['patient__patient_profile__insurance_identifier']
+
     def create_columns(self):
         return [
             AttributeTableColumn(

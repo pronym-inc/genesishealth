@@ -11,6 +11,8 @@ test = require_admin_permission('orders')
 class HeldOrderView(GenesisTableView):
     page_title = "Manage Held Orders"
 
+    extra_search_fields = ['patient__patient_profile__insurance_identifier']
+
     def create_columns(self):
         return [
             AttributeTableColumn(

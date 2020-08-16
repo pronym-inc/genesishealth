@@ -588,7 +588,7 @@ class GenesisSingleTableBase(GenesisTableBase):
                 if query is not None:
                     queries.append(query)
             if len(queries) > 0:
-                filtered_queryset = filtered_queryset.filter(*queries)
+                filtered_queryset = filtered_queryset.filter(*queries).distinct()
             if not self.fake_count:
                 json_data['iTotalDisplayRecords'] = filtered_queryset.count()
         # Handle sorting.
