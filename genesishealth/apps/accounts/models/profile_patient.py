@@ -6,7 +6,7 @@ import re
 
 from datetime import date, timedelta, datetime
 from hashlib import sha1 as sha_constructor
-from typing import Optional, Any, Dict
+from typing import Optional, Any
 
 from django.conf import settings
 from django.contrib.auth.models import User
@@ -476,8 +476,7 @@ class PatientProfile(BaseProfile):
 
     def get_activation_record(self):
         try:
-            return self.user.activation_records.order_by(
-                '-datetime_created')[0]
+            return self.user.activation_records.order_by('-datetime_created')[0]
         except IndexError:
             pass
 
