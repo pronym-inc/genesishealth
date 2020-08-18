@@ -1,14 +1,13 @@
 import csv
 import io
 from datetime import timedelta, datetime
-from typing import List, Optional, TYPE_CHECKING
+from typing import List, Optional
 
 from django.db import models
 from django.contrib.auth.models import User
 from django.db.models import QuerySet
 from django.utils.timezone import make_naive, get_default_timezone
 
-from genesishealth.apps.accounts.models import PatientProfile
 from genesishealth.apps.accounts.reports import _generate_noncompliance_report, _generate_target_range_report
 from genesishealth.apps.epc.models import EPCOrder
 from genesishealth.apps.gdrives.models import GDrive
@@ -537,6 +536,7 @@ class GenesisGroup(models.Model):
         return content
 
     def generate_target_range_report(self, days: int) -> str:
+        from genesishealth.apps.accounts.models import PatientProfile
         return _generate_target_range_report(
             self.get_patients().filter(patient_profile__account_status=PatientProfile.ACCOUNT_STATUS_ACTIVE),
             days,
@@ -573,7 +573,7 @@ class GenesisGroup(models.Model):
         return User.objects.filter(professional_profile__in=self.professionals.all())
 
     def remove_patient(self, patient: User) -> None:
-        profile: PatientProfile = patient.patient_profile
+        profile = patient.patient_profile
         profile.group = None
         profile.save()
 
