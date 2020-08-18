@@ -8,13 +8,10 @@ from django.contrib.auth.models import User
 from django.db.models import QuerySet
 from django.utils.timezone import make_naive, get_default_timezone
 
+from genesishealth.apps.accounts.models import PatientProfile
 from genesishealth.apps.accounts.reports import _generate_noncompliance_report, _generate_target_range_report
 from genesishealth.apps.epc.models import EPCOrder
 from genesishealth.apps.gdrives.models import GDrive
-
-if TYPE_CHECKING:
-    from genesishealth.apps.accounts.models import PatientProfile
-    from genesishealth.apps.accounts.models.contact import Contact
 
 
 class GenesisGroup(models.Model):
