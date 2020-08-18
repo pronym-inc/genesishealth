@@ -566,7 +566,7 @@ class RMAInspectionForm(GenesisModelForm):
             updated_by=self.requester,
             rma_notes=self.cleaned_data['rma_notes']
         )
-        update.found_problems = self.cleaned_data['found_problems']
+        update.found_problems.set(self.cleaned_data['found_problems'])
         return obj
 
 

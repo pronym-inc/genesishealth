@@ -37,7 +37,6 @@ class FinalizeShipmentForm(GenesisModelForm):
         self.rates = kwargs.pop('rates')
         super(FinalizeShipmentForm, self).__init__(*args, **kwargs)
         self.fields['shipping_class'].set_rates(self.rates)
-        print(list(self.rates.keys()))
         self.fields['shipping_class'].queryset = ShippingClass.objects.filter(
             stamps_abbreviation__in=self.rates.keys(),
             enabled=True)
