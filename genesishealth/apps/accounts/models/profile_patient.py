@@ -296,7 +296,7 @@ class PatientProfile(BaseProfile):
             also_skip = []
         if email:
             return email
-        elif first_name and last_name:
+        if first_name and last_name:
             c = 0
             username_base = "{}.{}".format(first_name, last_name).replace(' ', '').lower()
             while True:
@@ -549,13 +549,13 @@ class PatientProfile(BaseProfile):
 
     def get_glucose_refill_frequency(self):
         if self.get_refill_method() != self.REFILL_METHOD_SUBSCRIPTION:
-            return 80
+            return settings.DEFAULT_SUBSCRIPTION_REFILL_INTERVAL_DAYS
         if self.glucose_strip_refill_frequency is not None:
             return self.glucose_strip_refill_frequency
         if (self.company is not None and
                 self.company.glucose_strip_refill_frequency is not None):
             return self.company.glucose_strip_refill_frequency
-        return 80
+        return settings.DEFAULT_SUBSCRIPTION_REFILL_INTERVAL_DAYS
 
     def get_group(self):
         return self.group
@@ -670,9 +670,8 @@ class PatientProfile(BaseProfile):
                 base_quantity = self.get_strip_refill_minimum()
             else:
                 base_quantity = entry.quantity
-        # Each box is 50 readings and threshold is 85% of the number
-        # of strips they were sent.
-        return int(base_quantity * 50 * .85)
+        # Each box is 50 readings.
+        return int(base_quantity * 50 * settings.DEFAULT_UTILIZATION_REFILL_THRESHOLD_PERCENTAGE)
 
     def group_list(self):
         return self.group.name if self.group else 'N/A'

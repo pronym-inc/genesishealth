@@ -50,7 +50,7 @@ class ProfessionalProfile(BaseProfile):
         return make_password(self.user)
 
     def generate_noncompliance_report(self, hours: int, employer: 'Optional[Company]' = None) -> str:
-        patients = self.get_patients()
+        patients = self.get_patients().filter(patient_profile__account_status=PatientProfile.ACCOUNT_STATUS_ACTIVE)
         if employer is not None:
             patients = patients.filter(patient_profile__company=employer)
         return _generate_noncompliance_report(
