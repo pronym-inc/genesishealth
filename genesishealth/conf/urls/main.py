@@ -21,6 +21,11 @@ urlpatterns = [
             ('genesishealth.apps.accounts.urls',
              'genesishealth.apps.accounts'),
             namespace='accounts')),
+    url(r'^api/mobile/',
+        include(
+            ('genesishealth.apps.mobile.urls',
+             'genesishealth.apps.mobile'),
+            namespace='mobile')),
     url(r'^api/',
         include(
             ('genesishealth.apps.healthsplash.urls',
