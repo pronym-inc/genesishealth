@@ -31,4 +31,4 @@ class MeApiView(NoResourceApiView):
         }
 
     def _get_endpoint_name(self) -> str:
-        pass
+        return "mobile-me"
