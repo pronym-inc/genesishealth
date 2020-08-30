@@ -10,6 +10,6 @@ class BloodPressureReading(models.Model):
         related_name='blood_pressure_readings',
         editable=False
     )
-    datetime_received = models.DateTimeField(default=now, editable=False)
+    datetime_received = models.DateTimeField(default=now, blank=True)
     systolic_value = models.PositiveIntegerField()
     diastolic_value = models.PositiveIntegerField()
