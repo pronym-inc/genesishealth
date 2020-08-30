@@ -82,6 +82,7 @@ INSTALLED_APPS = [
     'genesishealth.apps.text_messaging',
     'genesishealth.apps.healthsplash',
     'genesishealth.apps.work_queue',
+    'genesishealth.apps.blood_pressure',
     'compressor',
     'localflavor',
 ]
