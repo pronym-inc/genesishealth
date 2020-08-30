@@ -7,8 +7,9 @@ class BloodPressureReading(models.Model):
         'accounts.PatientProfile',
         on_delete=models.SET_NULL,
         null=True,
-        related_name='blood_pressure_readings'
+        related_name='blood_pressure_readings',
+        editable=False
     )
-    datetime_received = models.DateTimeField(default=now)
+    datetime_received = models.DateTimeField(default=now, editable=False)
     systolic_value = models.PositiveIntegerField()
     diastolic_value = models.PositiveIntegerField()
