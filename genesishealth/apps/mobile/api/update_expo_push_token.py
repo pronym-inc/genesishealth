@@ -23,7 +23,7 @@ class UpdateExpoPushTokenAction(NoResourceFormAction[UpdateExpoPushTokenForm]):
             resource: ResourceT
     ) -> Optional[Union[ApiProcessingFailure, Dict[str, Any]]]:
         form = self._get_form(request, account_member, resource)
-        self._save_form(form, request, account_member, resource)
+        form.save()
         return {}
 
     def _get_form_class(self, request_data: Dict[str, Any], account_member: Optional[ApiAccountMember],
