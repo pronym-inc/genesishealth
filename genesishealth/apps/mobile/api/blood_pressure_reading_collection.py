@@ -3,6 +3,7 @@ from typing import Type, Optional, Dict, Any
 from django.db.models import QuerySet
 from pronym_api.models import ApiAccountMember
 from pronym_api.views.actions import ResourceAction
+from pronym_api.views.api_view import HttpMethod
 from pronym_api.views.model_view.actions.create import CreateModelResourceAction
 from pronym_api.views.model_view.modelform import LazyModelForm
 from pronym_api.views.model_view.views import ModelCollectionApiView
@@ -34,6 +35,11 @@ class BloodPressureReadingCollectionApiView(ModelCollectionApiView[BloodPressure
         except PatientProfile.DoesNotExist:
             return False
         return True
+
+    def _get_action_configuration(self) -> Dict[HttpMethod, ResourceAction]:
+        config = super()._get_action_configuration()
+        config[HttpMethod.POST] = CreateBloodPressureReadingAction(self._get_model())
+        return config
 
     def _get_model(self) -> Type[BloodPressureReading]:
         return BloodPressureReading
