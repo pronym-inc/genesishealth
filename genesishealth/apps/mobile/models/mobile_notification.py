@@ -11,9 +11,10 @@ class MobileNotification(models.Model):
         editable=False
     )
     datetime_created = models.DateTimeField(default=now, db_index=True)
+    subject = models.TextField()
     message = models.TextField()
     is_read = models.BooleanField(default=False)
-    is_pushed = models.BooleanField(default=False)
+    is_pushed = models.BooleanField(default=False, editable=False)
 
     class Meta:
         ordering = ['-datetime_created']
