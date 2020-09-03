@@ -5,6 +5,7 @@ from genesishealth.apps.mobile.api.blood_pressure_reading.collection import Bloo
 from genesishealth.apps.mobile.api.blood_pressure_reading.detail import BloodPressureReadingDetailApiView
 from genesishealth.apps.mobile.api.glucose_reading.collection import GlucoseReadingCollectionApiView
 from genesishealth.apps.mobile.api.me import MeApiView
+from genesishealth.apps.mobile.api.notifications.answer_question import AnswerQuestionMobileNotificationApiView
 from genesishealth.apps.mobile.api.notifications.collection import MobileNotificationCollectionApiView
 from genesishealth.apps.mobile.api.notifications.detail import MobileNotificationDetailApiView
 from genesishealth.apps.mobile.api.update_expo_push_token import UpdateExpoPushTokenApiView
@@ -45,5 +46,10 @@ urlpatterns = [
         r'notification/(?P<id>\d+)/$',
         MobileNotificationDetailApiView.as_view(),
         name="mobile-notification-detail"
+    ),
+    url(
+        r'question_entry/(?P<id>\d+)/answer/$',
+        AnswerQuestionMobileNotificationApiView.as_view(),
+        name="mobile-notification-answer-question"
     )
 ]
