@@ -10,10 +10,24 @@ class GetMyProfileAction(NoResourceAction):
     def execute(self, request: Dict[str, Any], account_member: Optional[ApiAccountMember],
                 resource: NullResource = NullResource()) -> Optional[Union[ApiProcessingFailure, Dict[str, Any]]]:
         if account_member is not None:
-            return {
+            output = {
                 "first_name": account_member.user.first_name,
-                "last_name": account_member.user.last_name
+                "last_name": account_member.user.last_name,
+                "address1": account_member.user.patient_profile.contact.address1,
+                "address2": account_member.user.patient_profile.contact.address2,
+                "city": account_member.user.patient_profile.contact.city,
+                "state": account_member.user.patient_profile.contact.state,
+                "zip_code": account_member.user.patient_profile.contact.zip,
             }
+            maybe_device = account_member.user.patient_profile.get_device()
+            if maybe_device:
+                output['glucose_device'] = {
+                    'meid': maybe_device.meid
+                }
+            output['blood_pressure_device'] = {
+                'serial_number': 'ABC12312424124'
+            }
+            return output
         return ApiProcessingFailure(
             errors=["Did not found a user."],
             status=500
