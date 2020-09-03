@@ -1,14 +1,29 @@
-from typing import Type, Dict, Optional
+from typing import Type, Dict, Optional, Any, Union
 
 from django.db.models import QuerySet
 
 from pronym_api.models import ApiAccountMember
-from pronym_api.views.actions import ResourceAction
+from pronym_api.views.actions import ResourceAction, ApiProcessingFailure
 from pronym_api.views.api_view import HttpMethod
+from pronym_api.views.model_view.actions.search import SearchModelResourceAction
 from pronym_api.views.model_view.views import ModelCollectionApiView
 
 from genesishealth.apps.accounts.models import PatientProfile
 from genesishealth.apps.readings.models import GlucoseReading
+
+
+class SearchGlucoseReadingResourceAction(SearchModelResourceAction[GlucoseReading]):
+    def execute(self, request: Dict[str, Any], account_member: Optional[ApiAccountMember],
+                resource: 'QuerySet[GlucoseReading]') -> Optional[Union[ApiProcessingFailure, Dict[str, Any]]]:
+        return {
+            "results": [
+                {
+                    "reading_datetime_utc": reading.reading_datetime_utc,
+                    "glucose_value": reading.glucose_value
+                }
+                for reading in resource
+            ]
+        }
 
 
 class GlucoseReadingCollectionApiView(ModelCollectionApiView[GlucoseReading]):
@@ -25,9 +40,9 @@ class GlucoseReadingCollectionApiView(ModelCollectionApiView[GlucoseReading]):
         return True
 
     def _get_action_configuration(self) -> Dict[HttpMethod, ResourceAction]:
-        config = super()._get_action_configuration()
-        del config[HttpMethod.POST]
-        return config
+        return {
+            HttpMethod.GET: SearchGlucoseReadingResourceAction()
+        }
 
     def _get_model(self) -> Type[GlucoseReading]:
         return GlucoseReading
