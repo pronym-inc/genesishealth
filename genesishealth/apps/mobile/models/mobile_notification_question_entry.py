@@ -10,7 +10,7 @@ class MobileNotificationQuestionEntry(models.Model):
         null=True,
         related_name='+'
     )
-    ordering = models.PositiveIntegerField()
+    ordering = models.PositiveIntegerField(default=0)
 
     class Meta:
         ordering = ['ordering']

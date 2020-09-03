@@ -20,6 +20,7 @@ class CreateBloodPressureReadingAction(CreateModelResourceAction[BloodPressureRe
         if account_member is not None:
             obj.patient_profile = account_member.user.patient_profile
             obj.save()
+        obj.send_notification()
         return obj
 
 
