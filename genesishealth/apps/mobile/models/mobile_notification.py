@@ -1,5 +1,9 @@
+from celery.result import AsyncResult
+
 from django.db import models
 from django.utils.timezone import now
+
+from genesishealth.apps.mobile.tasks import push_to_device
 
 
 class MobileNotification(models.Model):
@@ -26,3 +30,6 @@ class MobileNotification(models.Model):
         if response.success:
             self.is_pushed = True
             self.save()
+
+    def push_to_device_async(self) -> AsyncResult:
+        return push_to_device.delay(self.id)
