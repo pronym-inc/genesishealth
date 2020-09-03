@@ -18,6 +18,7 @@ class SearchGlucoseReadingResourceAction(SearchModelResourceAction[GlucoseReadin
         return {
             "results": [
                 {
+                    "id": reading.id,
                     "reading_datetime_utc": reading.reading_datetime_utc,
                     "glucose_value": reading.glucose_value
                 }
