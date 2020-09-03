@@ -47,7 +47,7 @@ class AnswerQuestionResourceAction(FormValidatedResourceAction[AnswerQuestionFor
         return {}
 
 
-class AnswerQuestionMobileNotificationApiView(ModelDetailApiView[MobileNotification]):
+class AnswerQuestionMobileNotificationApiView(ModelDetailApiView[MobileNotificationQuestionEntry]):
     def _get_action_configuration(self) -> Dict[HttpMethod, ResourceAction]:
         return {
             HttpMethod.POST: AnswerQuestionResourceAction()
@@ -56,7 +56,7 @@ class AnswerQuestionMobileNotificationApiView(ModelDetailApiView[MobileNotificat
     def _check_authorization(
             self,
             requester: ApiAccountMember,
-            resource: Optional[MobileNotification],
+            resource: Optional[MobileNotificationQuestionEntry],
             action: ResourceAction
     ) -> bool:
         try:
@@ -65,8 +65,10 @@ class AnswerQuestionMobileNotificationApiView(ModelDetailApiView[MobileNotificat
             return False
         return True
 
-    def _get_model(self) -> Type[MobileNotification]:
-        return MobileNotification
+    def _get_model(self) -> Type[MobileNotificationQuestionEntry]:
+        return MobileNotificationQuestionEntry
 
-    def _get_queryset(self) -> 'QuerySet[MobileNotification]':
-        return self.authenticated_account_member.user.mobile_profile.notifications.all()
+    def _get_queryset(self) -> 'QuerySet[MobileNotificationQuestionEntry]':
+        return MobileNotificationQuestionEntry.objects.filter(
+            notification__profile=self.authenticated_account_member.user.mobile_profile
+        )
