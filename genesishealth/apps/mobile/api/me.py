@@ -18,6 +18,7 @@ class GetMyProfileAction(NoResourceAction):
                 "city": account_member.user.patient_profile.contact.city,
                 "state": account_member.user.patient_profile.contact.state,
                 "zip_code": account_member.user.patient_profile.contact.zip,
+                "unread_notifications": account_member.user.mobile_profile.notifications.filter(is_read=False).count()
             }
             maybe_device = account_member.user.patient_profile.get_device()
             if maybe_device:
