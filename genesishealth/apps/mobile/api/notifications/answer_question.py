@@ -2,13 +2,12 @@ from typing import Optional, Dict, Any, Union, Type
 
 from django import forms
 from django.db.models import QuerySet
-
 from pronym_api.models import ApiAccountMember
 from pronym_api.views.actions import ResourceAction, ApiProcessingFailure, FormValidatedResourceAction
 from pronym_api.views.api_view import HttpMethod
 from pronym_api.views.model_view.views import ModelDetailApiView
 
-from genesishealth.apps.mobile.models import MobileNotification, MobileProfile, MobileNotificationQuestionEntry
+from genesishealth.apps.mobile.models import MobileProfile, MobileNotificationQuestionEntry
 
 
 class AnswerQuestionForm(forms.Form):
@@ -42,6 +41,7 @@ class AnswerQuestionResourceAction(FormValidatedResourceAction[AnswerQuestionFor
         resource: MobileNotificationQuestionEntry
     ) -> Optional[Union[ApiProcessingFailure, Dict[str, Any]]]:
         form = self._get_form(request, account_member, resource)
+        form.is_valid()
         resource.answer = form.cleaned_data['answer']
         resource.save()
         return {}
