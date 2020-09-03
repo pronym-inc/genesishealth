@@ -45,4 +45,9 @@ class BloodPressureReadingCollectionApiView(ModelCollectionApiView[BloodPressure
         return BloodPressureReading
 
     def _get_queryset(self) -> 'QuerySet[BloodPressureReading]':
-        return self.authenticated_account_member.user.patient_profile.blood_pressure_readings.all()
+        return self\
+            .authenticated_account_member\
+            .user\
+            .patient_profile\
+            .blood_pressure_readings\
+            .order_by('-datetime_received')
