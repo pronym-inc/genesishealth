@@ -27,7 +27,10 @@ class ExpoNotificationClient:
             response = PushClient().publish(
                 PushMessage(
                     to=token,
-                    body=notification.message
+                    body=notification.message,
+                    data={
+                        'notification_id': notification.id
+                    }
                 )
             )
         except PushServerError as exc:
