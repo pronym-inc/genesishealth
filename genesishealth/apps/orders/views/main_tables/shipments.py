@@ -68,7 +68,7 @@ class ShipmentView(GenesisTableView):
         ]
 
     def get_queryset(self):
-        return OrderShipment.objects.exclude(tracking_number__isnull=False)
+        return OrderShipment.objects.all()
 
 
 main = test(ShipmentView.as_view())
