@@ -626,7 +626,7 @@ class PatientProfile(BaseProfile):
     def get_readings_since_last_refill(self):
         last_refill = self.get_last_refill_order()
         readings = self.user.glucose_readings.all()
-        if last_refill is not None:
+        if last_refill is not None and last_refill.datetime_shipped is not None:
             readings = readings.filter(
                 reading_datetime_utc__gte=last_refill.datetime_shipped)
         return readings
