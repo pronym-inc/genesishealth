@@ -488,7 +488,7 @@ class PatientProfile(BaseProfile):
 
     def get_anticipated_refill_date(self):
         last_order = self.get_last_refill_order()
-        if last_order is None:
+        if last_order is None or last_order.datetime_shipped is None:
             return
         return last_order.datetime_shipped + timedelta(days=self.get_glucose_refill_shipping_interval())
 
