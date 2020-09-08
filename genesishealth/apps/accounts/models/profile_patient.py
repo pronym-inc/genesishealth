@@ -611,10 +611,13 @@ class PatientProfile(BaseProfile):
             return
         last_refill = self.get_last_refill_order()
         refill_interval = self.get_glucose_refill_shipping_interval()
-        if last_refill is None or last_refill.datetime_shipped is None:
+        if last_refill is None:
             base_date = self.user.date_joined
         else:
-            base_date = last_refill.datetime_shipped
+            if last_refill.datetime_shipped:
+                base_date = last_refill.datetime_shipped
+            else:
+                base_date = last_refill.datetime_added
         return base_date + timedelta(days=refill_interval)
 
     def get_partner_string(self) -> str:
@@ -626,9 +629,13 @@ class PatientProfile(BaseProfile):
     def get_readings_since_last_refill(self):
         last_refill = self.get_last_refill_order()
         readings = self.user.glucose_readings.all()
-        if last_refill is not None and last_refill.datetime_shipped is not None:
-            readings = readings.filter(
-                reading_datetime_utc__gte=last_refill.datetime_shipped)
+        if last_refill is not None:
+            if last_refill.datetime_shipped
+                readings = readings.filter(
+                    reading_datetime_utc__gte=last_refill.datetime_shipped)
+            else:
+                readings = readings.filter(
+                    reading_datetime_utc__gte=last_refill.datetime_added)
         return readings
 
     def get_refill_method(self):
