@@ -17,7 +17,7 @@ test = require_admin_permission('orders')
 class EditShipmentForm(GenesisModelForm):
     class Meta:
         model = OrderShipment
-        fields = ('tracking_number',)
+        fields = ('tracking_number', 'shipped_date')
 
     def clean_tracking_number(self):
         tracking_number = self.cleaned_data['tracking_number']

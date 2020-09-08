@@ -16,6 +16,6 @@ app.autodiscover_tasks()
 app.conf.beat_schedule = {
     'check_refills': {
         'task': 'genesishealth.apps.orders.tasks.check_refills',
-        'schedule': crontab(hour='0,12', minute='0')
+        'schedule': crontab(hour='5,17', minute='0')
     }
 }

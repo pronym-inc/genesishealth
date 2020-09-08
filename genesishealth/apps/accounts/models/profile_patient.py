@@ -490,8 +490,7 @@ class PatientProfile(BaseProfile):
         last_order = self.get_last_refill_order()
         if last_order is None:
             return
-        return last_order.datetime_added + timedelta(
-            days=self.get_glucose_refill_frequency())
+        return last_order.datetime_shipped + timedelta(days=self.get_glucose_refill_shipping_interval())
 
     def get_average_daily_readings(self, days=7):
         if days == 0:
@@ -547,7 +546,7 @@ class PatientProfile(BaseProfile):
                 return date_str
         return 'N/A'
 
-    def get_glucose_refill_frequency(self):
+    def get_glucose_refill_interval(self) -> int:
         if self.get_refill_method() != self.REFILL_METHOD_SUBSCRIPTION:
             return settings.DEFAULT_SUBSCRIPTION_REFILL_INTERVAL_DAYS
         if self.glucose_strip_refill_frequency is not None:
@@ -556,6 +555,9 @@ class PatientProfile(BaseProfile):
                 self.company.glucose_strip_refill_frequency is not None):
             return self.company.glucose_strip_refill_frequency
         return settings.DEFAULT_SUBSCRIPTION_REFILL_INTERVAL_DAYS
+
+    def get_glucose_refill_shipping_interval(self) -> int:
+        return self.get_glucose_refill_interval() - settings.DEFAULT_SUBSCRIPTION_REFILL_SHIPPING_BUFFER_DAYS
 
     def get_group(self):
         return self.group
@@ -608,14 +610,14 @@ class PatientProfile(BaseProfile):
         if self.get_refill_method() != self.REFILL_METHOD_SUBSCRIPTION:
             return
         last_refill = self.get_last_refill_order()
-        refill_interval = self.get_glucose_refill_frequency()
+        refill_interval = self.get_glucose_refill_shipping_interval()
         if last_refill is None:
             base_date = self.user.date_joined
         else:
-            base_date = last_refill.datetime_added
+            base_date = last_refill.datetime_shipped
         return base_date + timedelta(days=refill_interval)
 
-    def get_partner_string(self) -> Optional[datetime]:
+    def get_partner_string(self) -> str:
         return ", ".join(map(lambda x: x['name'],self.partners.all().values('name')))
 
     def get_professionals(self):
@@ -640,7 +642,7 @@ class PatientProfile(BaseProfile):
         # out how many strips to send them to last 90 days.
         days = (now() - self.get_last_refill_datetime()).days
         average_readings = self.get_average_daily_readings(days)
-        reading_period = self.get_glucose_refill_frequency()
+        reading_period = self.get_glucose_refill_interval()
         expected_readings_for_period = average_readings * reading_period + 10
         boxes_used = int(math.ceil(expected_readings_for_period / 50))
         boxes_used = max(boxes_used, self.get_strip_refill_minimum())
