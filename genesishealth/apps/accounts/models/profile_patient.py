@@ -611,7 +611,7 @@ class PatientProfile(BaseProfile):
             return
         last_refill = self.get_last_refill_order()
         refill_interval = self.get_glucose_refill_shipping_interval()
-        if last_refill is None:
+        if last_refill is None or last_refill.datetime_shipped is None:
             base_date = self.user.date_joined
         else:
             base_date = last_refill.datetime_shipped
