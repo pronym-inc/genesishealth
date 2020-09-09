@@ -342,11 +342,6 @@ class PatientProfile(BaseProfile):
             (self.user.date_joined + expiration_date <= now())
     activation_key_expired.boolean = True
 
-    def cancel_pending_orders(self):
-        for order in self.user.orders.all():
-            if order.can_be_canceled():
-                order.cancel("Eligibility revoked")
-
     def change_account_status(self, new_status, effective_date=None,
                               reason=None, notification_method="",
                               requested_by=None):
@@ -369,10 +364,6 @@ class PatientProfile(BaseProfile):
             notification_method=notification_method,
             new_status=new_status
         )
-        # If the account is no longer active, then cancel any orders.
-        if (old_status == self.ACCOUNT_STATUS_ACTIVE and
-                self.account_status != self.ACCOUNT_STATUS_ACTIVE):
-            self.cancel_pending_orders()
 
     def check_for_refills(self):
         refill_method = self.get_refill_method()
