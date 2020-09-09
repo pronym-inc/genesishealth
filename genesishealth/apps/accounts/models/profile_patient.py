@@ -346,7 +346,6 @@ class PatientProfile(BaseProfile):
                               reason=None, notification_method="",
                               requested_by=None):
         valid_statuses = map(lambda x: x[0], self.ACCOUNT_STATUS_CHOICES)
-        old_status = self.account_status
         assert new_status in valid_statuses
         if new_status in (
                 self.ACCOUNT_STATUS_TERMED,

@@ -12,7 +12,7 @@ class ConfigureOrderHistoryReportForm(CSVReportForm):
 
 class BaseOrderHistoryReport(CSVReport):
     header_rows = [[
-        'Order Datetime', 'Order Type', 'Order Status', 'Patient',
+        'Order Datetime', 'Order Type', 'Order Status', 'Patient', 'Insurance Identifier', 'Group',
         'Rx Partner', 'Date Shipped', 'Tracking Number', 'Invoice Number',
         'Strip Count', 'Meter Count', 'Lancet Count', 'Lancing Device Count',
         'Control Solution Count']]
@@ -28,8 +28,12 @@ class BaseOrderHistoryReport(CSVReport):
             shipped_dt = str(item.datetime_shipped)
         if item.patient is None:
             patient_str = 'N/A'
+            insurance_identifier = 'N/A'
+            group = 'N/A'
         else:
             patient_str = item.patient.get_reversed_name()
+            insurance_identifier = item.patient.patient_profile.insurance_identifier
+            group = item.patient.patient_profile.company.name
         if item.rx_partner is None:
             rx_str = 'N/A'
         else:
@@ -39,6 +43,8 @@ class BaseOrderHistoryReport(CSVReport):
             item.get_order_type_display(),
             item.get_order_status_display(),
             patient_str,
+            insurance_identifier,
+            group,
             rx_str,
             shipped_dt,
             item.get_tracking_number(),
