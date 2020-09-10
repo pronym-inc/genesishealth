@@ -179,7 +179,7 @@ def index(request, patient_id=None):
                         .get_patients().get(id=patient_id)
                 except User.DoesNotExist:
                     c['target'] = request.user.professional_profile \
-                        .watch_list.get(id=patient_id)
+                        .watch_list.get(user__id=patient_id)
                 c['breadcrumbs'] = [
                     Breadcrumb('Patients', reverse('accounts:manage-patients'))
                 ]
