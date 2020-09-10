@@ -628,8 +628,14 @@ def summary_report(request, patient_id=None):
     try:
         if patient_id:
             if request.user.is_professional():
-                patient = request.user.professional_profile.get_patients().get(
-                    pk=patient_id)
+                try:
+                    patient = request.user.professional_profile.get_patients().get(
+                        pk=patient_id)
+                except User.DoesNotExist:
+                    try:
+                        user = request.user.professional_profile.watch_list.get(user__pk=patient_id).user
+                    except PatientProfile.DoesNotExist:
+                        return HttpResponse(status=500)
             elif request.user.is_admin():
                 patient = PatientProfile.myghr_patients.get_users().get(
                     pk=patient_id)
