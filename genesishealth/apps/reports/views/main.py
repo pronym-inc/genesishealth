@@ -232,8 +232,14 @@ def logbook_with_summary(request, patient_id=None):
         if patient_id:
             assert request.user.is_professional() or request.user.is_admin()
             if request.user.is_professional():
-                user = request.user.professional_profile.get_patients().get(
-                    pk=patient_id)
+                try:
+                    user = request.user.professional_profile.get_patients().get(
+                        pk=patient_id)
+                except User.DoesNotExist:
+                    try:
+                        user = request.user.professional_profile.watch_list.get(user__pk=patient_id).user
+                    except PatientProfile.DoesNotExist:
+                        return HttpResponse(status=500)
             else:
                 user = PatientProfile.myghr_patients.get_users().get(
                     pk=patient_id)
@@ -482,8 +488,14 @@ class AggregateReport(ReportView):
         if patient_id:
             assert request.user.is_professional() or request.user.is_admin()
             if request.user.is_professional():
-                user = request.user.professional_profile.get_patients().get(
-                    pk=patient_id)
+                try:
+                    user = request.user.professional_profile.get_patients().get(
+                        pk=patient_id)
+                except User.DoesNotExist:
+                    try:
+                        user = request.user.professional_profile.watch_list.get(user__pk=patient_id).user
+                    except PatientProfile.DoesNotExist:
+                        return HttpResponse(status=500)
             else:
                 user = PatientProfile.myghr_patients.get_users().get(
                     pk=patient_id)
@@ -785,7 +797,10 @@ def compliance_report(request, user_id):
     try:
         user = request.user.professional_profile.get_patients().get(pk=user_id)
     except User.DoesNotExist:
-        return HttpResponse(status=500)
+        try:
+            user = request.user.professional_profile.watch_list.get(user__pk=user_id).user
+        except PatientProfile.DoesNotExist:
+            return HttpResponse(status=500)
 
     c = {'user': user}
     return render(request, 'reports/compliance_report.html', c)
