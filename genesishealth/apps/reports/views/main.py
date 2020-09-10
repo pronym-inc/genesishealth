@@ -174,8 +174,12 @@ def index(request, patient_id=None):
         if patient_id:
             assert request.user.is_professional() or request.user.is_admin()
             if request.user.is_professional():
-                c['target'] = request.user.professional_profile\
-                    .get_patients().get(id=patient_id)
+                try:
+                    c['target'] = request.user.professional_profile\
+                        .get_patients().get(id=patient_id)
+                except User.DoesNotExist:
+                    c['target'] = request.user.professional_profile \
+                        .watch_list.get(id=patient_id)
                 c['breadcrumbs'] = [
                     Breadcrumb('Patients', reverse('accounts:manage-patients'))
                 ]
