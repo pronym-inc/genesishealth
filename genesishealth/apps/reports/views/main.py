@@ -633,7 +633,7 @@ def summary_report(request, patient_id=None):
                         pk=patient_id)
                 except User.DoesNotExist:
                     try:
-                        user = request.user.professional_profile.watch_list.get(user__pk=patient_id).user
+                        patient = request.user.professional_profile.watch_list.get(user__pk=patient_id).user
                     except PatientProfile.DoesNotExist:
                         return HttpResponse(status=500)
             elif request.user.is_admin():
