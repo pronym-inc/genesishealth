@@ -546,7 +546,7 @@ def notes(request, patient_id):
     except User.DoesNotExist as e:
         try:
             form_kwargs['patient'] = patient = \
-                request.user.professional_profile.watch_list.get(user__pk=patient_id)
+                request.user.professional_profile.watch_list.get(user__pk=patient_id).user
         except User.DoesNotExist as e:
             return debug_response(e)
 
