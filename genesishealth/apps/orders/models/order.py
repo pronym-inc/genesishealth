@@ -1,3 +1,5 @@
+from datetime import datetime, time
+
 from django.db import models
 from django.utils.timezone import localtime, now
 
@@ -149,8 +151,9 @@ class Order(models.Model):
     def check_if_shipped(self):
         if self.order_status != self.ORDER_STATUS_IN_PROGRESS:
             return
+        shipment = self.get_shipment()
         self.order_status = self.ORDER_STATUS_SHIPPED
-        self.datetime_shipped = now()
+        self.datetime_shipped = datetime.combine(shipment.shipped_date, time())
         self.save()
 
     def check_lock(self):

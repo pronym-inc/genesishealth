@@ -478,9 +478,12 @@ class PatientProfile(BaseProfile):
 
     def get_anticipated_refill_date(self):
         last_order = self.get_last_refill_order()
-        if last_order is None or last_order.datetime_shipped is None:
-            return
-        return last_order.datetime_shipped + timedelta(days=self.get_glucose_refill_shipping_interval())
+        interval = timedelta(days=self.get_glucose_refill_shipping_interval())
+        if last_order is None:
+            return self.user.date_joined + interval
+        if last_order.datetime_shipped is None:
+            return last_order.datetime_added + interval
+        return last_order.datetime_shipped + interval
 
     def get_average_daily_readings(self, days=7):
         if days == 0:
@@ -581,8 +584,7 @@ class PatientProfile(BaseProfile):
         return self.user.date_joined
 
     def get_last_refill_order(self) -> Optional[Order]:
-        orders = self.user.orders.filter(
-            category__is_refill=True).order_by('-datetime_added')
+        orders = self.user.orders.filter(category__is_refill=True).order_by('-datetime_added')
         if orders.count() == 0:
             return None
         return orders[0]
