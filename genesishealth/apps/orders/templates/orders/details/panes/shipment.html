@@ -1,9 +1,6 @@
-{% for shipment in order.shipments.all %}
 <p>
-    <strong>Shipment</strong> on {{ shipment.shipped_date }}
+    <strong>Shipment</strong> on {{ order.date_shipped }}
 </p>
 <p>
-    <strong>Tracking Number</strong>: {{ shipment.tracking_number }}
+    <strong>Tracking Number</strong>: {{ order.get_tracking_number }}
 </p>
-{% if not forloop.last %}<hr>{% endif %}
-{% endfor %}
