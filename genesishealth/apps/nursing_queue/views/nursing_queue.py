@@ -52,6 +52,8 @@ class NursingQueueView(GenesisTableView):
             nursing_group = self.request.user.professional_profile.nursing_group
         except NursingGroup.DoesNotExist:
             return NursingQueueEntry.objects.none()
+        if nursing_group is None:
+            return NursingQueueEntry.objects.none()
         return nursing_group.nursing_queue_entries.filter(is_completed=False)
 
 
