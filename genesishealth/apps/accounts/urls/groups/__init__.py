@@ -6,6 +6,9 @@ from genesishealth.apps.accounts.views import groups as views
 
 
 id_urlpatterns = [
+    url(r'^admin/$',
+        views.group_admin,
+        name='manage-groups-admin'),
     url(r'^patients/',
         include('genesishealth.apps.accounts.urls.groups.patients')),
     url(r'^professionals/',

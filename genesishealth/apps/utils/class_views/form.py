@@ -31,6 +31,7 @@ class GenesisBaseFormMixin(object):
         pass
 
     def save_form(self, form):
+        print("Saving form")
         try:
             form.save()
         except AttributeError:
@@ -53,7 +54,8 @@ class GenesisFormView(GenesisBaseFormMixin, FormView):
         form_message = self._get_form_message()
         if form_message:
             kwargs.setdefault('form_message', form_message)
-        return super(GenesisFormView, self).get_context_data(**kwargs)
+        kwargs = super(GenesisFormView, self).get_context_data(**kwargs)
+        return kwargs
 
     def _get_breadcrumbs(self) -> List[Breadcrumb]:
         return []

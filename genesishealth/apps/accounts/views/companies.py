@@ -1,8 +1,10 @@
+from typing import Dict, Any, List
+
 from django.contrib.auth.decorators import login_required, user_passes_test
 from django.urls import reverse
 from django.http import HttpResponseNotFound
 
-from genesishealth.apps.accounts.models import GenesisGroup
+from genesishealth.apps.accounts.models import GenesisGroup, Company
 from genesishealth.apps.accounts.forms.companies import (
     CompanyForm, ImportCompaniesForm)
 from genesishealth.apps.accounts.views.base import GroupTableView
@@ -11,7 +13,8 @@ from genesishealth.apps.utils.class_views import (
     AttributeTableColumn, ActionTableColumn,
     ActionItem, GenesisTableLink, GenesisTableLinkAttrArg,
     GenesisAboveTableDropdown, GenesisAboveTableButton,
-    GenesisDropdownOption)
+    GenesisDropdownOption, GenesisFormView)
+from genesishealth.apps.utils.forms import GenesisModelForm
 from genesishealth.apps.utils.request import check_user_type
 from genesishealth.apps.utils.views import generic_form, generic_delete_form
 
@@ -46,19 +49,20 @@ class CompanyTableView(GroupTableView):
                             url_args=url_args + [
                                 GenesisTableLinkAttrArg('pk')]
                         )
-                    )
+                    ),
+
                 ]
             )
         ]
         if self.request.user.is_admin():
             columns.append(ActionTableColumn(
-                'Send Text',
+                'Admin',
                 actions=[
                     ActionItem(
-                        'Send Group Text',
+                        'Admin',
                         GenesisTableLink(
-                            'text_messaging:send-group-text',
-                            url_args=[GenesisTableLinkAttrArg('pk')]
+                            'accounts:manage-groups-companies-admin',
+                            url_args=url_args + [GenesisTableLinkAttrArg('pk')]
                         )
                     )
                 ]
@@ -252,3 +256,56 @@ def edit(request, company_id, group_id=None):
         system_message="The group/employer has been updated.",
         breadcrumbs=breadcrumbs,
         form_kwargs={'initial_group': group, 'instance': company})
+
+
+class CompanyAdminForm(GenesisModelForm):
+    class Meta:
+        model = Company
+        fields = [
+            'reading_too_high_interval',
+            'reading_too_high_threshold',
+            'reading_too_high_limit',
+            'reading_too_low_interval',
+            'reading_too_low_threshold',
+            'reading_too_low_limit',
+            'not_enough_recent_readings_interval',
+            'not_enough_recent_readings_minimum'
+        ]
+
+
+class CompanyAdminView(GenesisFormView):
+    form_class = CompanyAdminForm
+    page_title = "Administrate Company"
+    go_back_until = ['accounts:manage-groups-companies']
+    success_message = "The company has been updated."
+
+    def _get_breadcrumbs(self) -> List[Breadcrumb]:
+        group = self.get_group()
+        return [
+            Breadcrumb('Business Partners',
+                       reverse('accounts:manage-groups')),
+            Breadcrumb(
+                'Business Partner: {0}'.format(group.name),
+                reverse('accounts:manage-groups-detail',
+                        args=[group.pk])),
+            Breadcrumb(
+                'Companies',
+                reverse('accounts:manage-groups-companies',
+                        args=[group.pk])),
+        ]
+
+    def get_form_kwargs(self) -> Dict[str, Any]:
+        kwargs = super().get_form_kwargs()
+        kwargs['instance'] = self.get_company()
+        return kwargs
+
+    def get_company(self) -> Company:
+        return Company.objects.get(pk=self.kwargs['company_id'])
+
+    def get_group(self) -> GenesisGroup:
+        return self.get_company().group
+
+
+company_admin = user_passes_test(
+    lambda u: check_user_type(u, ['Admin'])
+)(CompanyAdminView.as_view())

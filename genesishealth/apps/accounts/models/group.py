@@ -36,6 +36,23 @@ class GenesisGroup(models.Model):
     is_no_pii = models.BooleanField(default=False)
     should_generate_refill_files = models.BooleanField(default=False)
     exclude_from_orders = models.BooleanField(default=False)
+    nursing_group = models.ForeignKey(
+        'nursing.NursingGroup',
+        null=True,
+        on_delete=models.SET_NULL,
+        related_name='genesis_groups'
+    )
+
+    reading_too_high_interval = models.PositiveIntegerField(null=True, blank=True)
+    reading_too_high_threshold = models.PositiveIntegerField(null=True, blank=True)
+    reading_too_high_limit = models.PositiveIntegerField(null=True, blank=True)
+
+    reading_too_low_interval = models.PositiveIntegerField(null=True, blank=True)
+    reading_too_low_threshold = models.PositiveIntegerField(null=True, blank=True)
+    reading_too_low_limit = models.PositiveIntegerField(null=True, blank=True)
+
+    not_enough_recent_readings_interval = models.PositiveIntegerField(null=True, blank=True)
+    not_enough_recent_readings_minimum = models.PositiveIntegerField(null=True, blank=True)
 
     class Meta:
         app_label = 'accounts'
@@ -648,6 +665,17 @@ class Company(models.Model):
     nursing_group = models.ForeignKey(
         'nursing.NursingGroup', related_name='nursing_groups', null=True,
         blank=True, on_delete=models.SET_NULL)
+
+    reading_too_high_interval = models.PositiveIntegerField(null=True, blank=True)
+    reading_too_high_threshold = models.PositiveIntegerField(null=True, blank=True)
+    reading_too_high_limit = models.PositiveIntegerField(null=True, blank=True)
+
+    reading_too_low_interval = models.PositiveIntegerField(null=True, blank=True)
+    reading_too_low_threshold = models.PositiveIntegerField(null=True, blank=True)
+    reading_too_low_limit = models.PositiveIntegerField(null=True, blank=True)
+
+    not_enough_recent_readings_interval = models.PositiveIntegerField(null=True, blank=True)
+    not_enough_recent_readings_minimum = models.PositiveIntegerField(null=True, blank=True)
 
     class Meta:
         app_label = 'accounts'

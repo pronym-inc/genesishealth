@@ -38,6 +38,12 @@ id_urlpatterns = [
     url(r'^orders/$',
         patient_views.orders,
         name='patient-orders'),
+    url(r'^admin/$',
+        patient_views.patient_admin,
+        name='patient-admin'),
+    url(r'^professional_detail/$',
+        patient_views.patient_professional_detail,
+        name='manage-patients-professional-detail')
 ]
 
 urlpatterns = [

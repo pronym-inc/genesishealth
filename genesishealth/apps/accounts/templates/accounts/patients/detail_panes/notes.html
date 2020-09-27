@@ -1,0 +1,15 @@
+{% load genesis_tools %}
+{% for note in recent_notes %}
+<div class="grid_6">
+    {{ note.datetime_added|date:"M. j, Y h:i A" }}
+</div>
+<div class="grid_6">
+{{ note.content|truncatechars:20 }}
+</div>
+{% endfor %}
+<div class="grid_6">
+    <a href="{% get_dashboard_url notes:patient-notes patient.id %}">See all notes</a>
+</div>
+<div class="grid_6">
+    <a href="{% get_dashboard_url notes:patient-notes-add patient.id %}">Add a note</a>
+</div>

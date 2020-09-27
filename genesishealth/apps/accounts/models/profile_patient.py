@@ -25,6 +25,7 @@ from genesishealth.apps.api.models import APIPartner
 from genesishealth.apps.dropdowns.models import DeactivationReason
 from genesishealth.apps.health_information.models import (
     HealthInformation, HealthProfessionalTargets)
+from genesishealth.apps.nursing.models import NursingGroup
 from genesishealth.apps.orders.models import Order, OrderCategory, OrderEntry
 from genesishealth.apps.products.models import ProductType
 from genesishealth.apps.readings.models import GlucoseReading
@@ -239,6 +240,17 @@ class PatientProfile(BaseProfile):
         'nursing.NursingGroup', null=True, related_name='patients', on_delete=models.SET_NULL)
 
     welcome_text_sent = models.BooleanField(default=False)
+
+    reading_too_high_interval = models.PositiveIntegerField(null=True, blank=True)
+    reading_too_high_threshold = models.PositiveIntegerField(null=True, blank=True)
+    reading_too_high_limit = models.PositiveIntegerField(null=True, blank=True)
+
+    reading_too_low_interval = models.PositiveIntegerField(null=True, blank=True)
+    reading_too_low_threshold = models.PositiveIntegerField(null=True, blank=True)
+    reading_too_low_limit = models.PositiveIntegerField(null=True, blank=True)
+
+    not_enough_recent_readings_interval = models.PositiveIntegerField(null=True, blank=True)
+    not_enough_recent_readings_minimum = models.PositiveIntegerField(null=True, blank=True)
 
     objects = PatientProfileManager()
     myghr_patients = MyGHRPatientManager()
@@ -612,6 +624,37 @@ class PatientProfile(BaseProfile):
                 base_date = last_refill.datetime_added
         return base_date + timedelta(days=refill_interval)
 
+    def get_not_enough_recent_readings_interval(self) -> int:
+        """The period of time, in days, over which to check if the patient
+        has tested enough times."""
+        possible_values = [
+            self.not_enough_recent_readings_interval,
+            self.company.not_enough_recent_readings_interval,
+            self.company.group.not_enough_recent_readings_interval
+        ]
+        for value in possible_values:
+            if value is not None:
+                return value
+        return settings.DEFAULT_NOT_ENOUGH_RECENT_READINGS_INTERVAL
+
+    def get_not_enough_recent_readings_minimum(self) -> int:
+        """The minimum number of readings the patient should have taken over
+        the interval to not trigger a nursing queue entry."""
+        possible_values = [
+            self.not_enough_recent_readings_minimum,
+            self.company.not_enough_recent_readings_minimum,
+            self.company.group.not_enough_recent_readings_minimum
+        ]
+        for value in possible_values:
+            if value is not None:
+                return value
+        return settings.DEFAULT_NOT_ENOUGH_RECENT_READINGS_MINIMUM
+
+    def get_nursing_group(self) -> Optional[NursingGroup]:
+        if self.company is None:
+            return None
+        return self.company.group.nursing_group
+
     def get_partner_string(self) -> str:
         return ", ".join(map(lambda x: x['name'],self.partners.all().values('name')))
 
@@ -629,6 +672,84 @@ class PatientProfile(BaseProfile):
                 readings = readings.filter(
                     reading_datetime_utc__gte=last_refill.datetime_added)
         return readings
+
+    def get_readings_too_high_interval(self) -> int:
+        """The number of days over which to check if we should trigger
+        a notification that there were too many readings that were too high."""
+        possible_values = [
+            self.reading_too_high_interval,
+            self.company.reading_too_high_interval,
+            self.company.group.reading_too_high_interval
+        ]
+        for value in possible_values:
+            if value is not None:
+                return value
+        return settings.DEFAULT_READINGS_TOO_HIGH_INTERVAL
+
+    def get_readings_too_high_limit(self) -> int:
+        """The number of high readings which is considered too many - will
+        trigger a queue entry if this number is met or exceeded."""
+        possible_values = [
+            self.reading_too_high_limit,
+            self.company.reading_too_high_limit,
+            self.company.group.reading_too_high_limit
+        ]
+        for value in possible_values:
+            if value is not None:
+                return value
+        return settings.DEFAULT_READINGS_TOO_HIGH_LIMIT
+
+    def get_readings_too_high_threshold(self) -> int:
+        """The glucose value over which a reading is considered to be
+        too high."""
+        possible_values = [
+            self.reading_too_high_threshold,
+            self.company.reading_too_high_threshold,
+            self.company.group.reading_too_high_threshold
+        ]
+        for value in possible_values:
+            if value is not None:
+                return value
+        return settings.DEFAULT_READINGS_TOO_HIGH_THRESHOLD
+
+    def get_readings_too_low_interval(self) -> int:
+        """The number of days over which to check if we should trigger
+        a notification that there were too many readings that were too low."""
+        possible_values = [
+            self.reading_too_low_interval,
+            self.company.reading_too_low_interval,
+            self.company.group.reading_too_low_interval
+        ]
+        for value in possible_values:
+            if value is not None:
+                return value
+        return settings.DEFAULT_READINGS_TOO_LOW_INTERVAL
+
+    def get_readings_too_low_limit(self) -> int:
+        """The number of low readings which is considered too many - will
+        trigger a queue entry if this number is met or exceeded."""
+        possible_values = [
+            self.reading_too_low_limit,
+            self.company.reading_too_low_limit,
+            self.company.group.reading_too_low_limit
+        ]
+        for value in possible_values:
+            if value is not None:
+                return value
+        return settings.DEFAULT_READINGS_TOO_LOW_LIMIT
+
+    def get_readings_too_low_threshold(self) -> int:
+        """The glucose value under which a reading is considered to be
+        too low."""
+        possible_values = [
+            self.reading_too_low_threshold,
+            self.company.reading_too_low_threshold,
+            self.company.group.reading_too_low_threshold
+        ]
+        for value in possible_values:
+            if value is not None:
+                return value
+        return settings.DEFAULT_READINGS_TOO_LOW_THRESHOLD
 
     def get_refill_method(self):
         if self.refill_method:

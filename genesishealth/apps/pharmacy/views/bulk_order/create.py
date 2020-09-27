@@ -76,4 +76,5 @@ class CreateRxBulkOrderView(GenesisFormView):
     def get_success_url(self, form):
         return reverse('orders:details', args=[form.instance.pk])
 
+
 main = test(CreateRxBulkOrderView.as_view())

@@ -28,9 +28,10 @@ from genesishealth.apps.utils.class_views import (
     AttributeTableColumn, ActionTableColumn,
     ActionItem, GenesisBaseDetailPane, GenesisDetailView,
     GenesisTableLink, GenesisTableLinkAttrArg, GenesisAboveTableButton,
-    GenesisTableView)
+    GenesisTableView, GenesisFormView)
 from genesishealth.apps.utils.class_views.csv_report import (
     CSVReport, CSVReportView)
+from genesishealth.apps.utils.forms import GenesisModelForm
 from genesishealth.apps.utils.request import admin_user, check_user_type
 from genesishealth.apps.utils.views import generic_form
 
@@ -355,6 +356,10 @@ class GroupDetailView(GenesisDetailView):
                 GenesisAboveTableButton(
                     'Account Detail',
                     reverse('accounts:manage-groups-edit',
+                            args=[group.id])),
+                GenesisAboveTableButton(
+                    'Admin',
+                    reverse('accounts:manage-groups-admin',
                             args=[group.id]))
 
             ]
@@ -394,6 +399,10 @@ class GroupDetailView(GenesisDetailView):
             GenesisAboveTableButton(
                 'Account Detail',
                 reverse('accounts:manage-groups-edit',
+                        args=[group.id])),
+            GenesisAboveTableButton(
+                'Admin',
+                reverse('accounts:manage-groups-admin',
                         args=[group.id]))
 
         ]
@@ -1189,3 +1198,45 @@ class GlucoseAverageCSVReportView(CSVReportView, GetGroupMixin):
 
 
 glucose_average_report_view = test(GlucoseAverageCSVReportView.as_view())
+
+
+class GroupAdminForm(GenesisModelForm):
+    class Meta:
+        model = GenesisGroup
+        fields = [
+            'nursing_group',
+            'reading_too_high_interval',
+            'reading_too_high_threshold',
+            'reading_too_high_limit',
+            'reading_too_low_interval',
+            'reading_too_low_threshold',
+            'reading_too_low_limit',
+            'not_enough_recent_readings_interval',
+            'not_enough_recent_readings_minimum'
+        ]
+
+
+class GroupAdminView(GetGroupMixin, GenesisFormView):
+    form_class = GroupAdminForm
+    page_title = "Administrate Group"
+    go_back_until = ['accounts:manage-groups-detail']
+    success_message = "The business partner has been updated."
+
+    def _get_breadcrumbs(self) -> List[Breadcrumb]:
+        group = self.get_group()
+        return [
+            Breadcrumb('Business Partners',
+                       reverse('accounts:manage-groups')),
+            Breadcrumb(
+                'Business Partner: {0}'.format(group.name),
+                reverse('accounts:manage-groups-detail',
+                        args=[group.pk]))
+        ]
+
+    def get_form_kwargs(self) -> Dict[str, Any]:
+        form_kwargs = super().get_form_kwargs()
+        form_kwargs['instance'] = self.get_group()
+        return form_kwargs
+
+
+group_admin = test(GroupAdminView.as_view())

@@ -111,8 +111,7 @@ function styleForms(div) {
 
     setAnyTimePicker(div.find('form.form').find('.dateField:input').not('.DOBField'), {
         format: '%m/%d/%Y',
-        earliest: new Date((new Date().getTime() - 365 * 2 * 24 * 60 * 60 * 1000)),
-        latest: new Date()
+        earliest: new Date((new Date().getTime() - 365 * 2 * 24 * 60 * 60 * 1000))
     });
 
     setAnyTimePicker(div.find('form.form').find('.DOBField:input'), {

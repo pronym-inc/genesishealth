@@ -22,14 +22,14 @@ class GroupForm(PhoneNumberFormMixin, GenesisModelForm):
     address1 = forms.CharField(required=False, label="Contact address")
     address2 = forms.CharField(required=False, label="Contact address (cont.)")
     city = forms.CharField(required=False, label="Contact city")
-    state = forms.ChoiceField(choices=US_STATES, required=False)
+    state = forms.ChoiceField(choices=US_STATES, required=False, label="Contact state")
     zip = forms.CharField(max_length=5, required=False, label="Contact zip")
 
     class Meta:
         model = GenesisGroup
         fields = (
             'name', 'group_type', 'first_name', 'last_name', 'email', 'phone',
-            'address1', 'address2', 'city', 'is_no_pii')
+            'address1', 'address2', 'city', 'state', 'zip', 'is_no_pii')
 
     def get_phone_initialdata(self):
         return self.instance.contact.phone_numbers.all()

@@ -84,6 +84,8 @@ INSTALLED_APPS = [
     'genesishealth.apps.work_queue',
     'genesishealth.apps.blood_pressure',
     'genesishealth.apps.mobile',
+    'genesishealth.apps.nursing_queue',
+    'genesishealth.apps.notes',
     'compressor',
     'localflavor',
 ]
@@ -587,3 +589,15 @@ TIME_ZONE = 'America/Chicago'
 DEFAULT_SUBSCRIPTION_REFILL_SHIPPING_BUFFER_DAYS = 20
 DEFAULT_SUBSCRIPTION_REFILL_INTERVAL_DAYS = 90
 DEFAULT_UTILIZATION_REFILL_THRESHOLD_PERCENTAGE = 0.8
+
+# Settings for nursing queue notifications.
+DEFAULT_READINGS_TOO_HIGH_INTERVAL = 7
+DEFAULT_READINGS_TOO_HIGH_THRESHOLD = 200
+DEFAULT_READINGS_TOO_HIGH_LIMIT = 3
+
+DEFAULT_READINGS_TOO_LOW_INTERVAL = 7
+DEFAULT_READINGS_TOO_LOW_THRESHOLD = 100
+DEFAULT_READINGS_TOO_LOW_LIMIT = 3
+
+DEFAULT_NOT_ENOUGH_RECENT_READINGS_INTERVAL = 7
+DEFAULT_NOT_ENOUGH_RECENT_READINGS_MINIMUM = 10

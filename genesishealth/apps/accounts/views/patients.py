@@ -2,6 +2,7 @@ import os
 
 from datetime import timedelta
 from json import dumps
+from typing import List, Dict, Any
 
 from dateutil.parser import parse
 
@@ -44,7 +45,7 @@ from genesishealth.apps.utils.class_views import (
 )
 from genesishealth.apps.utils.class_views.csv_import import (
     CSVImportForm, CSVImportView)
-from genesishealth.apps.utils.forms import GenesisForm
+from genesishealth.apps.utils.forms import GenesisForm, GenesisModelForm
 from genesishealth.apps.utils.request import (
     admin_user, check_user_type, debug_response, professional_user,
     redirect_with_message)
@@ -901,6 +902,11 @@ class PatientGlucoseStatisticPane(GenesisBaseDetailPane):
     pane_title = "Glucose Statistics"
 
 
+class PatientNotesPane(GenesisBaseDetailPane):
+    template_name = 'accounts/patients/detail_panes/notes.html'
+    pane_title = "Notes"
+
+
 class PatientDetailView(GenesisDetailView):
     pane_classes = (
         PatientInformationPane, PatientShippingPane, PatientLoginPane,
@@ -948,7 +954,10 @@ class PatientDetailView(GenesisDetailView):
                 reverse('epc:patient-orders', args=[patient.pk])),
             GenesisAboveTableButton(
                 'Orders',
-                reverse('accounts:patient-orders', args=[patient.pk]))
+                reverse('accounts:patient-orders', args=[patient.pk])),
+            GenesisAboveTableButton(
+                'Admin',
+                reverse('accounts:patient-admin', args=[patient.pk]))
 
         ]
 
@@ -1295,3 +1304,73 @@ def call_log_report(request):
         page_title='Generate Call Log',
         system_message='Your report has been generated.',
         send_download_url=True)
+
+
+class PatientAdminForm(GenesisModelForm):
+    class Meta:
+        model = PatientProfile
+        fields = [
+            'reading_too_high_interval',
+            'reading_too_high_threshold',
+            'reading_too_high_limit',
+            'reading_too_low_interval',
+            'reading_too_low_threshold',
+            'reading_too_low_limit',
+            'not_enough_recent_readings_interval',
+            'not_enough_recent_readings_minimum'
+        ]
+
+
+class PatientAdminView(GetPatientMixin, GenesisFormView):
+    form_class = PatientAdminForm
+    page_title = "Administrate Patient"
+    go_back_until = ['accounts:manage-groups-patients']
+    success_message = "The patient has been updated."
+
+    def _get_breadcrumbs(self) -> List[Breadcrumb]:
+        breadcrumbs = get_patient_breadcrumbs(
+            self.get_patient(),
+            self.request.user
+        )
+        return breadcrumbs
+
+    def get_form_kwargs(self) -> Dict[str, Any]:
+        kwargs = super().get_form_kwargs()
+        kwargs['instance'] = self.get_patient().patient_profile
+        return kwargs
+
+
+patient_admin = user_passes_test(
+    lambda u: check_user_type(u, ['Admin'])
+)(PatientAdminView.as_view())
+
+
+class PatientProfessionalDetailView(GetPatientMixin, GenesisDetailView):
+    pane_classes = (
+        PatientInformationPane,
+        PatientGlucoseStatisticPane,
+        PatientNotesPane
+    )
+
+    def get_page_title(self):
+        return 'Manage Patient {0}'.format(
+            self.get_patient().get_reversed_name())
+
+    def get_pane_context(self):
+        patient = self.get_patient()
+        cutoff = now() - timedelta(days=180)
+        last_180 = patient.glucose_readings.filter(
+            reading_datetime_utc__gt=cutoff).count()
+        return {
+            'patient': patient,
+            'recent_readings': patient.glucose_readings.order_by(
+                '-reading_datetime_utc')[:4],
+            'readings_last_180': last_180,
+            'recent_notes': patient.patient_profile.patient_notes.order_by(
+                '-datetime_added')[:5]
+        }
+
+
+patient_professional_detail = user_passes_test(
+    lambda u: check_user_type(u, ['Professional'])
+)(PatientProfessionalDetailView.as_view())

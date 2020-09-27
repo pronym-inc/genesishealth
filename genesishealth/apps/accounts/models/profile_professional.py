@@ -24,6 +24,12 @@ class ProfessionalProfile(BaseProfile):
         'accounts.PatientProfile', related_name='professionals')
     watch_list = models.ManyToManyField(
         'accounts.PatientProfile', related_name='watch_list_professionals')
+    nursing_group = models.ForeignKey(
+        'nursing.NursingGroup',
+        null=True,
+        related_name='professionals',
+        on_delete=models.SET_NULL
+    )
 
     class Meta:
         app_label = 'accounts'

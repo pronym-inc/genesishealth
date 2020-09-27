@@ -4,6 +4,7 @@ from django.db.models import Q
 from django.utils.timezone import now
 
 from genesishealth.apps.accounts.models import ProfessionalProfile, Company
+from genesishealth.apps.nursing.models import NursingGroup
 from genesishealth.apps.reports.models import TemporaryDownload
 from genesishealth.apps.utils.forms import GenesisForm, GenesisModelForm, PhoneField, SinglePhoneField
 from genesishealth.apps.utils.forms import (
@@ -16,7 +17,7 @@ class ProfessionalForm(PhoneNumberFormMixin, GenesisModelForm):
     CONTACT_FIELDS = (
         'salutation', 'middle_initial', 'address1', 'address2', 'city',
         'state', 'zip', 'fax')
-    PROFILE_FIELDS = ('timezone_name', )
+    PROFILE_FIELDS = ('timezone_name', 'nursing_group')
 
     salutation = forms.CharField(required=False)
     first_name = forms.CharField()
@@ -34,13 +35,17 @@ class ProfessionalForm(PhoneNumberFormMixin, GenesisModelForm):
     fax = forms.CharField(required=False)
     timezone_name = forms.ChoiceField(
         choices=ProfessionalProfile.ALLOWED_TIMEZONES, label="Timezone")
+    nursing_group = forms.ModelChoiceField(
+        queryset=NursingGroup.objects.all(),
+        required=False
+    )
 
     class Meta:
         model = User
         fields = (
             'salutation', 'first_name', 'middle_initial', 'last_name',
             'email', 'confirm_email', 'address1', 'address2', 'city',
-            'phone', 'fax', 'timezone_name')
+            'phone', 'fax', 'timezone_name', 'nursing_group')
 
     def __init__(self, *args, **kwargs):
         self.requester = kwargs.pop('requester')
