@@ -1,4 +1,4 @@
-$(function() {
+updateCallbackQueue.push(function(div) {
     function updateDisplay() {
         const queryType = $('.queryDropdownAction').val();
         if (queryType === 'recent_reading_count') {
