@@ -41,7 +41,7 @@ from genesishealth.apps.utils.class_views import (
     GenesisAboveTableButton, GenesisAboveTableDropdown, GenesisBaseDetailPane,
     GenesisDetailView, GenesisDropdownOption,
     GenesisTableLink, GenesisTableLinkAttrArg, GenesisTableView,
-    GenesisFormView
+    GenesisFormView, GenesisBaseAboveTableItem
 )
 from genesishealth.apps.utils.class_views.csv_import import (
     CSVImportForm, CSVImportView)
@@ -61,6 +61,10 @@ class GetPatientMixin(object):
                 patient_profile__isnull=False).get(
                 pk=self.kwargs['patient_id'])
         return self._patient
+
+
+class CaregiverQueryItem(GenesisBaseAboveTableItem):
+    _is_query = True
 
 
 class CaregiverTableView(GenesisTableView):
@@ -117,7 +121,8 @@ class CaregiverTableView(GenesisTableView):
                 GenesisDropdownOption(
                     'Remove from Watch List',
                     reverse('accounts:batch-remove-from-watch-list')),
-            ])
+            ]),
+            CaregiverQueryItem()
         ]
 
     def get_page_title(self):

@@ -27,6 +27,25 @@
         </select><input type="submit" for="dda_{{ forloop.counter }}" value="Apply to Selected" class="dropdownSubmitter" />
     </div>
     {% endif %}
+    {% if item.is_query %}
+    <div class="queryDropdown">
+        <select class="queryDropdownAction" id="queryDropdown_{{ forloop.counter }}">
+            <option value="recent_reading_count">Patients with fewer than X readings</option>
+            <option value="high_reading_count">Patients with more than X high readings</option>
+            <option value="low_reading_count">Patients with more than X low readings</option>
+        </select>
+        <div for="recent_reading_count">
+            Fewer than <input id="recent_reading_reading_count" /> readings in the past <input id="recent_reading_for_days" /> days
+        </div>
+        <div for="high_reading_count">
+            More than <input id="high_reading_reading_count" /> readings over <input id="high_reading_glucose_value" /> in the past <input id="high_reading_for_days" /> days
+        </div>
+        <div for="low_reading_count">
+            More than <input id="low_reading_reading_count" /> readings under <input id="low_reading_glucose_value" /> in the past <input id="low_reading_for_days" /> days
+        </div>
+        <input type="submit" for="queryDropdown_{{ forloop.counter }}" value="Run Query" class="queryDropdownSubmitter" />
+    </div>
+    {% endif %}
     {% endfor %}
 </p>
 {% endif %}

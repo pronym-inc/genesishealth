@@ -21,6 +21,7 @@ from genesishealth.apps.utils.class_views.auth_base import AuthTemplateView
 class GenesisBaseAboveTableItem(object):
     _is_button = False
     _is_dropdown = False
+    _is_query = False
     _is_raw = False
     _is_radio = False
 

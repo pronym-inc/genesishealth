@@ -1,8 +1,10 @@
+from datetime import timedelta
 from typing import TYPE_CHECKING, Optional
 
 from django.db import models, connection
 from django.contrib.auth.models import User
-from django.db.models import QuerySet
+from django.db.models import QuerySet, Q
+from django.utils.timezone import now
 
 from genesishealth.apps.accounts.password import make_password
 from genesishealth.apps.accounts.reports import (
@@ -79,7 +81,17 @@ class ProfessionalProfile(BaseProfile):
         return self.user.created_professionalalerts.all()
 
     def get_patients(self) -> 'QuerySet[User]':
-        return User.objects.filter(patient_profile__in=self.patients.all())
+        return User.objects.filter(
+            Q(patient_profile__in=self.patients.all()) |
+            Q(
+                patient_profile__nursing_group=self.nursing_group,
+                patient_profile__nursing_group__isnull=False
+            ) |
+            Q(
+                patient_profile__company__nursing_group=self.nursing_group,
+                patient_profile__company__nursing_group__isnull=False
+            )
+        )
 
     def get_patients_by_range(self, number_of_days: int = 7, target: str = 'inside') -> 'QuerySet[User]':
         assert number_of_days in (1, 7, 14, 30, 60, 90)
@@ -212,6 +224,49 @@ class ProfessionalProfile(BaseProfile):
         cursor.execute(query, [self.user.pk])
         ids = map(lambda x: x[0], cursor.fetchall())
         return self.get_patients().filter(pk__in=ids)
+
+    def get_patients_with_fewer_than_x_readings(self, reading_number: int, for_days: int) -> 'QuerySet[User]':
+        patient_ids = []
+        cutoff = now() - timedelta(days=for_days)
+        for patient in self.get_patients():
+            readings = patient.glucose_readings.filter(reading_datetime_utc__gt=cutoff)
+            if len(readings) < reading_number:
+                patient_ids.append(patient.id)
+        return self.get_patients().filter(id__in=patient_ids)
+
+    def get_patients_with_x_or_more_high_readings(
+            self,
+            reading_number: int,
+            glucose_value: int,
+            for_days: int
+    ) -> 'QuerySet[User]':
+        patient_ids = []
+        cutoff = now() - timedelta(days=for_days)
+        for patient in self.get_patients():
+            readings = patient.glucose_readings.filter(
+                reading_datetime_utc__gt=cutoff,
+                glucose_value__gte=glucose_value
+            )
+            if len(readings) > reading_number:
+                patient_ids.append(patient.id)
+        return self.get_patients().filter(id__in=patient_ids)
+
+    def get_patients_with_x_or_more_low_readings(
+            self,
+            reading_number: int,
+            glucose_value: int,
+            for_days: int
+    ) -> 'QuerySet[User]':
+        patient_ids = []
+        cutoff = now() - timedelta(days=for_days)
+        for patient in self.get_patients():
+            readings = patient.glucose_readings.filter(
+                reading_datetime_utc__gt=cutoff,
+                glucose_value__lte=glucose_value
+            )
+            if len(readings) > reading_number:
+                patient_ids.append(patient.id)
+        return self.get_patients().filter(id__in=patient_ids)
 
     def get_professionals_in_group(self) -> 'QuerySet[ProfessionalProfile]':
         return self.parent_group.get_professionals()
