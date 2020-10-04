@@ -9,12 +9,12 @@ from genesishealth.apps.utils.request import professional_user
 
 
 class NursingQueueView(GenesisTableView):
-    extra_search_fields = ['patient__first_name', 'patient__last_name']
+    extra_search_fields = ['patient__user__first_name', 'patient__user__last_name']
 
     def create_columns(self):
         return [
             AttributeTableColumn('Due Date', 'due_date', searchable=True),
-            AttributeTableColumn('Patient', 'patient.user.get_reversed_name', proxy_field='patient.user.last_name'),
+            AttributeTableColumn('Patient', 'patient.user.get_reversed_name'),
             AttributeTableColumn('Entry Type', 'get_entry_type_display', searchable=False),
             AttributeTableColumn('Group/Employer', 'patient.company.name', searchable=True),
             AttributeTableColumn('Insurance ID', 'patient.insurance_identifier', searchable=True),
