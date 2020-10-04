@@ -126,18 +126,14 @@
 </header>
 
 <section class="portlet grid_6 leading graph"> 
-    {% include "reports/report_quarter.html" with prefix="premeal" days=form.premeal_days.value start_date=form.premeal_start_date.value end_date=form.premeal_end_date.value empty=premeal_empty chartClass="taChart" description="premeal" %}
+    {% include "reports/summary_quarter.html" with prefix="summary" days=form.summary_days.value start_date=form.summary_start_date.value end_date=form.summary_end_date.value empty=summary_empty %}
 </section>
-
-<section class="portlet grid_6 leading graph">
-    {% include "reports/report_quarter.html" with prefix="postmeal" days=form.postmeal_days.value start_date=form.postmeal_start_date.value end_date=form.postmeal_end_date.value empty=postmeal_empty chartClass="taChart" description="postmeal" %}
-</section><div style="clear:both;"></div>
 
 <section class="portlet grid_6 leading graph">
     {% include "reports/report_quarter.html" with prefix="combined" days=form.combined_days.value start_date=form.combined_start_date.value end_date=form.combined_end_date.value empty=combined_empty chartClass="taChart" %}
-</section>
+</section><div style="clear:both;"></div>
 
-<section class="portlet grid_6 leading graph"> 
-    {% include "reports/summary_quarter.html" with prefix="summary" days=form.summary_days.value start_date=form.summary_start_date.value end_date=form.summary_end_date.value empty=summary_empty %}
-</section>   
+<section class="portlet grid_12 leading graph">
+
+</section>
 {% endblock %}
