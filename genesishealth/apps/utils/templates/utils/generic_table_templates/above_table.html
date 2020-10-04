@@ -34,14 +34,14 @@
             <option value="high_reading_count">Patients with more than X high readings</option>
             <option value="low_reading_count">Patients with more than X low readings</option>
         </select>
-        <div for="recent_reading_count">
-            Fewer than <input id="recent_reading_reading_count" /> readings in the past <input id="recent_reading_for_days" /> days
+        <div for="recent_reading_count" style="display:none">
+            Fewer than <input id="recent_reading_reading_count" size="3" /> readings in the past <input id="recent_reading_for_days" size="3" /> days
         </div>
-        <div for="high_reading_count">
-            More than <input id="high_reading_reading_count" /> readings over <input id="high_reading_glucose_value" /> in the past <input id="high_reading_for_days" /> days
+        <div for="high_reading_count" style="display:none">
+            More than <input id="high_reading_reading_count" size="3" /> readings over <input id="high_reading_glucose_value" size="3" /> in the past <input id="high_reading_for_days" size="3" /> days
         </div>
-        <div for="low_reading_count">
-            More than <input id="low_reading_reading_count" /> readings under <input id="low_reading_glucose_value" /> in the past <input id="low_reading_for_days" /> days
+        <div for="low_reading_count" style="display:none">
+            More than <input id="low_reading_reading_count" size="3" /> readings under <input id="low_reading_glucose_value" size="3" /> in the past <input id="low_reading_for_days" size="3" /> days
         </div>
         <input type="submit" for="queryDropdown_{{ forloop.counter }}" value="Run Query" class="queryDropdownSubmitter" />
     </div>
