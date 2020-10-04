@@ -129,6 +129,25 @@ class CaregiverTableView(GenesisTableView):
         return 'My Patients'
 
     def get_queryset(self):
+        query_type = self.request.GET.get('queryType')
+        if query_type:
+            if query_type == 'recent_reading_count':
+                return self.request.user.professional_profile.get_patients_with_fewer_than_x_readings(
+                    int(self.request.GET['count']),
+                    int(self.request.GET['for_days'])
+                )
+            elif query_type == 'high_reading_count':
+                return self.request.user.professional_profile.get_patients_with_x_or_more_high_readings(
+                    int(self.request.GET['count']),
+                    int(self.request.GET['threshold']),
+                    int(self.request.GET['for_days'])
+                )
+            elif query_type == 'low_reading_count':
+                return self.request.user.professional_profile.get_patients_with_x_or_more_low_readings(
+                    int(self.request.GET['count']),
+                    int(self.request.GET['threshold']),
+                    int(self.request.GET['for_days'])
+                )
         return self.request.user.professional_profile.get_patients()
 
 
