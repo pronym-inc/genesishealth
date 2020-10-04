@@ -32,5 +32,5 @@ $(function() {
         window.location = baseUrl + baseHash + "?" + queryString;
     });
 
-    console.log(1);
+    console.log($('.queryDropdownAction').length);
 });
