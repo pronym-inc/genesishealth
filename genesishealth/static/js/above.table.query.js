@@ -48,7 +48,7 @@ $(function() {
         if (queryOutput.queryType === 'recent_reading_count') {
             $('#recent_reading_reading_count').val(queryOutput.count);
             $('#recent_reading_for_days').val(queryOutput.for_days);
-        } else if (queryType === 'high_reading_count') {
+        } else if (queryOutput.queryType === 'high_reading_count') {
             $('#high_reading_reading_count').val(queryOutput.count);
             $('#high_reading_glucose_value').val(queryOutput.threshold);
             $('#high_reading_for_days').val(queryOutput.for_days);

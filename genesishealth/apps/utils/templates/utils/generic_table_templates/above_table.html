@@ -30,6 +30,7 @@
     {% if item.is_query %}
     <div class="queryDropdown">
         <select class="queryDropdownAction" id="queryDropdown_{{ forloop.counter }}">
+            <option value="">---</option>
             <option value="recent_reading_count">Patients with fewer than X readings</option>
             <option value="high_reading_count">Patients with more than X high readings</option>
             <option value="low_reading_count">Patients with more than X low readings</option>
