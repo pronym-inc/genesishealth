@@ -91,19 +91,12 @@ class CaregiverTableView(GenesisTableView):
                 ]
             ),
             ActionTableColumn(
-                'Reports',
+                'Testing Details',
                 actions=[
                     ActionItem(
                         'View Reports',
                         GenesisTableLink(
                             'reports:patient-index',
-                            url_args=[GenesisTableLinkAttrArg('pk')]
-                        )
-                    ),
-                    ActionItem(
-                        'Edit Targets',
-                        GenesisTableLink(
-                            'health_information:edit-health-targets',
                             url_args=[GenesisTableLinkAttrArg('pk')]
                         )
                     )

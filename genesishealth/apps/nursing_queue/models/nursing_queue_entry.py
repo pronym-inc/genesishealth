@@ -9,9 +9,9 @@ class NursingQueueEntry(models.Model):
     ENTRY_TYPE_NOT_ENOUGH_RECENT_READINGS = 'not enough recent readings'
 
     ENTRY_TYPE_CHOICES = (
-        (ENTRY_TYPE_READINGS_TOO_LOW, 'Readings Too Low'),
-        (ENTRY_TYPE_READINGS_TOO_HIGH, 'Readings Too High'),
-        (ENTRY_TYPE_NOT_ENOUGH_RECENT_READINGS, 'Not Enough Recent Readings')
+        (ENTRY_TYPE_READINGS_TOO_LOW, 'Low Reading'),
+        (ENTRY_TYPE_READINGS_TOO_HIGH, 'High Reading'),
+        (ENTRY_TYPE_NOT_ENOUGH_RECENT_READINGS, 'No Reading')
     )
 
     nursing_group = models.ForeignKey(
