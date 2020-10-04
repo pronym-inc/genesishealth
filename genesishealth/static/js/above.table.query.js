@@ -36,7 +36,7 @@ $(function() {
         } else {
            queryString = "queryType=high_reading_count&count=" + $('#low_reading_reading_count').val() + "&for_days=" + $('#low_reading_for_days').val() + "&threshold=" + $('#low_reading_glucose_value').val();
         }
-        window.location = baseUrl + baseHash + "?" + queryString;
+        window.location.href = baseUrl + baseHash + "?" + queryString;
     });
 
     function loadExistingQuery() {
