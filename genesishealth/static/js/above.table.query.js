@@ -9,10 +9,14 @@ $(function() {
            $('[for=recent_reading_count]').hide();
            $('[for=high_reading_count]').show();
            $('[for=low_reading_count]').hide();
-        } else {
+        } else if (queryType === 'low_reading_count') {
            $('[for=recent_reading_count]').hide();
            $('[for=high_reading_count]').hide();
            $('[for=low_reading_count]').show();
+        } else {
+           $('[for=recent_reading_count]').hide();
+           $('[for=high_reading_count]').hide();
+           $('[for=low_reading_count]').hide();
         }
     }
 
@@ -44,6 +48,7 @@ $(function() {
            const value = split[1];
            queryOutput[key] = value;
         });
+        $('.queryDropdownAction').val(queryOutput.queryType);
         updateDisplay();
         if (queryOutput.queryType === 'recent_reading_count') {
             $('#recent_reading_reading_count').val(queryOutput.count);
