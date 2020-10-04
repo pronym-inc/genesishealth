@@ -1,7 +1,7 @@
 {% load genesis_tools %}
 {% for note in recent_notes %}
 <div class="grid_6">
-    {{ note.datetime_added|date:"M. j, Y h:i A" }}
+    {{ note.datetime_added|date:"M. j, Y" }} {{ note.author.user.get_reversed_name }}
 </div>
 <div class="grid_6">
 {{ note.content|truncatechars:20 }}

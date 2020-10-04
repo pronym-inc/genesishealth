@@ -532,5 +532,7 @@ class ProfessionalDetailView(GenesisDetailView):
             'logins_last_six_months': professional.login_records.filter(
                 datetime__gt=now() - timedelta(days=182)).count()
         }
+
+
 test = user_passes_test(admin_user)
 detail = test(ProfessionalDetailView.as_view())

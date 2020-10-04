@@ -47,6 +47,7 @@ class Contact(models.Model):
         self.phone_numbers.all().delete()
         self.add_phone(new_phone)
 
+    @property
     def phone(self) -> str:
         try:
             return self.phone_numbers.filter(is_contact=True)[0].phone
@@ -55,7 +56,16 @@ class Contact(models.Model):
                 return self.phone_numbers.filter()[0].phone
             except IndexError:
                 return ''
-    phone = property(phone)
+
+    @property
+    def secondary_phone(self) -> str:
+        try:
+            return self.phone_numbers.filter(is_contact=True)[1].phone
+        except IndexError:
+            try:
+                return self.phone_numbers.filter()[1].phone
+            except IndexError:
+                return ''
 
 
 class PhoneNumber(models.Model):
