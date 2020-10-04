@@ -82,7 +82,7 @@ class CaregiverTableView(GenesisTableView):
                     ActionItem(
                         'Testing Details',
                         GenesisTableLink(
-                            'reports:trending-for-patient',
+                            'reports:test-history-for-patient',
                             url_args=[GenesisTableLinkAttrArg('pk')]
                         )
                     )
@@ -770,7 +770,7 @@ class WatchListTableView(GenesisTableView):
                     ActionItem(
                         'Testing Details',
                         GenesisTableLink(
-                            'reports:trending-for-patient',
+                            'reports:test-history-for-patient',
                             url_args=[GenesisTableLinkAttrArg('pk')]
                         )
                     )

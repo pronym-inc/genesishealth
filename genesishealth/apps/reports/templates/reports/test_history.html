@@ -5,6 +5,31 @@
     <script src="/static/js/highcharts/highcharts.js" type="text/javascript" charset="utf-8"></script>
     <script src="/static/js/highcharts/exporting.js" type="text/javascript" charset="utf-8"></script>
     <script src="/static/js/reports/th-report.js" type="text/javascript"></script>
+
+<script type="text/javascript" src="{{ STATIC_URL }}lib/datatables/js/jquery.dataTables.js"></script>
+    <script type="text/javascript" src="{{ STATIC_URL }}js/extra.datatables.js"></script>
+
+<!-- Pagination / Sort / Search function call for logbook w/ 4 columns and logbook w/ 8 columns -->
+<script type="text/javascript">
+    function setLogbookAjaxStr(startDate, endDate) {
+        var base = '/reports/ajax/logbook/?patient={{ patient.id }}&start_date='+startDate+'&end_date='+endDate;
+        window.logbook4AjaxStr = base + '&display_type=logbook4';
+        window.logbook8AjaxStr = base + '&display_type=logbook8';
+        // Markup wound up ugly, so we have to do it this way.
+        $('#pdflogbook, #printlogbook').each(function() {
+          $(this).find('#id_print-start_date').val(startDate);
+          $(this).find('#id_print-end_date').val(endDate);
+        });
+
+    };
+    setLogbookAjaxStr('{{ start_date|date:"Y-m-d" }}', '{{ end_date|date:"Y-m-d" }}');
+    window.logbookNotesLocation = '{% url "reports:ajax-logbook-get-notes-for-period" %}';
+    window.patient_id = {{ patient.id }};
+</script>
+
+<script type="text/javascript" src="/static/js/reports/logbook.js"></script>
+<script type="text/javascript" src="/static/js/reports/selectdays.js"></script>
+
     <link rel="stylesheet" href="{{ STATIC_URL }}css/smoothness/jquery-ui.css" type="text/css" media="screen" title="no title" charset="utf-8">
 
 <style media="screen" type="text/css">
@@ -133,7 +158,26 @@
 <div style="clear: both"></div>
 
 <section class="portlet grid_12 leading graph">
+    <table class="display logbook" id="logbook4">
+        <thead>
+        <tr>
+            <th rowspan="2">Date</th>
+          <th colspan="1">Breakfast</th>
+          <th colspan="1">Lunch</th>
+          <th colspan="1">Dinner</th>
+          <th colspan="1">Night</th>
+        </tr>
+        <tr>
+          <th colspan="1" class="small">5 AM - 11 AM</th>
+          <th colspan="1" class="small">11 AM - 2 PM</th>
+          <th colspan="1" class="small">2 PM - 10 PM</th>
+          <th colspan="1" class="small">10 PM - 5 AM</th>
+        </tr>
+      </thead>
+      <tbody>
+      </tbody>
 
+    </table>
 </section>
    
 {% endblock %}
