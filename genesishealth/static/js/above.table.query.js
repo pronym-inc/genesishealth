@@ -55,10 +55,11 @@ $(function() {
             $('#recent_reading_reading_count').val(queryOutput.count);
             $('#recent_reading_for_days').val(queryOutput.for_days);
         } else if (queryOutput.queryType === 'high_reading_count') {
+            console.log($('#high_reading_reading_count').length);
             $('#high_reading_reading_count').val(queryOutput.count);
             $('#high_reading_glucose_value').val(queryOutput.threshold);
             $('#high_reading_for_days').val(queryOutput.for_days);
-        } else {
+        } else if (queryOutput.queryType === 'low_reading_count') {
            $('#low_reading_reading_count').val(queryOutput.count);
            $('#low_reading_glucose_value').val(queryOutput.threshold);
            $('#low_reading_for_days').val(queryOutput.for_days);
