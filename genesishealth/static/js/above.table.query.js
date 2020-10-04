@@ -1,5 +1,6 @@
 $(document).on('.queryDropdownAction', 'change', function() {
    const queryType = $('.queryDropdownAction').val();
+   console.log(queryType);
    if (queryType === 'recent_reading_count') {
        $('[for=recent_reading_count]').show();
        $('[for=high_reading_count]').hide();
