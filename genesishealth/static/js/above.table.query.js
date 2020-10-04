@@ -1,40 +1,40 @@
 updateCallbackQueue.push(function(div) {
     function updateDisplay() {
-        const queryType = $('.queryDropdownAction').val();
+        const queryType = $(div).find('.queryDropdownAction').val();
         if (queryType === 'recent_reading_count') {
-           $('[for=recent_reading_count]').show();
-           $('[for=high_reading_count]').hide();
-           $('[for=low_reading_count]').hide();
+           $(div).find('[for=recent_reading_count]').show();
+           $(div).find('[for=high_reading_count]').hide();
+           $(div).find('[for=low_reading_count]').hide();
         } else if (queryType === 'high_reading_count') {
-           $('[for=recent_reading_count]').hide();
-           $('[for=high_reading_count]').show();
-           $('[for=low_reading_count]').hide();
+           $(div).find('[for=recent_reading_count]').hide();
+           $(div).find('[for=high_reading_count]').show();
+           $(div).find('[for=low_reading_count]').hide();
         } else if (queryType === 'low_reading_count') {
-           $('[for=recent_reading_count]').hide();
-           $('[for=high_reading_count]').hide();
-           $('[for=low_reading_count]').show();
+           $(div).find('[for=recent_reading_count]').hide();
+           $(div).find('[for=high_reading_count]').hide();
+           $(div).find('[for=low_reading_count]').show();
         } else {
-           $('[for=recent_reading_count]').hide();
-           $('[for=high_reading_count]').hide();
-           $('[for=low_reading_count]').hide();
+           $(div).find('[for=recent_reading_count]').hide();
+           $(div).find('[for=high_reading_count]').hide();
+           $(div).find('[for=low_reading_count]').hide();
         }
     }
 
-   $('.queryDropdownAction').change(function() {
+   $(div).find('.queryDropdownAction').change(function() {
        updateDisplay();
     });
 
-    $('.queryDropdownSubmitter').click(function() {
+    $(div).find('.queryDropdownSubmitter').click(function() {
         const baseUrl = window.location.pathname;
         const baseHash = window.location.hash.split('?')[0];
-        const queryType = $('.queryDropdownAction').val();
+        const queryType = $(div).find('.queryDropdownAction').val();
         let queryString;
         if (queryType === 'recent_reading_count') {
-            queryString = "queryType=recent_reading_count&count=" + $('#recent_reading_reading_count').val() + "&for_days=" + $('#recent_reading_for_days').val();
+            queryString = "queryType=recent_reading_count&count=" + $(div).find('#recent_reading_reading_count').val() + "&for_days=" + $(div).find('#recent_reading_for_days').val();
         } else if (queryType === 'high_reading_count') {
-            queryString = "queryType=high_reading_count&count=" + $('#high_reading_reading_count').val() + "&for_days=" + $('#high_reading_for_days').val() + "&threshold=" + $('#high_reading_glucose_value').val();
+            queryString = "queryType=high_reading_count&count=" + $(div).find('#high_reading_reading_count').val() + "&for_days=" + $(div).find('#high_reading_for_days').val() + "&threshold=" + $(div).find('#high_reading_glucose_value').val();
         } else {
-           queryString = "queryType=high_reading_count&count=" + $('#low_reading_reading_count').val() + "&for_days=" + $('#low_reading_for_days').val() + "&threshold=" + $('#low_reading_glucose_value').val();
+           queryString = "queryType=high_reading_count&count=" + $(div).find('#low_reading_reading_count').val() + "&for_days=" + $(div).find('#low_reading_for_days').val() + "&threshold=" + $(div).find('#low_reading_glucose_value').val();
         }
         window.location.href = baseUrl + baseHash + "?" + queryString;
     });
@@ -48,21 +48,20 @@ updateCallbackQueue.push(function(div) {
            const value = split[1];
            queryOutput[key] = value;
         });
-        $('.queryDropdownAction').val(queryOutput.queryType);
+        $(div).find('.queryDropdownAction').val(queryOutput.queryType);
         updateDisplay();
         console.log(queryOutput);
         if (queryOutput.queryType === 'recent_reading_count') {
-            $('#recent_reading_reading_count').val(queryOutput.count);
-            $('#recent_reading_for_days').val(queryOutput.for_days);
+            $(div).find('#recent_reading_reading_count').val(queryOutput.count);
+            $(div).find('#recent_reading_for_days').val(queryOutput.for_days);
         } else if (queryOutput.queryType === 'high_reading_count') {
-            console.log($('#high_reading_reading_count').length);
-            $('#high_reading_reading_count').val(queryOutput.count);
-            $('#high_reading_glucose_value').val(queryOutput.threshold);
-            $('#high_reading_for_days').val(queryOutput.for_days);
+            $(div).find('#high_reading_reading_count').val(queryOutput.count);
+            $(div).find('#high_reading_glucose_value').val(queryOutput.threshold);
+            $(div).find('#high_reading_for_days').val(queryOutput.for_days);
         } else if (queryOutput.queryType === 'low_reading_count') {
-           $('#low_reading_reading_count').val(queryOutput.count);
-           $('#low_reading_glucose_value').val(queryOutput.threshold);
-           $('#low_reading_for_days').val(queryOutput.for_days);
+           $(div).find('#low_reading_reading_count').val(queryOutput.count);
+           $(div).find('#low_reading_glucose_value').val(queryOutput.threshold);
+           $(div).find('#low_reading_for_days').val(queryOutput.for_days);
         }
     }
 
