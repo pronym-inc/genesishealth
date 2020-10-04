@@ -50,6 +50,7 @@ $(function() {
         });
         $('.queryDropdownAction').val(queryOutput.queryType);
         updateDisplay();
+        console.log(queryOutput);
         if (queryOutput.queryType === 'recent_reading_count') {
             $('#recent_reading_reading_count').val(queryOutput.count);
             $('#recent_reading_for_days').val(queryOutput.for_days);
