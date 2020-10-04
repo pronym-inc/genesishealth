@@ -614,7 +614,7 @@ class PatientProfile(BaseProfile):
         notes = self.patient_notes.order_by('-datetime_added')
         if len(notes) > 0:
             note = notes[0]
-            return f"[{note.datetime_added}] {note.content}"
+            return f"[{note.datetime_added.strftime('%Y-%m-%d')}] {note.content}"
         return ""
 
     def get_next_refill_date(self) -> Optional[datetime]:

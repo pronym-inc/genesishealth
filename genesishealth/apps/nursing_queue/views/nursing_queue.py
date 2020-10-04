@@ -13,14 +13,14 @@ class NursingQueueView(GenesisTableView):
 
     def create_columns(self):
         return [
-            AttributeTableColumn('Due Date', 'due_date'),
-            AttributeTableColumn('Patient', 'patient.user.get_reversed_name'),
-            AttributeTableColumn('Entry Type', 'get_entry_type_display'),
-            AttributeTableColumn('Group/Employer', 'patient.company.name'),
-            AttributeTableColumn('Insurance ID', 'patient.insurance_identifier'),
-            AttributeTableColumn('Date of Birth', 'patient.date_of_birth'),
-            AttributeTableColumn('Latest Note', 'patient.get_latest_note_summary'),
-            AttributeTableColumn('Phone Number', 'patient.contact.phone'),
+            AttributeTableColumn('Due Date', 'due_date', searchable=True),
+            AttributeTableColumn('Patient', 'patient.user.get_reversed_name', proxy_field='patient.user.last_name'),
+            AttributeTableColumn('Entry Type', 'get_entry_type_display', searchable=False),
+            AttributeTableColumn('Group/Employer', 'patient.company.name', searchable=True),
+            AttributeTableColumn('Insurance ID', 'patient.insurance_identifier', searchable=True),
+            AttributeTableColumn('Date of Birth', 'patient.date_of_birth', searchable=True),
+            AttributeTableColumn('Latest Note', 'patient.get_latest_note_summary', searchable=False),
+            AttributeTableColumn('Phone Number', 'patient.contact.phone', searchable='patient.contact.phonenumber_set.phone'),
             ActionTableColumn(
                 'View',
                 actions=[
@@ -69,7 +69,7 @@ class NursingQueueView(GenesisTableView):
             ]
         return [
             GenesisAboveTableButton(
-                'Show Uncompleted',
+                'Show Completed',
                 reverse('nursing-queue:queue') + "?showCompleted=1"
             )
         ]
