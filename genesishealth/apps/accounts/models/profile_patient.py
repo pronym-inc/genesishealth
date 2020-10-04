@@ -610,6 +610,13 @@ class PatientProfile(BaseProfile):
             return None
         return orders[0]
 
+    def get_latest_note_summary(self) -> str:
+        notes = self.patient_notes.order_by('-datetime_added')
+        if len(notes) > 0:
+            note = notes[0]
+            return f"[{note.datetime_added}] {note.content}"
+        return ""
+
     def get_next_refill_date(self) -> Optional[datetime]:
         if self.get_refill_method() != self.REFILL_METHOD_SUBSCRIPTION:
             return

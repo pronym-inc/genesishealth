@@ -101,9 +101,9 @@
       	<nav class="drilldownMenu" style="position: relative;"><h1><span class="title">Main Menu</span><button title="Go Back" class="back">Back</button></h1>
           <ul class="tlm">
           	{% if user.is_professional %}
-                <li class="current">
-                  <a href="{% get_dashboard_url dashboard:home %}" title="My Home">
-                    <img src="/static/images/navicons/53.png" alt=""/><span>My Home</span>
+                <li>
+                  <a href="{% get_dashboard_url nursing-queue:queue %}" title="My Work Queue">
+                    <img src="/static/images/navicons/29.png" alt="" /><span>My Work Queue</span>
                   </a><img class="innerloader"  src="/static/images/ajax-loader-menu.gif" />
                 </li>
                 <li>
@@ -114,11 +114,6 @@
                 <li>
                   <a href="{% get_dashboard_url accounts:watch-list %}" title="My Watch List">
                     <img src="/static/images/navicons/29.png" alt="" /><span>My Watch List</span>
-                  </a><img class="innerloader"  src="/static/images/ajax-loader-menu.gif" />
-                </li>
-                <li>
-                  <a href="{% get_dashboard_url nursing-queue:queue %}" title="My Work Queue">
-                    <img src="/static/images/navicons/29.png" alt="" /><span>My Work Queue</span>
                   </a><img class="innerloader"  src="/static/images/ajax-loader-menu.gif" />
                 </li>
                 <li>

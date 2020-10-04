@@ -1,9 +1,10 @@
 from django.contrib.auth.decorators import user_passes_test
+from django.urls import reverse
 
 from genesishealth.apps.nursing.models import NursingGroup
 from genesishealth.apps.nursing_queue.models import NursingQueueEntry
 from genesishealth.apps.utils.class_views import GenesisTableView, AttributeTableColumn, ActionTableColumn, ActionItem, \
-    GenesisTableLink, GenesisTableLinkAttrArg
+    GenesisTableLink, GenesisTableLinkAttrArg, GenesisAboveTableButton
 from genesishealth.apps.utils.request import professional_user
 
 
@@ -15,6 +16,10 @@ class NursingQueueView(GenesisTableView):
             AttributeTableColumn('Due Date', 'due_date'),
             AttributeTableColumn('Patient', 'patient.user.get_reversed_name'),
             AttributeTableColumn('Entry Type', 'get_entry_type_display'),
+            AttributeTableColumn('Group/Employer', 'patient.company.name'),
+            AttributeTableColumn('Insurance ID', 'patient.insurance_identifier'),
+            AttributeTableColumn('Date of Birth', 'patient.date_of_birth'),
+            AttributeTableColumn('Latest Note', 'patient.get_latest_note_summary'),
             AttributeTableColumn('Phone Number', 'patient.contact.phone'),
             ActionTableColumn(
                 'View',
@@ -26,6 +31,11 @@ class NursingQueueView(GenesisTableView):
                             url_args=[GenesisTableLinkAttrArg('patient.user.id')]
                         )
                     ),
+                ]
+            ),
+            ActionTableColumn(
+                'Complete',
+                actions=[
                     ActionItem(
                         'Complete',
                         GenesisTableLink(
@@ -33,6 +43,11 @@ class NursingQueueView(GenesisTableView):
                             url_args=[GenesisTableLinkAttrArg('pk')]
                         )
                     ),
+                ]
+            ),
+            ActionTableColumn(
+                'Reschedule',
+                actions=[
                     ActionItem(
                         'Reschedule',
                         GenesisTableLink(
@@ -41,6 +56,21 @@ class NursingQueueView(GenesisTableView):
                         )
                     )
                 ]
+            )
+        ]
+
+    def get_above_table_items(self):
+        if self.get_should_show_completed():
+            return [
+                GenesisAboveTableButton(
+                    'Show Uncompleted',
+                    reverse('nursing-queue:queue')
+                )
+            ]
+        return [
+            GenesisAboveTableButton(
+                'Show Uncompleted',
+                reverse('nursing-queue:queue') + "?showCompleted=1"
             )
         ]
 
@@ -54,7 +84,11 @@ class NursingQueueView(GenesisTableView):
             return NursingQueueEntry.objects.none()
         if nursing_group is None:
             return NursingQueueEntry.objects.none()
-        return nursing_group.nursing_queue_entries.filter(is_completed=False)
+        should_show_completed = self.get_should_show_completed()
+        return nursing_group.nursing_queue_entries.filter(is_completed=should_show_completed)
+
+    def get_should_show_completed(self) -> bool:
+        return self.request.GET.get('showCompleted') == '1'
 
 
 nursing_queue_view = user_passes_test(professional_user)(NursingQueueView.as_view())
