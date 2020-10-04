@@ -31,4 +31,14 @@ $(function() {
         }
         window.location = baseUrl + baseHash + "?" + queryString;
     });
+
+    function loadExistingQuery() {
+        const qs = window.location.hash.split('?')[1].split('&');
+        let queryType;
+        $.each(qs, function(idx, entry) {
+           console.log(entry.split('='));
+        });
+    }
+
+    loadExistingQuery();
 });
