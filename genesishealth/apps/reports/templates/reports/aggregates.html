@@ -23,14 +23,11 @@
     </tr>
 
     <tr>
-        <td>Average:</td><td class="value">{{ aggregates.glucose_value__avg|floatformat }}</td><td>Standard Deviation:</td><td class="value">{{ aggregates.glucose_value__stddev|floatformat }}</td>
+        <td>Average:</td><td class="value">{{ aggregates.glucose_value__avg|floatformat }}</td>
     </tr>
 
     <tr>
     <td>Number of Low Readings:</td><td class="value">{{ aggregates.low_readings }}</td><td>Number of High Readings:</td><td class="value">{{ aggregates.high_readings }}</td>
-    </tr>
-    <tr>
-    <td>Number of Hypoglycemic Readings:</td><td class="value">{{ aggregates.hypo_readings }}</td><td>Number of Hyperglycemic Readings:</td><td class="value">{{ aggregates.hyper_readings }}</td>
     </tr>
 </tbody>
 </table>
