@@ -521,7 +521,7 @@ class AggregateReport(ReportView):
                 datetime.strptime(request.GET['end_date'], date_format))
             days = 'custom'
         else:
-            days = int(request.GET.get('days', 7))
+            days = int(request.GET.get('days', 14))
             end_date = datetime.now(timezone)
             start_date = end_date - timedelta(days=days - 1)
 
