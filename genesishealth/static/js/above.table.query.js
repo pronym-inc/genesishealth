@@ -29,3 +29,5 @@ $(document).on('.queryDropdownSubmitter', 'click', function() {
     }
     window.location = baseUrl + baseHash + "?" + queryString;
 });
+
+console.log(1);
