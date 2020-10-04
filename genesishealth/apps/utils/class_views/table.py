@@ -36,6 +36,9 @@ class GenesisBaseAboveTableItem(object):
     def is_dropdown(self):
         return self._is_dropdown
 
+    def is_query(self):
+        return self._is_query
+
     def is_raw(self):
         return self._is_raw
 
