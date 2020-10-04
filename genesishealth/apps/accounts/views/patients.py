@@ -70,26 +70,12 @@ class CaregiverQueryItem(GenesisBaseAboveTableItem):
 class CaregiverTableView(GenesisTableView):
     def create_columns(self):
         return [
-            AttributeTableColumn('Last Name', 'last_name'),
-            AttributeTableColumn('First Name', 'first_name'),
-            AttributeTableColumn(
-                'Group/Employer', 'patient_profile.company.name'),
-            AttributeTableColumn('Payor/TPA', 'patient_profile.company.payor'),
-            AttributeTableColumn(
-                'Contact #', 'patient_profile.contact.phone',
-                sortable=False),
-            ActionTableColumn(
-                'Notes',
-                actions=[
-                    ActionItem(
-                        'View Notes',
-                        GenesisTableLink(
-                            'accounts:manage-patients-notes',
-                            url_args=[GenesisTableLinkAttrArg('pk')]
-                        )
-                    )
-                ]
-            ),
+            AttributeTableColumn('Group/Employer', 'patient_profile.company.name'),
+            AttributeTableColumn('Insurance ID', 'patient_profile.insurance_identifier'),
+            AttributeTableColumn('Name', 'get_reversed_name', proxy_field='last_name'),
+            AttributeTableColumn('DOB', 'patient_profile.date_of_birth'),
+            AttributeTableColumn('Phone', 'patient_profile.contact.phone'),
+            AttributeTableColumn('Latest Note', 'patient_profile.get_latest_note_summary'),
             ActionTableColumn(
                 'Testing Details',
                 actions=[
@@ -101,8 +87,7 @@ class CaregiverTableView(GenesisTableView):
                         )
                     )
                 ]
-            ),
-
+            )
         ]
 
     def get_above_table_items(self):
@@ -773,25 +758,14 @@ class WatchListTableView(GenesisTableView):
 
     def create_columns(self):
         return [
-            AttributeTableColumn(
-                'Patient Name', 'get_reversed_name', cell_class='main'),
-            AttributeTableColumn('Group/Employer', 'patient_profile.company'),
-            AttributeTableColumn('Payor/TPA', 'patient_profile.company.payor'),
-            AttributeTableColumn('Contact #', 'patient_profile.contact.phone',
-                                 sortable=False),
+            AttributeTableColumn('Group/Employer', 'patient_profile.company.name'),
+            AttributeTableColumn('Insurance ID', 'patient_profile.insurance_identifier'),
+            AttributeTableColumn('Name', 'get_reversed_name', proxy_field='last_name'),
+            AttributeTableColumn('DOB', 'patient_profile.date_of_birth'),
+            AttributeTableColumn('Phone', 'patient_profile.contact.phone'),
+            AttributeTableColumn('Latest Note', 'patient_profile.get_latest_note_summary'),
             ActionTableColumn(
-                'Notes',
-                actions=[
-                    ActionItem(
-                        'View Notes',
-                        GenesisTableLink(
-                            'accounts:manage-patients-notes',
-                            url_args=[GenesisTableLinkAttrArg('pk')])
-                    )
-                ]
-            ),
-            ActionTableColumn(
-                'Reports',
+                'Testing Details',
                 actions=[
                     ActionItem(
                         'View Reports',
