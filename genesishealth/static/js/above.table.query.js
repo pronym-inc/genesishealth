@@ -1,5 +1,5 @@
 $(function() {
-   $(document).on('.queryDropdownAction', 'change', function() {
+   $('.queryDropdownAction').change(function() {
        const queryType = $('.queryDropdownAction').val();
        console.log(queryType);
        if (queryType === 'recent_reading_count') {
@@ -17,7 +17,7 @@ $(function() {
        }
     });
 
-    $(document).on('.queryDropdownSubmitter', 'click', function() {
+    $('.queryDropdownSubmitter').click(function() {
         const baseUrl = window.location.pathname;
         const baseHash = window.location.hash.split('?')[0];
         const queryType = $('.queryDropdownAction').val();
@@ -31,6 +31,4 @@ $(function() {
         }
         window.location = baseUrl + baseHash + "?" + queryString;
     });
-
-    console.log($('.queryDropdownAction').length);
 });
