@@ -70,8 +70,7 @@ class CaregiverQueryItem(GenesisBaseAboveTableItem):
 class CaregiverTableView(GenesisTableView):
     extra_search_fields = [
         'first_name',
-        'last_name',
-        'patient_profile__contact__phonenumber_set__phone'
+        'last_name'
     ]
 
     def create_columns(self):
@@ -81,7 +80,10 @@ class CaregiverTableView(GenesisTableView):
             AttributeTableColumn('Insurance ID', 'patient_profile.insurance_identifier'),
             AttributeTableColumn('Name', 'get_reversed_name', proxy_field='last_name'),
             AttributeTableColumn('DOB', 'patient_profile.date_of_birth'),
-            AttributeTableColumn('Phone', 'patient_profile.contact.phone'),
+            AttributeTableColumn(
+                'Phone',
+                'patient_profile.contact.phone',
+                searchable='patient.contact.phonenumber_set.phone'),
             AttributeTableColumn('Latest Note', 'patient_profile.get_latest_note_summary'),
             ActionTableColumn(
                 'Testing Details',
@@ -778,7 +780,10 @@ class WatchListTableView(GenesisTableView):
             AttributeTableColumn('Insurance ID', 'patient_profile.insurance_identifier'),
             AttributeTableColumn('Name', 'get_reversed_name', proxy_field='last_name'),
             AttributeTableColumn('DOB', 'patient_profile.date_of_birth'),
-            AttributeTableColumn('Phone', 'patient_profile.contact.phone'),
+            AttributeTableColumn(
+                'Phone',
+                'patient_profile.contact.phone',
+                searchable='patient.contact.phonenumber_set.phone'),
             AttributeTableColumn('Latest Note', 'patient_profile.get_latest_note_summary'),
             ActionTableColumn(
                 'Testing Details',
