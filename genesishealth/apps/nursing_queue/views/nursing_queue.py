@@ -9,7 +9,11 @@ from genesishealth.apps.utils.request import professional_user
 
 
 class NursingQueueView(GenesisTableView):
-    extra_search_fields = ['patient__user__first_name', 'patient__user__last_name']
+    extra_search_fields = [
+        'patient__user__first_name',
+        'patient__user__last_name',
+        'patient__contact__phonenumber_set'
+    ]
 
     def create_columns(self):
         base_buttons = [

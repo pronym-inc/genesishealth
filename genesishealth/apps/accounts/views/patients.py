@@ -68,6 +68,12 @@ class CaregiverQueryItem(GenesisBaseAboveTableItem):
 
 
 class CaregiverTableView(GenesisTableView):
+    extra_search_fields = [
+        'patient__user__first_name',
+        'patient__user__last_name',
+        'patient__contact__phonenumber_set'
+    ]
+
     def create_columns(self):
         return [
             AttributeTableColumn('Business Partner', 'patient_profile.group.name'),
@@ -759,6 +765,11 @@ def batch_deactivate_patient(request):
 
 class WatchListTableView(GenesisTableView):
     additional_js_templates = ['accounts/watchlist_js.html']
+    extra_search_fields = [
+        'first_name',
+        'last_name',
+        'patient_profile__contact__phonenumber_set'
+    ]
 
     def create_columns(self):
         return [
