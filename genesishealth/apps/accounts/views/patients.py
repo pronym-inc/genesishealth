@@ -69,9 +69,9 @@ class CaregiverQueryItem(GenesisBaseAboveTableItem):
 
 class CaregiverTableView(GenesisTableView):
     extra_search_fields = [
-        'patient__user__first_name',
-        'patient__user__last_name',
-        'patient__contact__phonenumber_set'
+        'first_name',
+        'last_name',
+        'patient_profile__contact__phonenumber_set'
     ]
 
     def create_columns(self):
