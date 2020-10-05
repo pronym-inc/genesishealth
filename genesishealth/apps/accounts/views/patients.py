@@ -71,7 +71,7 @@ class CaregiverTableView(GenesisTableView):
     extra_search_fields = [
         'first_name',
         'last_name',
-        'patient_profile__contact__phonenumber_set'
+        'patient_profile__contact__phonenumber_set__phone'
     ]
 
     def create_columns(self):
@@ -768,7 +768,7 @@ class WatchListTableView(GenesisTableView):
     extra_search_fields = [
         'first_name',
         'last_name',
-        'patient_profile__contact__phonenumber_set'
+        'patient_profile__contact__phonenumber_set__phone'
     ]
 
     def create_columns(self):
