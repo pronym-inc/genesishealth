@@ -83,7 +83,7 @@ class CaregiverTableView(GenesisTableView):
             AttributeTableColumn(
                 'Phone',
                 'patient_profile.contact.phone',
-                searchable='patient.contact.phonenumber_set.phone'),
+                searchable='patient_profile.contact.phonenumber_set.phone'),
             AttributeTableColumn('Latest Note', 'patient_profile.get_latest_note_summary'),
             ActionTableColumn(
                 'Testing Details',
@@ -783,7 +783,7 @@ class WatchListTableView(GenesisTableView):
             AttributeTableColumn(
                 'Phone',
                 'patient_profile.contact.phone',
-                searchable='patient.contact.phonenumber_set.phone'),
+                searchable='patient_profile.contact.phonenumber_set.phone'),
             AttributeTableColumn('Latest Note', 'patient_profile.get_latest_note_summary'),
             ActionTableColumn(
                 'Testing Details',
