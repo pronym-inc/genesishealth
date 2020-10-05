@@ -117,10 +117,6 @@
     {{ form.as_p }}
 </form>
 
-<a id="downloadReport" href="" class="btnRight sbm sbm_red"><i class="icon-download-alt"></i>Download PDF Report</a>
-
-<a href="{% if user == patient %}{% get_dashboard_url reports:index %}{% else %}{% get_dashboard_url reports:patient-index patient.id %}{% endif %}" class="sbm sbm_red"><i class="icon-arrow-left"></i>Back to Reports</a><br />
-
 <header>
     <h2>Show results for: <select id="daysSelect">
         <option value="1" {% if days == '1' %}selected="selected"{% endif %}>Past day</option>

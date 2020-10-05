@@ -25,7 +25,7 @@
 <table id="genesis-table{% if table_name_postfix %}-{{table_name_postfix}}{% endif %}" class="display">
     <thead>
         <tr>
-             {% if batch_enabled %}<th><span>Select All</span><br /><input type="checkbox" class="batchSelectAll" /></th>{% endif %}
+             {% if batch_enabled %}<th><span>{{ batch_select_column_name }}</span><br /><input type="checkbox" class="batchSelectAll" /></th>{% endif %}
              {% for column in columns %}
              <th><strong>{{ column.name }}</strong></th>
              {% endfor %}

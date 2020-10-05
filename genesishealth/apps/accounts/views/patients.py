@@ -70,6 +70,7 @@ class CaregiverQueryItem(GenesisBaseAboveTableItem):
 class CaregiverTableView(GenesisTableView):
     def create_columns(self):
         return [
+            AttributeTableColumn('Business Partner', 'patient_profile.group.name'),
             AttributeTableColumn('Group/Employer', 'patient_profile.company.name'),
             AttributeTableColumn('Insurance ID', 'patient_profile.insurance_identifier'),
             AttributeTableColumn('Name', 'get_reversed_name', proxy_field='last_name'),
@@ -102,6 +103,9 @@ class CaregiverTableView(GenesisTableView):
             ]),
             CaregiverQueryItem()
         ]
+
+    def get_batch_select_column_name(self) -> str:
+        return "Add to Watch List"
 
     def get_page_title(self):
         return 'My Patients'
@@ -758,6 +762,7 @@ class WatchListTableView(GenesisTableView):
 
     def create_columns(self):
         return [
+            AttributeTableColumn('Business Partner', 'patient_profile.group.name'),
             AttributeTableColumn('Group/Employer', 'patient_profile.company.name'),
             AttributeTableColumn('Insurance ID', 'patient_profile.insurance_identifier'),
             AttributeTableColumn('Name', 'get_reversed_name', proxy_field='last_name'),
@@ -787,6 +792,9 @@ class WatchListTableView(GenesisTableView):
                 )
             ])
         ]
+
+    def get_batch_select_column_name(self) -> str:
+        return "Remove From Watch List"
 
     def get_page_title(self):
         return 'My Watch List'

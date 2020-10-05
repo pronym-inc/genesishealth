@@ -12,15 +12,17 @@ class NursingQueueView(GenesisTableView):
     extra_search_fields = ['patient__user__first_name', 'patient__user__last_name']
 
     def create_columns(self):
-        return [
+        base_buttons = [
             AttributeTableColumn('Due Date', 'due_date', searchable=True),
-            AttributeTableColumn('Patient', 'patient.user.get_reversed_name'),
             AttributeTableColumn('Entry Type', 'get_entry_type_display', searchable=False),
+            AttributeTableColumn('Business Partner', 'patient.group.name'),
             AttributeTableColumn('Group/Employer', 'patient.company.name', searchable=True),
             AttributeTableColumn('Insurance ID', 'patient.insurance_identifier', searchable=True),
-            AttributeTableColumn('Date of Birth', 'patient.date_of_birth', searchable=True),
+            AttributeTableColumn('Name', 'patient.user.get_reversed_name'),
+            AttributeTableColumn('DOB', 'patient.date_of_birth', searchable=True),
+            AttributeTableColumn('Phone', 'patient.contact.phone',
+                                 searchable='patient.contact.phonenumber_set.phone'),
             AttributeTableColumn('Latest Note', 'patient.get_latest_note_summary', searchable=False),
-            AttributeTableColumn('Phone Number', 'patient.contact.phone', searchable='patient.contact.phonenumber_set.phone'),
             ActionTableColumn(
                 'View',
                 actions=[
@@ -34,30 +36,47 @@ class NursingQueueView(GenesisTableView):
                 ]
             ),
             ActionTableColumn(
-                'Complete',
+                'Testing Details',
                 actions=[
                     ActionItem(
-                        'Complete',
+                        'Testing Details',
                         GenesisTableLink(
-                            'nursing-queue:entry-complete',
-                            url_args=[GenesisTableLinkAttrArg('pk')]
-                        )
-                    ),
-                ]
-            ),
-            ActionTableColumn(
-                'Reschedule',
-                actions=[
-                    ActionItem(
-                        'Reschedule',
-                        GenesisTableLink(
-                            'nursing-queue:entry-reschedule',
+                            'reports:test-history-for-patient',
                             url_args=[GenesisTableLinkAttrArg('pk')]
                         )
                     )
                 ]
             )
         ]
+        if not self.get_should_show_completed():
+            return base_buttons + [
+                ActionTableColumn(
+                    'Complete',
+                    actions=[
+                        ActionItem(
+                            'Complete',
+                            GenesisTableLink(
+                                'nursing-queue:entry-complete',
+                                url_args=[GenesisTableLinkAttrArg('pk')]
+                            )
+                        ),
+                    ]
+                ),
+                ActionTableColumn(
+                    'Reschedule',
+                    actions=[
+                        ActionItem(
+                            'Reschedule',
+                            GenesisTableLink(
+                                'nursing-queue:entry-reschedule',
+                                url_args=[GenesisTableLinkAttrArg('pk')]
+                            )
+                        )
+                    ]
+                )
+            ]
+        return base_buttons
+
 
     def get_above_table_items(self):
         if self.get_should_show_completed():

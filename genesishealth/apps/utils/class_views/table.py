@@ -668,6 +668,9 @@ class GenesisSingleTableBase(GenesisTableBase):
     def get_ajax_url(self):
         return
 
+    def get_batch_select_column_name(self) -> str:
+        return 'Select All'
+
     def get_columns(self):
         if not self._columns_assembled:
             self._columns = []
@@ -742,7 +745,8 @@ class GenesisSingleTableBase(GenesisTableBase):
             'table_name_postfix': self.name_postfix,
             'data_table_js': self.get_datatable_js(),
             'batch_enabled': self.is_batch(),
-            'ajax_url': self.get_ajax_url()
+            'ajax_url': self.get_ajax_url(),
+            'batch_select_column_name': self.get_batch_select_column_name()
         }
         if self.ajax:
             data['rows'] = []
