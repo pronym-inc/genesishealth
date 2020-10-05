@@ -40,6 +40,7 @@ updateCallbackQueue.push(function(div) {
     });
 
     function loadExistingQuery() {
+        if (window.location.hash.indexOf('?') === -1) return;
         const qs = window.location.hash.split('?')[1].split('&');
         let queryOutput = {};
         $.each(qs, function(idx, entry) {
