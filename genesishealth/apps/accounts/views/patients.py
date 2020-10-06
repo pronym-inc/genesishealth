@@ -86,6 +86,18 @@ class CaregiverTableView(GenesisTableView):
                 searchable='patient_profile.contact.phonenumber_set.phone'),
             AttributeTableColumn('Latest Note', 'patient_profile.get_latest_note_summary'),
             ActionTableColumn(
+                'View',
+                actions=[
+                    ActionItem(
+                        'View',
+                        GenesisTableLink(
+                            'accounts:manage-patients-professional-detail',
+                            url_args=[GenesisTableLinkAttrArg('pk')]
+                        )
+                    ),
+                ]
+            ),
+            ActionTableColumn(
                 'Testing Details',
                 actions=[
                     ActionItem(
@@ -769,8 +781,7 @@ class WatchListTableView(GenesisTableView):
     additional_js_templates = ['accounts/watchlist_js.html']
     extra_search_fields = [
         'first_name',
-        'last_name',
-        'patient_profile__contact__phonenumber_set__phone'
+        'last_name'
     ]
 
     def create_columns(self):
@@ -785,6 +796,18 @@ class WatchListTableView(GenesisTableView):
                 'patient_profile.contact.phone',
                 searchable='patient_profile.contact.phonenumber_set.phone'),
             AttributeTableColumn('Latest Note', 'patient_profile.get_latest_note_summary'),
+            ActionTableColumn(
+                'View',
+                actions=[
+                    ActionItem(
+                        'View',
+                        GenesisTableLink(
+                            'accounts:manage-patients-professional-detail',
+                            url_args=[GenesisTableLinkAttrArg('pk')]
+                        )
+                    ),
+                ]
+            ),
             ActionTableColumn(
                 'Testing Details',
                 actions=[

@@ -45,7 +45,7 @@ class NursingQueueView(GenesisTableView):
                         'Testing Details',
                         GenesisTableLink(
                             'reports:test-history-for-patient',
-                            url_args=[GenesisTableLinkAttrArg('pk')]
+                            url_args=[GenesisTableLinkAttrArg('patient.user.id')]
                         )
                     )
                 ]
