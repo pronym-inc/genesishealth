@@ -77,7 +77,6 @@ class CaregiverTableView(GenesisTableView):
         return [
             AttributeTableColumn('Business Partner', 'patient_profile.group.name'),
             AttributeTableColumn('Group/Employer', 'patient_profile.company.name'),
-            AttributeTableColumn('Insurance ID', 'patient_profile.insurance_identifier'),
             AttributeTableColumn('Name', 'get_reversed_name', proxy_field='last_name'),
             AttributeTableColumn('DOB', 'patient_profile.date_of_birth'),
             AttributeTableColumn(
@@ -788,7 +787,6 @@ class WatchListTableView(GenesisTableView):
         return [
             AttributeTableColumn('Business Partner', 'patient_profile.group.name'),
             AttributeTableColumn('Group/Employer', 'patient_profile.company.name'),
-            AttributeTableColumn('Insurance ID', 'patient_profile.insurance_identifier'),
             AttributeTableColumn('Name', 'get_reversed_name', proxy_field='last_name'),
             AttributeTableColumn('DOB', 'patient_profile.date_of_birth'),
             AttributeTableColumn(

@@ -138,6 +138,7 @@ def aggregate_readings(user, readings, days=0):
         glucose_value__lt=user.healthinformation.safe_zone_minimum).count()
     aggregates['hyper_readings'] = readings.filter(
         glucose_value__gt=user.healthinformation.safe_zone_maximum).count()
+    aggregates['average_tests_per_day'] = readings.count() / days
 
     return aggregates
 

@@ -88,8 +88,15 @@ class ProfessionalProfile(BaseProfile):
                 patient_profile__nursing_group__isnull=False
             ) |
             Q(
+                patient_profile__nursing_group__isnull=True,
                 patient_profile__company__nursing_group=self.nursing_group,
                 patient_profile__company__nursing_group__isnull=False
+            ) |
+            Q(
+                patient_profile__nursing_group__isnull=True,
+                patient_profile__company__nursing_group__isnull=True,
+                patient_profile__group__nursing_group=self.nursing_group,
+                patient_profile__group__nursing_group__isnull=False
             )
         )
 

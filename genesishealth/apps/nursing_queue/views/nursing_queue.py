@@ -20,7 +20,6 @@ class NursingQueueView(GenesisTableView):
             AttributeTableColumn('Entry Type', 'get_entry_type_display', searchable=False),
             AttributeTableColumn('Business Partner', 'patient.group.name'),
             AttributeTableColumn('Group/Employer', 'patient.company.name', searchable=True),
-            AttributeTableColumn('Insurance ID', 'patient.insurance_identifier', searchable=True),
             AttributeTableColumn('Name', 'patient.user.get_reversed_name'),
             AttributeTableColumn('DOB', 'patient.date_of_birth', searchable=True),
             AttributeTableColumn('Phone', 'patient.contact.phone',

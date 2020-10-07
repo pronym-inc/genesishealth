@@ -15,19 +15,28 @@
 <section>
 <table id="aggregates" class="full styled"><tbody>
     <tr>
-       <td>Min:</td><td class="value">{{ aggregates.glucose_value__min }}</td><td>Total Days:</td><td class="value">{{ aggregates.total_days }}</td>
+        <td>Total Days:</td>
+        <td class="value">{{ aggregates.total_days }}</td>
+        <td>Total Tests:</td>
+        <td>{{ aggregates.total }}</td>
     </tr>
-
     <tr>
-        <td>Max:</td><td class="value">{{ aggregates.glucose_value__max }}</td><td>Total Readings:</td><td class="value">{{ aggregates.total }}</td>
+        <td>Minimum Reading:</td>
+        <td class="value">{{ aggregates.glucose_value__min|floatformat }}</td>
+        <td>Number of Low Readings:</td>
+        <td class="value">{{ aggregates.low_readings }}</td>
     </tr>
-
     <tr>
-        <td>Average:</td><td class="value">{{ aggregates.glucose_value__avg|floatformat }}</td>
+        <td>Max Reading:</td>
+        <td class="value">{{ aggregates.glucose_value__max|floatformat }}</td>
+        <td>Number of High Readings:</td>
+        <td class="value">{{ aggregates.high_readings }}</td>
     </tr>
-
     <tr>
-    <td>Number of Low Readings:</td><td class="value">{{ aggregates.low_readings }}</td><td>Number of High Readings:</td><td class="value">{{ aggregates.high_readings }}</td>
+        <td>Average Reading:</td>
+        <td class="value">{{ aggregates.glucose_value__avg|floatformat }}</td>
+        <td>Average # Tests / Day:</td>
+        <td class="value">{{ aggregates.average_tests_per_day|floatformat }}</td>
     </tr>
 </tbody>
 </table>

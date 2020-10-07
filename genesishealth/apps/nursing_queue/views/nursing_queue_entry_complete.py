@@ -1,25 +1,38 @@
+from typing import Dict, Any
+
 from django.contrib.auth.decorators import user_passes_test
-from django.urls import reverse
 from django.utils.timezone import now
-from django.views import View
 
 from genesishealth.apps.nursing_queue.models import NursingQueueEntry
-from genesishealth.apps.utils.request import professional_user, redirect_with_message
+from genesishealth.apps.utils.class_views import GenesisFormView
+from genesishealth.apps.utils.forms import GenesisForm
+from genesishealth.apps.utils.request import professional_user
 
 
-class NursingQueueEntryCompleteView(View):
-    def get(self, request, *args, **kwargs):
-        entry = NursingQueueEntry.objects.get(
+class NursingQueueEntryCompleteForm(GenesisForm):
+    def __init__(self, *args, **kwargs):
+        self.instance = kwargs.pop('instance')
+        super().__init__(*args, **kwargs)
+
+    def save(self):
+        self.instance.is_completed = True
+        self.instance.completed_datetime = now()
+        self.instance.save()
+        return self.instance
+
+
+class NursingQueueEntryCompleteView(GenesisFormView):
+    form_class = NursingQueueEntryCompleteForm
+    page_title = "Complete Nursing Queue Item"
+    go_back_until = ['nursing-queue:queue']
+    success_message = "The item has been completed."
+
+    def get_form_kwargs(self) -> Dict[str, Any]:
+        kwargs = super().get_form_kwargs()
+        kwargs['instance'] = NursingQueueEntry.objects.get(
             pk=self.kwargs['nursing_queue_entry_id']
         )
-        entry.completed_datetime = now()
-        entry.is_completed = True
-        entry.save()
-        return redirect_with_message(
-            self.request,
-            reverse('nursing-queue:queue'),
-            "The task has been marked complete."
-        )
+        return kwargs
 
 
 nursing_queue_entry_complete_view = user_passes_test(professional_user)(NursingQueueEntryCompleteView.as_view())
