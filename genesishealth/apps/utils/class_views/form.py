@@ -46,11 +46,13 @@ class GenesisFormView(GenesisBaseFormMixin, FormView):
     template_name = 'utils/generic_form.html'
     form_message = None
     page_title: ClassVar[str]
+    show_back_button: ClassVar[bool] = False
 
     def get_context_data(self, **kwargs):
         if 'breadcrumbs' not in kwargs:
             kwargs['breadcrumbs'] = self._get_breadcrumbs()
         kwargs.setdefault('title', self._get_page_title())
+        kwargs['show_back_button'] = self.show_back_button
         form_message = self._get_form_message()
         if form_message:
             kwargs.setdefault('form_message', form_message)

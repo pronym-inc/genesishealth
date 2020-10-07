@@ -23,9 +23,11 @@ class NursingQueueEntryCompleteForm(GenesisForm):
 
 class NursingQueueEntryCompleteView(GenesisFormView):
     form_class = NursingQueueEntryCompleteForm
+    form_message = "Are you sure you want to mark this as complete?"
     page_title = "Complete Nursing Queue Item"
     go_back_until = ['nursing-queue:queue']
     success_message = "The item has been completed."
+    show_back_button = True
 
     def get_form_kwargs(self) -> Dict[str, Any]:
         kwargs = super().get_form_kwargs()

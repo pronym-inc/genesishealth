@@ -19,5 +19,6 @@
         {{ form.as_p }}
 
         <p><input type="submit" value="Submit">{% if delete_link %}<input type="submit" class="deleteButton" target="{{ delete_link }}" value="Delete" style="margin-left: 20px !important" />{% endif %}</p>
+        {% if show_back_button %}<p><button onclick="window.history.back()">Cancel</p>{% endif %}
     </form>
 {% endblock %}
