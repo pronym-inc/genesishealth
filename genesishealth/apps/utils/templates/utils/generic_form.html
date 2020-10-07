@@ -18,7 +18,6 @@
         {% if batch_id_str %}<input type="hidden" name="batch_ids" value="{{ batch_id_str }}" />{% endif %}
         {{ form.as_p }}
 
-        <p><input type="submit" value="Submit">{% if delete_link %}<input type="submit" class="deleteButton" target="{{ delete_link }}" value="Delete" style="margin-left: 20px !important" />{% endif %}</p>
-        {% if show_back_button %}<p><button onclick="window.history.back()">Cancel</p>{% endif %}
+        <p><input type="submit" value="Submit">{% if show_back_button %}<button onclick="window.history.back()">Cancel</button>{% endif %}{% if delete_link %}<input type="submit" class="deleteButton" target="{{ delete_link }}" value="Delete" style="margin-left: 20px !important" />{% endif %}</p>
     </form>
 {% endblock %}
