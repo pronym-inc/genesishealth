@@ -17,5 +17,9 @@ app.conf.beat_schedule = {
     'check_refills': {
         'task': 'genesishealth.apps.orders.tasks.check_refills',
         'schedule': crontab(hour='5,17', minute='0')
+    },
+    'nursing_queue_populate': {
+        'task': 'genesishealth.apps.nursing_queue.tasks.populate_queue',
+        'schedule': crontab(hour='*', minute='0')
     }
 }
