@@ -11,7 +11,8 @@ class NursingQueueService:
     """A service for populating the nursing queue for nurses, based
     on the behavior of patients in their watch list."""
     def populate(self):
-        for patient in PatientProfile.objects.all():
+        for patient in PatientProfile.objects.filter(
+                account_status=PatientProfile.ACCOUNT_STATUS_ACTIVE):
             self._populate_queue_entries_for_patient(patient)
 
     def _populate_queue_entries_for_patient(self, patient: PatientProfile) -> None:
@@ -112,4 +113,3 @@ class NursingQueueService:
                 entry_type=NursingQueueEntry.ENTRY_TYPE_NOT_ENOUGH_RECENT_READINGS,
                 due_date=(now() + timedelta(days=7)).date()
             )
-

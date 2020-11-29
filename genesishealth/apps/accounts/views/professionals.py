@@ -220,7 +220,8 @@ class CaregiverPatientTableView(GenesisTableView):
         prof = self.get_professional()
         qs = User.objects.filter(patient_profile__isnull=False)
         query_kwargs = {
-            'patient_profile__professionals': prof.professional_profile
+            'patient_profile__professionals': prof.professional_profile,
+            'account_status': PatientProfile.ACCOUNT_STATUS_ACTIVE
         }
         if self.should_show_assigned():
             return qs.filter(**query_kwargs)

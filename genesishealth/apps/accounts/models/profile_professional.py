@@ -98,7 +98,7 @@ class ProfessionalProfile(BaseProfile):
                 patient_profile__group__nursing_group=self.nursing_group,
                 patient_profile__group__nursing_group__isnull=False
             )
-        )
+        ).filter(patient_profile__account_status=PatientProfile.ACCOUNT_STATUS_ACTIVE)
 
     def get_patients_by_range(self, number_of_days: int = 7, target: str = 'inside') -> 'QuerySet[User]':
         assert number_of_days in (1, 7, 14, 30, 60, 90)
