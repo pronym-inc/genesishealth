@@ -663,7 +663,10 @@ class Company(models.Model):
     api_partner = models.ForeignKey(
         'api.APIPartner', related_name='companies', null=True, blank=True, on_delete=models.SET_NULL)
     nursing_group = models.ForeignKey(
-        'nursing.NursingGroup', related_name='nursing_groups', null=True,
+        'nursing.NursingGroup', related_name='groups', null=True,
+        blank=True, on_delete=models.SET_NULL)
+    compliance_nursing_group = models.ForeignKey(
+        'nursing.NursingGroup', related_name='compliance_groups', null=True,
         blank=True, on_delete=models.SET_NULL)
 
     reading_too_high_interval = models.PositiveIntegerField(null=True, blank=True)

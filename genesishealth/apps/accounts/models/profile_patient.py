@@ -657,6 +657,13 @@ class PatientProfile(BaseProfile):
                 return value
         return settings.DEFAULT_NOT_ENOUGH_RECENT_READINGS_MINIMUM
 
+    def get_compliance_nursing_group(self) -> Optional[NursingGroup]:
+        if self.company is None:
+            return None
+        if self.company.group.compliance_nursing_group:
+            return self.company.group.compliance_nursing_group
+        return self.company.group.nursing_group
+
     def get_nursing_group(self) -> Optional[NursingGroup]:
         if self.company is None:
             return None

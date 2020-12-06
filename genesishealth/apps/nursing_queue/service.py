@@ -18,12 +18,13 @@ class NursingQueueService:
     def _populate_queue_entries_for_patient(self, patient: PatientProfile) -> None:
         """Populate all queue entries for the given patient."""
         nursing_group = patient.get_nursing_group()
+        compliance_nursing_group = patient.get_compliance_nursing_group()
         if nursing_group is None:
             return
         print(f"Checking {patient}")
         self._check_if_readings_too_high(patient, nursing_group)
         self._check_if_readings_too_low(patient, nursing_group)
-        self._check_if_not_enough_readings(patient, nursing_group)
+        self._check_if_not_enough_readings(patient, compliance_nursing_group)
 
     def _check_if_readings_too_high(
             self,
