@@ -30,7 +30,7 @@ class CompanyForm(PhoneNumberFormMixin, GenesisModelForm):
             'address2', 'city', 'group_identifier', 'billing_method',
             'refill_method', 'start_kit_size', 'minimum_refill_quantity', 'bin_id',
             'pcn_id', 'glucose_control_refill_frequency', 'lancing_refill_frequency',
-            'default_pharmacy', 'api_partner', 'nursing_group')
+            'default_pharmacy', 'api_partner', 'nursing_group', 'compliance_nursing_group')
 
     def __init__(self, *args, **kwargs):
         self.initial_group = kwargs.pop('initial_group')
