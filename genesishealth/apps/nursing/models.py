@@ -1,4 +1,5 @@
 from django.db import models
+from django.db.models import Q
 
 
 class NursingGroup(models.Model):
@@ -20,3 +21,14 @@ class NursingGroup(models.Model):
         if self.address2:
             output += " / {0}".format(self.address2)
         return output
+
+    def get_nursing_queue_entries(self):
+        from genesishealth.apps.nursing_queue.models import NursingQueueEntry
+        return NursingQueueEntry.objects.filter(
+            Q(patient__nursing_group=self) |
+            Q(patient__nursing_group__isnull=True,
+              patient__company__nursing_group=self) |
+            Q(patient__nursing_group__isnull=True,
+              patient__company__nursing_group__isnull=True,
+              patient__group__nursing_group=self)
+        )

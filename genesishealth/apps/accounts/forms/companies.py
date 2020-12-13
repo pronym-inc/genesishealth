@@ -26,7 +26,7 @@ class CompanyForm(PhoneNumberFormMixin, GenesisModelForm):
     class Meta:
         model = Company
         fields = (
-            'name', 'payor', 'first_name', 'last_name', 'email', 'phone', 'address1',
+            'name', 'payor',  'first_name', 'last_name', 'email', 'phone', 'address1',
             'address2', 'city', 'group_identifier', 'billing_method',
             'refill_method', 'start_kit_size', 'minimum_refill_quantity', 'bin_id',
             'pcn_id', 'glucose_control_refill_frequency', 'lancing_refill_frequency',

@@ -18,22 +18,20 @@ class NursingQueueService:
     def _populate_queue_entries_for_patient(self, patient: PatientProfile) -> None:
         """Populate all queue entries for the given patient."""
         nursing_group = patient.get_nursing_group()
-        compliance_nursing_group = patient.get_compliance_nursing_group()
         if nursing_group is None:
             return
         print(f"Checking {patient}")
-        self._check_if_readings_too_high(patient, nursing_group)
-        self._check_if_readings_too_low(patient, nursing_group)
-        self._check_if_not_enough_readings(patient, compliance_nursing_group)
+        self._check_if_readings_too_high(patient)
+        self._check_if_readings_too_low(patient)
+        self._check_if_not_enough_readings(patient)
 
     def _check_if_readings_too_high(
             self,
-            patient: PatientProfile,
-            nursing_group: NursingGroup
+            patient: PatientProfile
     ) -> None:
         # See if we have already made such a notification in the past
         # week for the patient.
-        existing_entries = nursing_group.nursing_queue_entries.filter(
+        existing_entries = NursingQueueEntry.objects.filter(
             patient=patient,
             entry_type=NursingQueueEntry.ENTRY_TYPE_READINGS_TOO_HIGH,
             datetime_added__gt=now() - timedelta(days=7)
@@ -51,7 +49,6 @@ class NursingQueueService:
         )
         if len(readings) >= too_high_limit:
             NursingQueueEntry.objects.create(
-                nursing_group=nursing_group,
                 patient=patient,
                 entry_type=NursingQueueEntry.ENTRY_TYPE_READINGS_TOO_HIGH,
                 due_date=(now() + timedelta(days=7)).date()
@@ -59,12 +56,11 @@ class NursingQueueService:
 
     def _check_if_readings_too_low(
             self,
-            patient: PatientProfile,
-            nursing_group: NursingGroup
+            patient: PatientProfile
     ) -> None:
         # See if we have already made such a notification in the past
         # week for the patient.
-        existing_entries = nursing_group.nursing_queue_entries.filter(
+        existing_entries = NursingQueueEntry.objects.filter(
             patient=patient,
             entry_type=NursingQueueEntry.ENTRY_TYPE_READINGS_TOO_LOW,
             datetime_added__gt=now() - timedelta(days=7)
@@ -82,7 +78,6 @@ class NursingQueueService:
         )
         if len(readings) >= too_low_limit:
             NursingQueueEntry.objects.create(
-                nursing_group=nursing_group,
                 patient=patient,
                 entry_type=NursingQueueEntry.ENTRY_TYPE_READINGS_TOO_LOW,
                 due_date=(now() + timedelta(days=7)).date()
@@ -90,12 +85,11 @@ class NursingQueueService:
 
     def _check_if_not_enough_readings(
             self,
-            patient: PatientProfile,
-            nursing_group: NursingGroup
+            patient: PatientProfile
     ) -> None:
         # See if we have already made such a notification in the past
         # week for the patient.
-        existing_entries = nursing_group.nursing_queue_entries.filter(
+        existing_entries = NursingQueueEntry.objects.filter(
             patient=patient,
             entry_type=NursingQueueEntry.ENTRY_TYPE_NOT_ENOUGH_RECENT_READINGS,
             datetime_added__gt=now() - timedelta(days=7)
@@ -109,7 +103,6 @@ class NursingQueueService:
         readings = patient.user.glucose_readings.filter(reading_datetime_utc__gt=cutoff)
         if len(readings) < limit:
             NursingQueueEntry.objects.create(
-                nursing_group=nursing_group,
                 patient=patient,
                 entry_type=NursingQueueEntry.ENTRY_TYPE_NOT_ENOUGH_RECENT_READINGS,
                 due_date=(now() + timedelta(days=7)).date()

@@ -665,9 +665,13 @@ class PatientProfile(BaseProfile):
         return self.company.group.nursing_group
 
     def get_nursing_group(self) -> Optional[NursingGroup]:
-        if self.company is None:
-            return None
-        return self.company.group.nursing_group
+        if self.nursing_group:
+            return self.nursing_group
+        if self.company is not None:
+            return self.company.nursing_group
+        if self.group is not None:
+            return self.group.nursing_group
+        return None
 
     def get_partner_string(self) -> str:
         return ", ".join(map(lambda x: x['name'],self.partners.all().values('name')))

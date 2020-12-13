@@ -79,7 +79,6 @@ class NursingQueueView(GenesisTableView):
             ]
         return base_buttons
 
-
     def get_above_table_items(self):
         if self.get_should_show_completed():
             return [
@@ -106,7 +105,7 @@ class NursingQueueView(GenesisTableView):
         if nursing_group is None:
             return NursingQueueEntry.objects.none()
         should_show_completed = self.get_should_show_completed()
-        return nursing_group.nursing_queue_entries.filter(is_completed=should_show_completed)
+        return nursing_group.get_nursing_queue_entries().filter(is_completed=should_show_completed)
 
     def get_should_show_completed(self) -> bool:
         return self.request.GET.get('showCompleted') == '1'

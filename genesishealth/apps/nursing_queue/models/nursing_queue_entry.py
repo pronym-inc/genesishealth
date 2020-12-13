@@ -13,12 +13,6 @@ class NursingQueueEntry(models.Model):
         (ENTRY_TYPE_READINGS_TOO_HIGH, 'High Reading'),
         (ENTRY_TYPE_NOT_ENOUGH_RECENT_READINGS, 'No Reading')
     )
-
-    nursing_group = models.ForeignKey(
-        'nursing.NursingGroup',
-        on_delete=models.CASCADE,
-        related_name='nursing_queue_entries'
-    )
     patient = models.ForeignKey(
         'accounts.PatientProfile',
         on_delete=models.CASCADE,
