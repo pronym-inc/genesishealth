@@ -24,11 +24,21 @@ class NursingGroup(models.Model):
 
     def get_nursing_queue_entries(self):
         from genesishealth.apps.nursing_queue.models import NursingQueueEntry
-        return NursingQueueEntry.objects.filter(
+        x = (
             Q(patient__nursing_group=self) |
             Q(patient__nursing_group__isnull=True,
               patient__company__nursing_group=self) |
             Q(patient__nursing_group__isnull=True,
               patient__company__nursing_group__isnull=True,
               patient__group__nursing_group=self)
+        )
+        return NursingQueueEntry.objects.filter(
+            (Q(entry_type=NursingQueueEntry.ENTRY_TYPE_NOT_ENOUGH_RECENT_READINGS) & (
+                    (x & Q(patient__company__compliance_nursing_group__isnull=True)) |
+                    Q(patient__company__compliance_nursing_group=self)
+            )) |
+            (Q(entry_type__in=(
+                NursingQueueEntry.ENTRY_TYPE_READINGS_TOO_LOW,
+                NursingQueueEntry.ENTRY_TYPE_READINGS_TOO_HIGH)) & x
+            )
         )
